@@ -1,0 +1,18 @@
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ^                                                    ^
+  ^   EEEEE   NN   N   M       M       A        SSSS   ^
+  ^   EE      NNN  N   MM     MM      AAA      SS      ^
+  ^   EEEEE   NN N N   MMM   MMM     AA AA       SS    ^
+  ^   EE      NN  NN   MM MMM MM    AAAAAAA       SS   ^
+  ^   EEEEE   NN   N   MM  M  MM   AA     AA   SSSS    ^
+  ^                                                    ^
+  ^       Environment for Multi-Agent Simulation       ^
+  ^                                                    ^
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+@author Connor Doyle <connor.p.d@gmail.com>
+
+Use Apache Ant to compile the project.
+ 1. Install the Scala programming language on the system, if you haven't already. 
+ 2. Edit the scala.home property in build.xml to point to your scala installation.
+ 3. Run ant in this directory
