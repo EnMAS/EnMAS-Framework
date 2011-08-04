@@ -1,60 +1,80 @@
 package edu.uwlax.enmas
-import scala.collection.immutable._, scala.reflect.{Manifest, ClassManifest}
-import ClassManifest.fromClass
 
-class StateException(msg:String) extends Exception(msg)
+import edu.uwlax.enmas.server.AgentProxy
+import scala.reflect.{Manifest, ClassManifest},
+  ClassManifest.fromClass
 
-class State extends ListMap[String, Any] {
-	val agentMapping:(String, Set[Agent]) = find(POMDP.agentMappingPredicate) match {
-		case Some(tuple:Tuple2[_,_]) => 
-			(tuple._1.asInstanceOf[String], tuple._2.asInstanceOf[Set[Agent]])
-		case None => ("", ListSet[Agent]())
-	}
+/** Thrown when an invalid State is detected.  At this point the recovery
+  * behavior is not defined.
+  */
+case class StateException(msg:String) extends Exception(msg)
 
-	if (count(POMDP.agentMappingPredicate) != 1)
-		throw new StateException("State must contain exactly one Set[Agent].")
+/** Represents  Central class in the edu.uwlax.enmas package.  
+  * 
+  */
+class POMDP(initialState: State, arbiter: Set[State] => State) {
 
-	agentMapping._2.map((a:Agent) =>
-		if (agentMapping._2.count((b:Agent) => b.id == a.id) != 1)
-			throw new StateException("All agent IDs must be unique."))
+  /** 
+    * 
+    */
+  private var history = initialState :: Nil
+
+  /** 
+    * 
+    */
+  private final val agentsKey = "$AGENTS"
+
+  /** 
+    * 
+    */
+  final def stateHistory(): List[State] = history
+
+  /** 
+    * 
+    */
+  final def iterate[A <: Agent](agents: Set[A]) = synchronized {
+    // update clients with obs, reward, actions
+    agents.foreach(
+      _ match { case proxy: AgentProxy => {
+        proxy.update(
+          proxy.observation(history.last),
+          proxy.actions(history.last),
+          proxy.reward(history.last)
+        )}})
+
+    // get agent actions, compute next state
+    history :+= transition(history.last, agents)
+  }
+
+  /** 
+    * 
+    */
+  private final def transition(state: State, agents: Set[_ <: Agent]) = {
+    val substates: Set[State] = agents.map(_.action(state))
+    val resolvedState = 
+      if (substates.isEmpty) arbiter(Set(state))
+      else arbiter(substates)
+    verifyState(replaceAgents(resolvedState, agents))
+  }
+
+  /** Adds a tuple to the state binding the String agentsKey to the given Set of Agents.
+    * If the key exists in the 
+    */
+  private final def replaceAgents[A <: Agent](state: State, agents: Set[A]) : State = {
+    state + (agentsKey -> agents.map(_.toCaseClass))
+  }
+
+  /** Checks known invariants pertaining to the State.  If any fail,
+    * throws a StateException.  Otherwise returns the unmodified input State. */
+  private final def verifyState(state: State): State = {
+    state
+  }
+
 }
 
-case class Agent(
-	id: Int,
-	fO: State => Map[String, Any],				// observation
-	fA: State => Set[State => State],			// actions
-	fR: State => Float,							// reward
-	action: State => State = POMDP.NO_ACTION
-)
-
-class POMDP(state: State, substateResolver: Set[State] => State) {
-
-	var history = state::Nil
-
-	def iterate[A<:Agent](agents: List[A]) = {
-		history :+= transition(history.last, agents)
-		agents.foreach(
-			_ match { case ra:RemoteAgent => {
-				ra.update(
-					ra.fR(history.last), 
-					ra.fO(history.last),
-					ra.fA(history.last)
-				)}})
-	}
-
-	def transition(state: State, agents: List[Agent]) = {
-		substateResolver(ListSet[State](
-			(for (a <- agents) yield a.action(state) 
-				+ ((state.agentMapping._1, ListSet(
-					for (a <- agents) yield Agent(a.id, a.fO, a.fA, a.fR, a.action))))
-			).reduceLeft(_ ++ _).asInstanceOf[State]))
-	}
-}
+/** Companion object to the POMDP class.  Supplies static members. */
 object POMDP {
-	val NO_ACTION = (s: State) => s // the identity action
-	// returns true if the 2nd element of the tuple is a subclass of Set[Agent]
-
-	val agentMappingPredicate = (mapping: (String, Any)) =>
-		fromClass(classOf[Set[Agent]]) <:< 
-		fromClass(mapping._2.asInstanceOf[AnyRef].getClass())
+  /** The Identity action:  does not modify the input State.
+    */
+  val NO_ACTION = (s: State) => s
 }

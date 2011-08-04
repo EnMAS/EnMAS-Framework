@@ -1,0 +1,96 @@
+package edu.uwlax.enmas.server
+
+import edu.uwlax.enmas._, edu.uwlax.enmas.messages._
+
+import scala.actors._, scala.actors.Actor._, scala.actors.Futures._,
+  scala.actors.remote._, scala.actors.remote.TcpService._,
+  scala.actors.remote.FreshNameCreator._, scala.actors.remote.RemoteActor._,
+  java.net._
+
+  /** 
+    * 
+    */
+object Mode extends Enumeration {
+  type Mode = Value
+  val SYNCHRONOUS, ASYNCHRONOUS = Value
+}
+
+/** 
+  * 
+  */
+class SimServer(
+  pomdp: POMDP,
+  agentBuilder: AgentProxy,
+  port: Int = SimServer.defaultServerPort,
+  serverName: Symbol = newName()
+) {
+
+  /** 
+    * 
+    */
+  protected var agents: List[Agent] = Nil
+
+  while(true) { try {
+      Thread.sleep(SimServer.iterationInterval)
+      agents ++= AgentRegistrar.getAndClearQueue
+      pomdp.iterate(agents.toSet)
+    }
+    catch {
+      case e: Exception => e.printStackTrace
+    }
+  }
+
+  /** 
+    * 
+    */
+  private object AgentRegistrar extends DaemonActor {
+  	classLoader = getClass().getClassLoader() // hack!
+    private var queue: List[AgentProxy] = Nil
+    start
+
+    override def act() = loop { try {
+      alive(port)
+      register(serverName, self)
+      receive {
+        case Register(host, port, clientName) => synchronized {
+          print("AgentRegistrar: registering new agent "+clientName+"... ")
+          queue ::= agentBuilder.build(select(Node(host, port), clientName), clientName)
+          reply{
+            RegisterConfirmation
+          }
+          print("done.")
+        }
+        case _ => ()
+      }}
+      catch {
+        case e: Exception => e.printStackTrace
+        case _ => println("AgentRegistrar: caught something else")
+      }
+    }
+
+    def getAndClearQueue = synchronized {
+      val result = queue
+      queue = Nil
+      result
+    }
+  }
+
+}
+
+/** 
+  * 
+  */
+object SimServer {
+
+  /** Port for the server to listen on for registration messages from clients
+    */
+  final val defaultServerPort = 9700
+
+  /** Number of ms to pause before each iteration of the underlying POMDP
+    */
+  final val iterationInterval = 50
+
+  /** Number of ms to wait before rechecking agent responses in ASYNCHRONOUS mode
+    */
+  final val retryInterval = 25
+}

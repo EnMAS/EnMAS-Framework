@@ -12,6 +12,7 @@
 	<property name="sources.dir" value="src" />
 	<property name="build.dir" value="build" />
 	<property name="dist.dir" value="dist" />
+	<property name="docs.dir" value="docs" />
 
 	<target name="init">
 		<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
@@ -30,11 +31,24 @@
 
 	<target name="compile" depends="init">
 		<mkdir dir="${build.dir}" />
-		<scalac srcdir="${sources.dir}" destdir="${build.dir}" classpathref="build.classpath" unchecked="on">
+		<scalac srcdir="${sources.dir}" destdir="${build.dir}" classpathref="build.classpath" unchecked="on" deprecation="on">
 			<include name="**/*.scala"   />
 		</scalac>
+
+		<delete dir="${docs.dir}" />
+		<mkdir dir="${docs.dir}" />
+		<scaladoc 
+			srcdir="${sources.dir}"
+			destdir="${docs.dir}"
+			deprecation="yes"
+			unchecked="yes"
+			doctitle="EnMAS API Specification"
+			classpathref="build.classpath"
+		>
+			<include name="**/*.scala"   />
+		</scaladoc>
 	</target>
-	
+
 	<target name="dist" depends="clean, compile" description="generate the distribution">
 		<mkdir dir="${dist.dir}/lib" />
 		<!-- Put everything in ${build} into the EnMAS-${DSTAMP}.jar file -->
