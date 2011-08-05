@@ -12,34 +12,39 @@
 ^   Author: Connor Doyle <connor.p.d@gmail.com>    ^
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Licensing Information:
+
+
 To build the project:
-	1. Install the Scala programming language on the system,
+
+	1. Install the Scala programming language on your system
 	   if you haven't already.
-	2. Edit the scala.home property in build.xml to point to
+
+	2. Edit the ${scala.home} property in build.xml to point to
 	   your scala installation.
-	3. Run Apache Ant in this directory
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	3. Run Apache Ant from the project directory.
+
 To create a new simulation:
-	1. Create a new POMDP by supplying the initial state
-	2. Implement a subclass of AgentProxy
-	3. new SimServer(sim: POMDP, agentBuilder: AgentProxy)
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	1. Implement a subclass of AgentProxy
+
+	2. Create a new POMDP by supplying the initial state
+	   and the arbiter function.
+
+	3. Create a new SimServer, supplying your POMDP and
+	   an instance of your AgentProxy subclass.  The server
+	   uses the build method of the AgentProxy instance
+	   to create more proxies on demand as client agents
+	   connect.
+
 To create a new agent:
-	1. Implement a subclass of AgentClient
-	2. Start the client
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-^ TODO:                       ^
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 	- Scaladoc comments
-	4	_ package.scala
-	5	_ POMDP.scala
-	6	_ AgentProxy.scala
-	7	_ SimServer.scala
+	1. Implement and instantiate a subclass of AgentClient
 
+TODO:
+	- parallelize the action fetch map() call with futures
+	- fix crazy "26th Agent" bug (?!)
 	- Requiring the user to specify an enum of possible keys to the State?
 		- at least a chance at inferring a complete transition matrix
 	- Create concrete examples as proof-of-concept

@@ -39,7 +39,7 @@ package edu.uwlax.enmas.messages {
   case class Update(
     reward: Float,
     observation: State,
-    actions: HashSet[String]
+    actions: Set[String]
   ) extends Message
 
   /** Sent by an AgentProxy instance to the ClientAgent it is assigned to.

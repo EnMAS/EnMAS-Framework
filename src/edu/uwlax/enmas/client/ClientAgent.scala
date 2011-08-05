@@ -30,7 +30,8 @@ abstract class ClientAgent(server: AbstractActor) extends Actor {
     println("ClientAgent: init()")
     alive(port)
     register(name, self)
-    print("ClientAgent "+name+": registering with server... ")
+    println("ClientAgent "+name+": Alive on port "+port)
+    print("Registering with server... ")
     server ! Register(host, port, name)
     receive {
       case RegisterConfirmation => println("done.")

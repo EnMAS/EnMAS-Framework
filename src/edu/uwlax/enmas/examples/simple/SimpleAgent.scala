@@ -11,13 +11,13 @@ class SimpleAgent(server: AbstractActor) extends ClientAgent(server: AbstractAct
   def mainLoop = receive {
     case Update(reward, observation, actions) => {
         actionName = actions.head
-        println("SimpleAgent: received reward: "+reward+", decided to take action: "+actionName)
+//        println("SimpleAgent: received reward: "+reward+", decided to take action: "+actionName)
     }
     case Decide => {
-      println("SimpleAgent: taking action: "+actionName)
       takeAction(actionName)
+      print(".")
     }
-    case TimeoutWarning => println("SimpleAgent: Oops -- Timeout Warning Received!")
+    case TimeoutWarning => print("x")
   }
 
 }
