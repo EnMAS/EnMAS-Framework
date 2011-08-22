@@ -4,9 +4,6 @@ import edu.uwlax.enmas._, edu.uwlax.enmas.server.AgentProxy,
   edu.uwlax.enmas.server.Mode._
 import scala.actors._
 
-/** 
-  * 
-  */
 class SimpleAgentProxy(
   actor: AbstractActor, 
   name: Symbol, 
@@ -30,8 +27,4 @@ class SimpleAgentProxy(
       case Some((_, "lose")) => -1f
       case _ => 0f
     }
-
-  // the server delegates to this function to create new proxies
-  def build(actor: AbstractActor, name: Symbol): AgentProxy = 
-    new SimpleAgentProxy(actor, name, ASYNCHRONOUS)
 }

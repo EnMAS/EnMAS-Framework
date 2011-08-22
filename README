@@ -14,9 +14,16 @@
 
 Licensing Information:
 
-	EnMAS (Environment Simulator for Multi-Agent Systems) by Connor Doyle
+	EnMAS (Environment for Multi-Agent Simulation) by Connor Doyle
 	is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike
 	3.0 Unported License.
+
+	For more details on the license agreement, see
+	http://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	For any reuse or distribution, you must make clear to others the 
+	license terms of this work.
+
 
 To build the project:
 
@@ -28,28 +35,34 @@ To build the project:
 
 	3. Run Apache Ant from the project directory.
 
+
 To create a new simulation:
 
-	1. Implement a subclass of AgentProxy
+	1. Implement at least one subclass of AgentProxy
+	
+	2. Implement a subclass of AgentProxyFactory
 
-	2. Create a new POMDP by supplying the initial state
-	   and the arbiter function.
+	3. Create a new POMDP by supplying the initial state and
+	   the arbiter function.
 
-	3. Create a new SimServer, supplying your POMDP and
-	   an instance of your AgentProxy subclass.  The server
-	   uses the build method of the AgentProxy instance
-	   to create more proxies on demand as client agents
+	4. Create a new SimServer, supplying your POMDP and
+	   an instance of your AgentProxyFactory subclass.  
+	   The server uses the AgentProxyFactory instance
+	   to create proxies on demand as client agents
 	   connect.
+
 
 To create a new agent:
 
 	1. Implement and instantiate a subclass of AgentClient
 
+
 TODO:
-	- fix crazy "26th Agent" bug (?!)
 	- Requiring the user to specify an enum of possible keys to the State?
 		- at least a chance at inferring a complete transition matrix
-	- Option to save state history to a DB? (datasets will quickly be too large for main mem)
+	- 
+	- Option to save state history to a DB? (datasets may quickly be too large
+	  for main mem)
 	- Partial implementations for spatial simulations
-	- Adapter from spatial sim to <???> rendering engine
+	- Adapter from spatial sim to some rendering engine
 	- Create wetware interface from ClientAgent to rat neurons? ;-)

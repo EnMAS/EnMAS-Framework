@@ -19,7 +19,7 @@ object Mode extends Enumeration {
   * for communicating with the clients. */
 class SimServer(
   pomdp: POMDP,
-  agentBuilder: AgentProxy,
+  proxyFactory: AgentProxyFactory,
   port: Int = SimServer.defaultServerPort,
   serverName: Symbol = newName()
 ) {
@@ -50,7 +50,7 @@ class SimServer(
       receive {
         case Register(host, port, clientName) => synchronized {
           print("AgentRegistrar: registering new agent "+clientName+"... ")
-          queue ::= agentBuilder.build(select(Node(host, port), clientName), clientName)
+          queue ::= proxyFactory.build(select(Node(host, port), clientName), clientName)
           reply{
             RegisterConfirmation
           }

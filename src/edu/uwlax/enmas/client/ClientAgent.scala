@@ -63,7 +63,7 @@ abstract class ClientAgent(server: AbstractActor) extends Actor {
     *   of the actions set received in the latest Update message.  Sending an invalid key
     *   here results in this agent choosing the null action for the simulation step.
     */
-  final protected def takeAction(actionName: String) = reply{ TakeAction(actionName) }
+  final protected def takeAction(actionName: String) = reply{ print("."); TakeAction(actionName) }
 
   /** Consumes all pending messages.
     * The library should have implemented atomic receiveAndClear */

@@ -12,7 +12,7 @@ class SimpleAgent(server: AbstractActor) extends ClientAgent(server: AbstractAct
   def mainLoop = react {
     case Update(reward, observation, actions) => action = actions.head
     case Decide => takeAction(action)
-    case TimeoutWarning => ()
+    case TimeoutWarning => print("x")
   }
 
 }

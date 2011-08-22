@@ -15,7 +15,7 @@ import scala.actors._, scala.actors.Actor._, scala.actors.Futures._,
 abstract class AgentProxy(
   actor: AbstractActor,
   actorName: Symbol,
-  var mode: Mode = SYNCHRONOUS
+  mode: Mode = SYNCHRONOUS
 ) extends Agent {
 
   /** Provides consistency between calls to update and calls to action */
@@ -28,10 +28,6 @@ abstract class AgentProxy(
   val observation: State => State
   val actions: State => Map[String, State => State]
   val reward: State => Float
-
-  /** Returns a new instance of some concrete subclass of AgentProxy.
-    * It's up to the problem specifier how to determine how to do this. */
-  def build(actor: AbstractActor, name: Symbol): AgentProxy
 
   /** Sends an [[edu.uwlax.enmas.messages.Update]] message to the underlying
     * {{AbstractActor}}. */
