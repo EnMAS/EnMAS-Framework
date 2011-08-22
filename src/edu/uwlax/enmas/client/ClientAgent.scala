@@ -4,7 +4,6 @@ import edu.uwlax.enmas._, edu.uwlax.enmas.messages._
 
 import scala.actors._, scala.actors.Actor._,
   scala.actors.Futures._, scala.actors.remote._,
-  scala.actors.remote.TcpService._,
   scala.actors.remote.FreshNameCreator._,
   scala.actors.remote.RemoteActor._,
   java.net._
@@ -20,7 +19,9 @@ import scala.actors._, scala.actors.Actor._,
   * act simply calls init and then repeatedly invokes mainLoop. */
 abstract class ClientAgent(server: AbstractActor) extends Actor {
   final val host = InetAddress.getLocalHost.getHostAddress
-  final val port = generatePort
+  final val socket = new ServerSocket(0)
+  final val port = socket.getLocalPort
+  socket.close
   val name = newName()
   start
 
@@ -46,7 +47,7 @@ abstract class ClientAgent(server: AbstractActor) extends Actor {
   }
 
   /** Fully defines the behavior of this agent.
-    * mainLoop implementations should handle (i.e. in a receive block)
+    * mainLoop implementations should handle (i.e. in a react or receive block)
     * Update, Decide, and TimeoutWarning messages as defined in
     * the edu.uwlax.enmas.messages package.
     *

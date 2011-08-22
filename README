@@ -14,6 +14,9 @@
 
 Licensing Information:
 
+	EnMAS (Environment Simulator for Multi-Agent Systems) by Connor Doyle
+	is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike
+	3.0 Unported License.
 
 To build the project:
 
@@ -43,14 +46,10 @@ To create a new agent:
 	1. Implement and instantiate a subclass of AgentClient
 
 TODO:
-	- parallelize the action fetch map() call with futures
 	- fix crazy "26th Agent" bug (?!)
 	- Requiring the user to specify an enum of possible keys to the State?
 		- at least a chance at inferring a complete transition matrix
-	- Create concrete examples as proof-of-concept
-	- Implement Debugging Output
-	- Implement Logging Output
-	   option to save state history to a DB? (datasets will quickly be too large for main mem)
+	- Option to save state history to a DB? (datasets will quickly be too large for main mem)
 	- Partial implementations for spatial simulations
 	- Adapter from spatial sim to <???> rendering engine
 	- Create wetware interface from ClientAgent to rat neurons? ;-)
