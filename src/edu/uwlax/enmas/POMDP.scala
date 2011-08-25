@@ -11,13 +11,10 @@ case class StateException(msg:String) extends Exception(msg)
 
 /** Represents a decentralized, partially observable Markov Decision Problem.
   * This class is the heart of the edu.uwlax.enmas package. */
-class POMDP(initialState: State, arbiter: Set[State] => State) {
+class POMDP(initialState: State, transitionFunction: (State, Set[AgentCase]) => State) {
 
   /** In-order history of states. The initial state is the last element. */
   private var history = initialState :: Nil
-
-  /** The list of agents is stored in the state, in (agentsKey, agents) */
-  private final val agentsKey = "$AGENTS"
 
   /** Returns the current total in-order history of states in
     * which the initial state is the last in the list. */
@@ -35,56 +32,42 @@ class POMDP(initialState: State, arbiter: Set[State] => State) {
     * Next, the result of the transition function is prepended to the internal
     * state history. */
   final def iterate[A <: Agent](agents: Set[A]) = synchronized {
-    // update clients with obs, reward, actions
+    val state = history.head
+
+    // update clients with observation, reward, actions
     agents.foreach(
-      _ match { case proxy: AgentProxy => {
-        proxy.update(
-          proxy.observation(history.head),
-          proxy.actions(history.head),
-          proxy.reward(history.head)
+      _ match { case agent: AgentProxy => {
+        agent.update(
+          agent.observationFunction(state),
+          agent.actionsFunction(state),
+          agent.rewardFunction(state)
         )}})
 
-    // prepend next state to history
-    history +:= transition(history.head, agents)
-  }
-
-  /** Returns the result of applying the arbiter function to the set of
-    * substates produced by each [[edu.uwlax.enmas.Agent]]'s chosen 
-    * action function as applied to the supplied [[edu.uwlax.enmas.State]]. */
-  private final def transition(state: State, agents: Set[_ <: Agent]) = {
-//    val substates: Set[State] = agents.map(_.action(state))
-
     // dispatch all proxies to fetch action decisions
-    val actionFutures = List[Future[Action]]()
-    agents.map((a) => future{ a.action } :: actionFutures)
+    var actionFutures = List[(A, Future[Action])]()
+    agents.map((a) => actionFutures +:= (a, future{ a.action }))
 
-    // wait for results, apply actions to compute substates
-    val substates: Set[State] = actionFutures.map(_()(state)).toSet
+    // resolve actions, flatten all agents into case class representations
+    val agentCases = actionFutures.map(
+      af => AgentCase(
+        af._1.name,
+        af._1.observationFunction(state),
+        af._1.actionsFunction(state),
+        af._1.rewardFunction(state),
+        af._2()
+      )).toSet
 
-    // apply the arbiter function to resolve substates, completing the transition
-    val resolvedState =
-      if (substates.isEmpty) arbiter(Set(state))
-      else arbiter(substates)
-
-    // override the previous agent set, verify the new state against invariants
-    verifyState(replaceAgents(resolvedState, agents))
-  }
-
-  /** Overrides a tuple to the state binding the String agentsKey to the given Set of Agents. */
-  private final def replaceAgents[A <: Agent](state: State, agents: Set[A]) : State = {
-    state + (agentsKey -> agents.map(_.toCaseClass))
-  }
-
-  /** Checks invariants pertaining to the State.  If any fail,
-    * throws a StateException.  Otherwise returns the unmodified input State. */
-  private final def verifyState(state: State): State = {
-    state
+    // invokes the transition function, override the previous agent set,
+    // prepend result state to the history
+    history +:= transitionFunction(state, agentCases) + (POMDP.agentsKey -> agentCases)
   }
 
 }
 
-/** Companion object to the POMDP class.  Supplies static members. */
+/** Companion object to the POMDP class. */
 object POMDP {
   /** The Identity action:  does not modify the input State. */
-  val NO_ACTION = (s: State) => s
+  val NO_ACTION: Action = 'NO_ACTION
+  /** The list of agents is stored in the state, in (agentsKey, agents) */
+  val agentsKey = "AGENTS"
 }

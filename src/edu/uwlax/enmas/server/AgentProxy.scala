@@ -19,33 +19,33 @@ abstract class AgentProxy(
 ) extends Agent {
 
   /** Provides consistency between calls to update and calls to action */
-  private var actionMap = Map[String, State => State]()
+  private var actionSet = Set[Action]()
 
   /** Provides consistency between calls to update and calls to action */
   private var currentAction: Action = null
 
   val name = actorName
-  val observation: State => State
-  val actions: State => Map[String, State => State]
-  val reward: State => Float
+  val observationFunction: State => State
+  val actionsFunction: State => Set[Action]
+  val rewardFunction: State => Float
 
   /** Sends an [[edu.uwlax.enmas.messages.Update]] message to the underlying
     * {{AbstractActor}}. */
   final def update (
     observation: State,
-    actions: Map[String, Action],
+    actions: Set[Action],
     reward: Float
   ): Unit = synchronized {
-    actionMap = actions
+    actionSet = actions
     currentAction = null
-    Communicator ! Update(reward, observation, (Set[String]()).union(actions.keySet))
+    Communicator ! Update(reward, observation, actions)
   }
 
   /** Returns the associated agent client's chosen action
     * or possibly POMDP.NO_ACTION if the mode is ASYNCHRONOUS. */
   final override def action: Action = synchronized {
     if (currentAction == null) currentAction = Communicator !? FetchAction(mode) match {
-      case TakeAction(key) => actionMap.getOrElse(key, POMDP.NO_ACTION)
+      case TakeAction(a) => if (actionSet.contains(a)) a else POMDP.NO_ACTION
       case _ => POMDP.NO_ACTION
     }
     currentAction

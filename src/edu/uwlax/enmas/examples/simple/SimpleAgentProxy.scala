@@ -11,20 +11,16 @@ class SimpleAgentProxy(
 ) extends AgentProxy(actor, name, mode) {
 
   // agent is an omnicient observer
-  val observation = (s: State) => s
+  val observationFunction = (s: State) => s
 
   // agent always chooses between "win" and "lose"
-  val actions: State => Map[String, State => State] = {
-    val win = ("win", (s: State) => s + ("lastAction" -> "win"))
-    val lose = ("lose", (s: State) => s + ("lastAction" -> "win"))
-    (s: State) => Map() + lose + win
-  }
+  val actionsFunction = (s: State) => Set('win, 'lose)
 
   // simply checks for "win" or "lose" as last action
-  val reward: State => Float =
-    (s: State) => s.find((t:(String, Any)) => t._1 == "lastAction") match {
-      case Some((_, "win")) => 1f
-      case Some((_, "lose")) => -1f
+  val rewardFunction: State => Float =
+    (s: State) => s.get("time") match {
+      case agents: Set[AgentCase] => if (agents.head.action == 'win) 1f else -1f
       case _ => 0f
     }
+
 }

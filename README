@@ -43,7 +43,7 @@ To create a new simulation:
 	2. Implement a subclass of AgentProxyFactory
 
 	3. Create a new POMDP by supplying the initial state and
-	   the arbiter function.
+	   the transition function.
 
 	4. Create a new SimServer, supplying your POMDP and
 	   an instance of your AgentProxyFactory subclass.  
@@ -58,6 +58,7 @@ To create a new agent:
 
 
 TODO:
+	- Implement State.getAs[T <: Any](key: String): Option[T]
 	- Requiring the user to specify an enum of possible keys to the State?
 		- at least a chance at inferring a complete transition matrix
 	- 

@@ -10,8 +10,15 @@ import scala.collection.immutable.HashMap,
 	* Instantiates a SimServer. */
 object SimpleServerLauncher extends App {
   val server = new SimServer(
-    new POMDP(HashMap.empty, (ss: Set[State]) => ss.head),
-    SimpleAgentProxyFactory,
+    new POMDP(
+      HashMap.empty + ("time" -> 0), // initial state
+      (s: State, aa: Set[AgentCase]) => 
+        s.get("time") match { 
+          case Some(t: Int) => s + (("time", t+1))
+          case _ => s
+        } // transition fxn
+    ),
+    SimpleAgentProxyFactory, // agent proxy builder
     9700, // port
     'TestServer // app server name on node
   )

@@ -1,6 +1,7 @@
 package edu.uwlax {
 
-  /** Provides classes for the EnMAS POMDP framework. 
+  /** Provides classes for the EnMAS POMDP framework.  EnMAS stands for
+    * "Environment for Multi Agent Simulation".
     *
     * == About the Project ==
     * EnMAS is an Environment for Multi-Agent and
@@ -19,7 +20,7 @@ package edu.uwlax {
     *
     * == Acknowledgements ==
     *
-    * This project is maintained by Connor Doyle 
+    * This project was created and is maintained by Connor Doyle 
     * <[[mailto:connor.p.d@gmail.com connor.p.d@gmail.com]]> as part
     * of the Master of Software Engineering degree at the University of
     * Wisconsin - La Crosse under the advisement of 
@@ -35,17 +36,18 @@ package edu.uwlax {
     *
     * ==== To create a new simulation: ====
     *
-    * 1. Implement a subclass of [[edu.uwlax.enmas.server.AgentProxy]]
+    * 1. Implement at least one subclass of [[edu.uwlax.enmas.server.AgentProxy]]
     *
-    * 2. Create a new [[edu.uwlax.enmas.POMDP]] by supplying the initial state
-    *	   and the arbiter function.
+    * 2. Implement a subclass of [[edu.uwlax.enmas.server.AgentProxyFactory]]
     *
-    * 3. Create a new [[edu.uwlax.enmas.server.SimServer]], supplying your 
-    *    [[edu.uwlax.enmas.POMDP]] and an instance of your 
-    *    [[edu.uwlax.enmas.server.AgentProxy]] subclass. The server uses the 
-    *    build method of the [[edu.uwlax.enmas.server.AgentProxy]] instance
-    *	   to create more proxies on demand as 
-    *    [[edu.uwlax.enmas.client.ClientAgent]]s connect.
+    * 3. Create a new [[edu.uwlax.enmas.POMDP]] by supplying the initial state and
+    *    the transition function.
+    *
+    * 4. Create a new [[edu.uwlax.enmas.server.SimServer]], supplying your [[edu.uwlax.enmas.POMDP]] and
+    *    an instance of your [[edu.uwlax.enmas.server.AgentProxyFactory]] subclass.  
+    *    The server uses the [[edu.uwlax.enmas.server.AgentProxyFactory]] instance
+    *    to create proxies on demand as client agents
+    *    connect.
     *
     * ==== To create a new agent: ====
     *
@@ -86,9 +88,8 @@ package edu.uwlax {
       * over the network to distributed agents. */
     type State = HashMap[String, Any]
 
-    /** Defines a POMDP Action to be a function that takes a State
-      * as its single argument, returning a new state. */
-    type Action = State => State
+    /** POMDP Actions are just Symbols */
+    type Action = Symbol
   }
 
 }

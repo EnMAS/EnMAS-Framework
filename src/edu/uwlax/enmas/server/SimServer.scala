@@ -40,7 +40,6 @@ class SimServer(
     * with the system and dispatches responsibility for communicating with
     * them to a new instance of AgentProxy. */
   private object AgentRegistrar extends DaemonActor {
-  	classLoader = getClass().getClassLoader() // hack!
     private var queue: List[AgentProxy] = Nil
     start
 
