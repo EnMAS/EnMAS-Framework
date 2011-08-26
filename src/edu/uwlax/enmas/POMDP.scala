@@ -66,7 +66,7 @@ class POMDP(initialState: State, transitionFunction: (State, Set[AgentCase]) => 
 
 /** Companion object to the POMDP class. */
 object POMDP {
-  /** The Identity action:  does not modify the input State. */
+  /** The Identity action */
   val NO_ACTION: Action = 'NO_ACTION
   /** The list of agents is stored in the state, in (agentsKey, agents) */
   val agentsKey = "AGENTS"

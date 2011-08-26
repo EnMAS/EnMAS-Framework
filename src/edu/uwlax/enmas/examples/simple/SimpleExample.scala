@@ -13,12 +13,13 @@ object SimpleServerLauncher extends App {
     new POMDP(
       State.empty + ("time" -> 0), // initial state
       (s: State, aa: Set[AgentCase]) => 
-        s.getAs[Int]("time") match { 
-          case Some(t: Int) => s + (("time", t+1))
+        s.getAs[Int]("time") match {
+          case Some(t: Int) => { println(t); s + (("time", t+1)) }
           case _ => s
         } // transition fxn
     ),
     SimpleAgentProxyFactory, // agent proxy builder
+    (2, 3), // min, max number of clients
     9700, // port
     'TestServer // app server name on node
   )

@@ -20,6 +20,7 @@ object Mode extends Enumeration {
 class SimServer(
   pomdp: POMDP,
   proxyFactory: AgentProxyFactory,
+  numClients: (Int, Int),
   port: Int = SimServer.defaultServerPort,
   serverName: Symbol = newName()
 ) {
@@ -29,7 +30,8 @@ class SimServer(
   while(true) { try {
       Thread.sleep(SimServer.iterationInterval)
       agents ++= AgentRegistrar.getAndClearQueue
-      pomdp.iterate(agents.toSet)
+      if (numClients._1 <= agents.length && agents.length <= numClients._2)
+        pomdp.iterate(agents.toSet)
     }
     catch {
       case e: Exception => e.printStackTrace
@@ -48,12 +50,17 @@ class SimServer(
       register(serverName, self)
       receive {
         case Register(host, port, clientName) => synchronized {
-          print("AgentRegistrar: registering new agent "+clientName+"... ")
-          queue ::= proxyFactory.build(select(Node(host, port), clientName), clientName)
-          reply{
-            RegisterConfirmation
+          if (agents.length + queue.length < numClients._2) {
+            print("AgentRegistrar: registering new agent "+clientName+"... ")
+            queue ::= proxyFactory.build(select(Node(host, port), clientName), clientName)
+            reply{
+              RegisterConfirmation
+            }
+            println("done.")
           }
-          println("done.")
+          else {
+            println("AgentRegistrar: server has reached maximum number of client connections. Registration failed.")            
+          }
         }
         case _ => ()
       }}
