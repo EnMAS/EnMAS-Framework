@@ -62,7 +62,7 @@ package edu.uwlax.enmas.messages {
     * @see [[edu.uwlax.enmas.server.AgentProxy]]
     * @see [[edu.uwlax.enmas.client.ClientAgent]]
     */
-  case class TakeAction(action: Symbol) extends Message
+  case class TakeAction(action: Action) extends Message
 
   /** Sent by an AgentProxy instance to the ClientAgent it is assigned to.
     * This messsage should be handled (i.e. within a receive block) in concrete

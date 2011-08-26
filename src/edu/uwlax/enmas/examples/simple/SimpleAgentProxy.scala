@@ -16,10 +16,13 @@ class SimpleAgentProxy(
   // agent always chooses between "win" and "lose"
   val actionsFunction = (s: State) => Set('win, 'lose)
 
-  // simply checks for "win" or "lose" as last action
+  // simply checks for "win" or "lose" in set of last actions
   val rewardFunction: State => Float =
-    (s: State) => s.get("time") match {
-      case agents: Set[AgentCase] => if (agents.head.action == 'win) 1f else -1f
+    (s: State) => s.getAs[Set[AgentCase]](POMDP.agentsKey) match {
+      case Some(agents) => agents.headOption match {
+        case Some(a) => if (a.action == 'win) 1f else -1f
+        case _ => 0f
+      }
       case _ => 0f
     }
 

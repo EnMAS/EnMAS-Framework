@@ -61,7 +61,6 @@ TODO:
 	- Implement State.getAs[T <: Any](key: String): Option[T]
 	- Requiring the user to specify an enum of possible keys to the State?
 		- at least a chance at inferring a complete transition matrix
-	- 
 	- Option to save state history to a DB? (datasets may quickly be too large
 	  for main mem)
 	- Partial implementations for spatial simulations

@@ -11,9 +11,9 @@ import scala.collection.immutable.HashMap,
 object SimpleServerLauncher extends App {
   val server = new SimServer(
     new POMDP(
-      HashMap.empty + ("time" -> 0), // initial state
+      State.empty + ("time" -> 0), // initial state
       (s: State, aa: Set[AgentCase]) => 
-        s.get("time") match { 
+        s.getAs[Int]("time") match { 
           case Some(t: Int) => s + (("time", t+1))
           case _ => s
         } // transition fxn

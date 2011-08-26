@@ -14,9 +14,12 @@ class SimpleAgent(server: AbstractActor) extends ClientAgent(server: AbstractAct
   var action: Action = POMDP.NO_ACTION
 
   def mainLoop = react {
-    case Update(reward, observation, actions) => action = actions.head
+    case Update(reward, observation, actions) => {
+      println(reward)
+      action = actions.head
+    }
     case Decide => takeAction(action)
-    case TimeoutWarning => print("x")
+    case TimeoutWarning => print("\t\tx")
   }
 
 }

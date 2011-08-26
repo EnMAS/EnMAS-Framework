@@ -79,7 +79,7 @@ object SimServer {
   final val defaultServerPort = 9700
 
   /** Number of ms to pause before each iteration of the underlying POMDP */
-  final val iterationInterval = 10
+  final val iterationInterval = 1000
 
   /** Number of ms to wait before rechecking agent responses in SYNCHRONOUS mode.
     * This value is also the one-time grace period in ASYNCHRONOUS mode. */
