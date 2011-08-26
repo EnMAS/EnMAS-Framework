@@ -1,13 +1,9 @@
 package edu.uwlax.enmas
 
-import java.io.Serializable
-
 class State(
   map: HashMap[String, (Manifest[_], Any)] = 
     scala.collection.immutable.HashMap.empty[String, (Manifest[_], Any)]
-) extends Serializable {
-
-  def empty = State()
+) extends java.io.Serializable {
 
   def +[T <: Any](elem: (String, T))(implicit m: Manifest[T]): State =
     State(map.+((elem._1, (m, elem._2))))

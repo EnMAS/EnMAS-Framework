@@ -82,8 +82,6 @@ package edu.uwlax {
       * [[http://akka.io/docs/akka/1.1.3/scala/stm.html#persistent-datastructures Explanation of Persistent Datastructures]] */
     type HashMap[A, B] = scala.collection.immutable.HashMap[A, B]
 
-    implicit def Map2State(m: HashMap[String, (Manifest[_], Any)]): State = m.asInstanceOf[State]
-
     /** POMDP Actions are just Symbols */
     type Action = Symbol
   }
