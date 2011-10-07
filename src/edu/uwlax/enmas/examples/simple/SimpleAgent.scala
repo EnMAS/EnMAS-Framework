@@ -1,6 +1,6 @@
 package edu.uwlax.enmas.examples.simple
 
-import edu.uwlax.enmas.client.ClientAgent, 
+import edu.uwlax.enmas.client.AgentClient, 
   edu.uwlax.enmas.messages._, 
   edu.uwlax.enmas.{Action, POMDP}
 import scala.actors._, 
@@ -9,7 +9,8 @@ import scala.actors._,
 
 /** Most simplistic concrete subclass of ClientAgent.
   * Always takes the "first" action in set of available actions. */
-class SimpleAgent(server: AbstractActor) extends ClientAgent(server: AbstractActor) {
+class SimpleAgent(serverHost: String, serverPort: Int) 
+    extends AgentClient(serverHost: String, serverPort: Int) {
 
   var action: Action = POMDP.NO_ACTION
 

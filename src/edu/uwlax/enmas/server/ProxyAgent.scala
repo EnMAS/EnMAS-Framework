@@ -12,7 +12,7 @@ import scala.actors._, scala.actors.Actor._, scala.actors.Futures._,
   *
   * The client AI agent may be remote or local, depending on
   * the underlying AbstractActor member. */
-abstract class AgentProxy(
+abstract class ProxyAgent(
   actor: AbstractActor,
   actorName: Symbol,
   mode: Mode = SYNCHRONOUS

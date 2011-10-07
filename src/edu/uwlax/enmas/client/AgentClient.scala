@@ -1,6 +1,6 @@
 package edu.uwlax.enmas.client
 
-import edu.uwlax.enmas._, edu.uwlax.enmas.messages._
+import edu.uwlax.enmas._, edu.uwlax.enmas.server._, edu.uwlax.enmas.messages._
 
 import scala.actors._, scala.actors.Actor._,
   scala.actors.Futures._, scala.actors.remote._,
@@ -12,12 +12,14 @@ import scala.actors._, scala.actors.Actor._,
   * All AI clients must extend this class in order to interface with
   * the POMDP simulation.
   *
-  * Once instantiated, concrete subclasses of ClientAgent start themselves.
+  * Once instantiated, concrete subclasses of AgentClient start themselves.
   * There is no need to call start on them.
   *
   * The only element implementations must supply is the mainLoop method.
   * act simply calls init and then repeatedly invokes mainLoop. */
-abstract class ClientAgent(server: AbstractActor) extends Actor {
+abstract class AgentClient(serverHost: String, serverPort: Int) extends Actor {
+  val server = select(Node(serverHost, serverPort), SimServer.serverName)
+
   final val host = InetAddress.getLocalHost.getHostAddress
   final val socket = new ServerSocket(0)
   final val port = socket.getLocalPort

@@ -10,6 +10,8 @@ class State(
 
   def -(key: String): State = State(map.-(key))
 
+  def keySet = map.keySet
+
   def getAs[T](key: String)(implicit m : Manifest[T]): Option[T] = {
     map.get(key) match {
       case Some((om: Manifest[_], o: Any)) =>

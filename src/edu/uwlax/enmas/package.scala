@@ -36,16 +36,16 @@ package edu.uwlax {
     *
     * ==== To create a new simulation: ====
     *
-    * 1. Implement at least one subclass of [[edu.uwlax.enmas.server.AgentProxy]]
+    * 1. Implement at least one subclass of [[edu.uwlax.enmas.server.ProxyAgent]]
     *
-    * 2. Implement a subclass of [[edu.uwlax.enmas.server.AgentProxyFactory]]
+    * 2. Implement a subclass of [[edu.uwlax.enmas.server.ProxyAgentFactory]]
     *
     * 3. Create a new [[edu.uwlax.enmas.POMDP]] by supplying the initial state and
     *    the transition function.
     *
     * 4. Create a new [[edu.uwlax.enmas.server.SimServer]], supplying your [[edu.uwlax.enmas.POMDP]] and
-    *    an instance of your [[edu.uwlax.enmas.server.AgentProxyFactory]] subclass.  
-    *    The server uses the [[edu.uwlax.enmas.server.AgentProxyFactory]] instance
+    *    an instance of your [[edu.uwlax.enmas.server.ProxyAgentFactory]] subclass.  
+    *    The server uses the [[edu.uwlax.enmas.server.ProxyAgentFactory]] instance
     *    to create proxies on demand as client agents
     *    connect.
     *

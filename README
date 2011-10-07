@@ -58,11 +58,8 @@ To create a new agent:
 
 
 TODO:
-	- Implement State.getAs[T <: Any](key: String): Option[T]
-	- Requiring the user to specify an enum of possible keys to the State?
-		- at least a chance at inferring a complete transition matrix
+	- Prototype phase completed, time to think about formal requirements
 	- Option to save state history to a DB? (datasets may quickly be too large
 	  for main mem)
 	- Partial implementations for spatial simulations
 	- Adapter from spatial sim to some rendering engine
-	- Create wetware interface from ClientAgent to rat neurons? ;-)

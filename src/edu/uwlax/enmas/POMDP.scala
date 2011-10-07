@@ -1,6 +1,6 @@
 package edu.uwlax.enmas
 
-import edu.uwlax.enmas.server.AgentProxy
+import edu.uwlax.enmas.server.ProxyAgent
 import scala.reflect.{Manifest, ClassManifest},
   ClassManifest.fromClass
 import scala.actors.Future, scala.actors.Futures._
@@ -36,7 +36,7 @@ class POMDP(initialState: State, transitionFunction: (State, Set[AgentCase]) => 
 
     // update clients with observation, reward, actions
     agents.foreach(
-      _ match { case agent: AgentProxy => {
+      _ match { case agent: ProxyAgent => {
         agent.update(
           agent.observationFunction(state),
           agent.actionsFunction(state),
@@ -66,8 +66,10 @@ class POMDP(initialState: State, transitionFunction: (State, Set[AgentCase]) => 
 
 /** Companion object to the POMDP class. */
 object POMDP {
+
   /** The Identity action */
   val NO_ACTION: Action = 'NO_ACTION
+
   /** The list of agents is stored in the state, in (agentsKey, agents) */
-  val agentsKey = "AGENTS"
+  val agentsKey = "$AGENTS"
 }

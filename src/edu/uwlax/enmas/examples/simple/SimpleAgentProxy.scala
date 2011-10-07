@@ -1,14 +1,14 @@
 package edu.uwlax.enmas.examples.simple
 
-import edu.uwlax.enmas._, edu.uwlax.enmas.server.AgentProxy,
+import edu.uwlax.enmas._, edu.uwlax.enmas.server.ProxyAgent,
   edu.uwlax.enmas.server.Mode._
 import scala.actors._
 
-class SimpleAgentProxy(
+class SimpleProxyAgent(
   actor: AbstractActor, 
   name: Symbol, 
   mode: Mode = SYNCHRONOUS
-) extends AgentProxy(actor, name, mode) {
+) extends ProxyAgent(actor, name, mode) {
 
   // agent is an omnicient observer
   val observationFunction = (s: State) => s

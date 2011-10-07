@@ -19,10 +19,9 @@ object Mode extends Enumeration {
   * for communicating with the clients. */
 class SimServer(
   pomdp: POMDP,
-  proxyFactory: AgentProxyFactory,
+  proxyFactory: ProxyAgentFactory,
   numClients: (Int, Int),
-  port: Int = SimServer.defaultServerPort,
-  serverName: Symbol = newName()
+  port: Int = SimServer.defaultServerPort
 ) {
 
   protected var agents: List[Agent] = Nil
@@ -42,16 +41,16 @@ class SimServer(
     * with the system and dispatches responsibility for communicating with
     * them to a new instance of AgentProxy. */
   private object AgentRegistrar extends DaemonActor {
-    private var queue: List[AgentProxy] = Nil
+    private var queue: List[ProxyAgent] = Nil
     start
 
     override def act() = loop { try {
       alive(port)
-      register(serverName, self)
+      register(SimServer.serverName, self)
       receive {
         case Register(host, port, clientName) => synchronized {
           if (agents.length + queue.length < numClients._2) {
-            print("AgentRegistrar: registering new agent "+clientName+"... ")
+            print("Registering new agent "+clientName+"... ")
             queue ::= proxyFactory.build(select(Node(host, port), clientName), clientName)
             reply{
               RegisterConfirmation
@@ -59,14 +58,13 @@ class SimServer(
             println("done.")
           }
           else {
-            println("AgentRegistrar: server has reached maximum number of client connections. Registration failed.")            
+            println("Registration Failed. Server has reached max number of clients.")
           }
         }
         case _ => ()
       }}
       catch {
         case e: Exception => e.printStackTrace
-        case _ => println("AgentRegistrar: caught something else")
       }
     }
 
@@ -81,6 +79,8 @@ class SimServer(
 
 /** Companion object for [[edu.uwlax.enmas.server.SimServer]].  Provides static values. */
 object SimServer {
+
+  final val serverName = 'EnMAS_Server
 
   /** Port for the server to listen on for registration messages from clients */
   final val defaultServerPort = 9700

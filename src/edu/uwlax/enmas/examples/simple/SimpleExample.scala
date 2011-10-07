@@ -5,31 +5,29 @@ import scala.collection.immutable.HashMap,
   scala.actors.remote._, scala.actors.remote.RemoteActor._
 
 /**
-	* Creates a new POMDP by supplying the initial state and the arbiter function.
-	* Instantiates a SimpleAgentProxy (subclass of AgentProxy).
+	* Creates a new POMDP by supplying the initial state and the 
+	* transition function.
 	* Instantiates a SimServer. */
 object SimpleServerLauncher extends App {
-  val server = new SimServer(
+  new SimServer(
     new POMDP(
-      State.empty + ("time" -> 0), // initial state
-      (s: State, aa: Set[AgentCase]) => 
-        s.getAs[Int]("time") match {
-          case Some(t: Int) => { println(t); s + (("time", t+1)) }
+      // initial state
+      State.empty + ("time" -> 0),
+
+      // transition fxn
+      (s: State, aa: Set[AgentCase]) => s.getAs[Int]("time") match {
+          case Some(t) => { println(t); s + (("time", t+1)) }
           case _ => s
-        } // transition fxn
+      }
     ),
-    SimpleAgentProxyFactory, // agent proxy builder
-    (2, 3), // min, max number of clients
-    9700, // port
-    'TestServer // app server name on node
+
+    SimpleProxyAgentFactory, // agent proxy builder
+
+    (2, 3) // min, max number of clients
   )
 }
 
 /** Instantiates a SimpleAgent */
 object SimpleClientLauncher extends App {
-  val client = new SimpleAgent(
-    select(
-      Node("localhost", 9700), 'TestServer
-    )
-  )
+  new SimpleAgent("localhost", SimServer.defaultServerPort)
 }
