@@ -32,7 +32,7 @@ package org.enmas {
     * and the National Science Foundation.
     *
     * == Usage Summary ==
-    * The main class in this package is [[org.enmas.core.POMDP]]. 
+    * The main class in this package is [[org.enmas.pomdp.POMDP]]. 
     *
     * ==== To create a new simulation: ====
     *

@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">POMDP</span>
         
-        <span class="params">(<span name="agents">agents: List[(AgentType, <span name="scala.Int" class="extype">Int</span>, <span name="scala.Int" class="extype">Int</span>)]</span>, <span name="initialState">initialState: <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="rewardFunction">rewardFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ List[(<span name="scala.Int" class="extype">Int</span>, <span name="scala.Float" class="extype">Float</span>)]</span>, <span name="observationFunction">observationFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ List[(<span name="scala.Int" class="extype">Int</span>, <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>)]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agents">agents: List[(AgentType, <span name="scala.Int" class="extype">Int</span>, <span name="scala.Int" class="extype">Int</span>)]</span>, <span name="initialState">initialState: <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="rewardFunction">rewardFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ List[(<span name="scala.Int" class="extype">Int</span>, <span name="scala.Float" class="extype">Float</span>)]</span>, <span name="observationFunction">observationFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ List[(<span name="scala.Int" class="extype">Int</span>, <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>)]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">POMDP</span>
         
-        <span class="params">(<span name="agents">agents: List[(AgentType, <span name="scala.Int" class="extype">Int</span>, <span name="scala.Int" class="extype">Int</span>)]</span>, <span name="initialState">initialState: <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="rewardFunction">rewardFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ List[(<span name="scala.Int" class="extype">Int</span>, <span name="scala.Float" class="extype">Float</span>)]</span>, <span name="observationFunction">observationFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ List[(<span name="scala.Int" class="extype">Int</span>, <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>)]</span>)</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agents">agents: List[(AgentType, <span name="scala.Int" class="extype">Int</span>, <span name="scala.Int" class="extype">Int</span>)]</span>, <span name="initialState">initialState: <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="rewardFunction">rewardFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ List[(<span name="scala.Int" class="extype">Int</span>, <span name="scala.Float" class="extype">Float</span>)]</span>, <span name="observationFunction">observationFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ List[(<span name="scala.Int" class="extype">Int</span>, <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>)]</span>)</span>
       </span>
       </h4>
       
@@ -189,6 +189,17 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.pomdp.POMDP#description" data-isabs="false">
+      <a id="description:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">description</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -269,6 +280,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.pomdp.POMDP#name" data-isabs="false">
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">name</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">

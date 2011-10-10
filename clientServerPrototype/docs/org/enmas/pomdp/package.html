@@ -38,7 +38,7 @@ Wisconsin - La Crosse under the advisement of
 Drs. <a href="http://cs.uwlax.edu/~mallen">Marty Allen</a> and
 <a href="http://charity.cs.uwlax.edu">Kenny Hunt</a>.</p><p>The author would like to acknowledge the generosity of the Department
 of Computer Science at the University of Wisconsin - La Crosse
-and the National Science Foundation.</p><h4> Usage Summary </h4><p>The main class in this package is org.enmas.core.POMDP.</p><h6> To create a new simulation: </h6><h6> To create a new agent: </h6><h4> Legal </h4><p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">
+and the National Science Foundation.</p><h4> Usage Summary </h4><p>The main class in this package is <a name="org.enmas.pomdp.POMDP" class="extype" href="POMDP.html">POMDP</a>.</p><h6> To create a new simulation: </h6><h6> To create a new agent: </h6><h4> Legal </h4><p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">
   <img alt="Creative Commons License"
     style="border-width:0"
     src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" />
@@ -118,7 +118,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
       <span class="symbol"> 
         <a href="POMDP.html"><span class="name">POMDP</span></a>
         
-        <span class="params">(<span name="agents">agents: List[(AgentType, Int, Int)]</span>, <span name="initialState">initialState: State</span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (State, JointAction) ⇒ State</span>, <span name="rewardFunction">rewardFunction: (State, JointAction) ⇒ List[(Int, Float)]</span>, <span name="observationFunction">observationFunction: (State, JointAction) ⇒ List[(Int, State)]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agents">agents: List[(AgentType, Int, Int)]</span>, <span name="initialState">initialState: State</span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (State, JointAction) ⇒ State</span>, <span name="rewardFunction">rewardFunction: (State, JointAction) ⇒ List[(Int, Float)]</span>, <span name="observationFunction">observationFunction: (State, JointAction) ⇒ List[(Int, State)]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Represents a decentralized, partially observable Markov Decision Problem.</p>

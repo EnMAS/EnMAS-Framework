@@ -1,18 +1,19 @@
-Write the following classes: (19/24)
+Write the following classes: (22/25)
 
 org.enmas.pomdp				POMDP						√
 							State						√
 							<type aliases>				√
 
 org.enmas.client			Client						√
-							ClientManager				
+							ClientManager				 3
 							Agent						√
 
-org.enmas.client.gui		ClientGUI					
-							GraphicsPlugin				
+org.enmas.client.gui		ClientGUI					 4
+							GraphicsPlugin				√
 
-org.enmas.server			ServerManager				
-							Server						
+org.enmas.server			ServerManager				√
+							Server						 2
+							Host						√
 							Logger						√
 							POMDPIteration				√
 							ClientManagerRef			√
