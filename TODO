@@ -1,0 +1,30 @@
+Write the following classes: (19/24)
+
+org.enmas.pomdp				POMDP						√
+							State						√
+							<type aliases>				√
+
+org.enmas.client			Client						√
+							ClientManager				
+							Agent						√
+
+org.enmas.client.gui		ClientGUI					
+							GraphicsPlugin				
+
+org.enmas.server			ServerManager				
+							Server						
+							Logger						√
+							POMDPIteration				√
+							ClientManagerRef			√
+							AgentRef					√
+
+org.enmas.messaging			MessageBundle				√
+							Message						√
+							RegisterHost				√
+							ConfirmHostRegistration		√
+							DenyHostRegistration		√
+							RegisterAgent				√
+							ConfirmAgentRegistration	√
+							DenyAgentRegistration		√
+							TakeAction					√
+							UpdateAgent					√

@@ -1,0 +1,65 @@
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^                                                  ^
+^   EEEEE          M       M       A        SSSS   ^
+^   EE     nn nn   MM     MM      AAA      SS      ^
+^   EEEEE  nnn nn  MMM   MMM     AA AA       SS    ^
+^   EE     nn  nn  MM MMM MM    AAAAAAA       SS   ^
+^   EEEEE  nn  nn  MM  M  MM   AA     AA   SSSS    ^
+^                                                  ^
+^      Environment for Multi-Agent Simulation      ^
+^                                                  ^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^   Author: Connor Doyle <connor.p.d@gmail.com>    ^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Licensing Information:
+
+	EnMAS (Environment for Multi-Agent Simulation) by Connor Doyle
+	is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike
+	3.0 Unported License.
+
+	For more details on the license agreement, see
+	http://creativecommons.org/licenses/by-nc-sa/3.0/
+
+	For any reuse or distribution, you must make clear to others the 
+	license terms of this work.
+
+
+To build the project:
+
+	1. Install the Scala programming language on your system
+	   if you haven't already.
+
+	2. Edit the ${scala.home} property in build.xml to point to
+	   your scala installation.
+
+	3. Run Apache Ant from the project directory.
+
+
+To create a new simulation:
+
+	1. Implement at least one subclass of AgentProxy
+	
+	2. Implement a subclass of AgentProxyFactory
+
+	3. Create a new POMDP by supplying the initial state and
+	   the transition function.
+
+	4. Create a new SimServer, supplying your POMDP and
+	   an instance of your AgentProxyFactory subclass.  
+	   The server uses the AgentProxyFactory instance
+	   to create proxies on demand as client agents
+	   connect.
+
+
+To create a new agent:
+
+	1. Implement and instantiate a subclass of AgentClient
+
+
+TODO:
+	- Prototype phase completed, time to think about formal requirements
+	- Option to save state history to a DB? (datasets may quickly be too large
+	  for main mem)
+	- Partial implementations for spatial simulations
+	- Adapter from spatial sim to some rendering engine

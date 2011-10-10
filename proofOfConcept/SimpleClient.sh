@@ -1,0 +1,1 @@
+java -cp /usr/bin/scala-CURRENT/lib/scala-library.jar:dist/lib/EnMAS.jar edu.uwlax.enmas.examples.simple.SimpleClientLauncher
