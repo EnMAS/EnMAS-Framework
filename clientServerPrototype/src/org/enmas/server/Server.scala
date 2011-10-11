@@ -11,8 +11,8 @@ class Server(
 ) extends Actor {
 
   var state = model.initialState
-  var clientManagers = ListSet[ClientManagerRef]()
-  var agents = ListSet[AgentRef]()
+  var clientManagers = Set[ClientManagerRef]()
+  var agents = Set[AgentRef]()
   var messageQueue = Map[ClientManagerRef, List[Message]]()
   var pendingActions = Map[AgentRef, Action]()
 

@@ -54,8 +54,8 @@
 
 	<target name="dist" depends="clean, compile" description="generate the distribution">
 		<mkdir dir="${dist.dir}/lib" />
-		<!-- Put everything in ${build} into the EnMAS-${DSTAMP}.jar file -->
-		<jar jarfile="${dist.dir}/lib/EnMAS-${DSTAMP}.jar" basedir="${build.dir}"/>
+		<!-- Put everything in ${build} into the EnMAS.jar file -->
+		<jar jarfile="${dist.dir}/lib/EnMAS.jar" basedir="${build.dir}"/>
 	</target>
 	
 	<target name="clean" description="clean up" >
