@@ -20,9 +20,7 @@ class Server(
   private def registerAgent(cm: ClientManagerRef, reg: RegisterAgent): ClientMessage = {
     val newAgent = AgentRef(cm, reg.agentRef, reg.agentType)
     var newAgentSet = agents + newAgent
-    val agentSetMatchesModel = true // TODO: implement
-
-    if (agentSetMatchesModel) {
+    if (model accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
       agents = newAgentSet
       ConfirmAgentRegistration(reg.agentRef, reg.agentType, model.actionsFunction(reg.agentType))
     }

@@ -24,11 +24,12 @@
       <span class="symbol"> 
         <span class="name">POMDP</span>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agents">agents: List[<a name="org.enmas.pomdp.AgentConstraint" class="extype" href="AgentConstraint.html">AgentConstraint</a>]</span>, <span name="initialState">initialState: <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="rewardFunction">rewardFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ (AgentType) ⇒ <span name="scala.Float" class="extype">Float</span></span>, <span name="observationFunction">observationFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ (AgentType) ⇒ Observation</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agentConstraints">agentConstraints: List[<a name="org.enmas.pomdp.AgentConstraint" class="extype" href="AgentConstraint.html">AgentConstraint</a>]</span>, <span name="initialState">initialState: <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="rewardFunction">rewardFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ (AgentType) ⇒ <span name="scala.Float" class="extype">Float</span></span>, <span name="observationFunction">observationFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ (AgentType) ⇒ Observation</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Represents a decentralized, partially observable Markov Decision Problem.</p></div><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Represents a decentralized, partially observable Markov Decision Problem.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -63,7 +64,7 @@
       <span class="symbol"> 
         <span class="name">POMDP</span>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agents">agents: List[<a name="org.enmas.pomdp.AgentConstraint" class="extype" href="AgentConstraint.html">AgentConstraint</a>]</span>, <span name="initialState">initialState: <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="rewardFunction">rewardFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ (AgentType) ⇒ <span name="scala.Float" class="extype">Float</span></span>, <span name="observationFunction">observationFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ (AgentType) ⇒ Observation</span>)</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agentConstraints">agentConstraints: List[<a name="org.enmas.pomdp.AgentConstraint" class="extype" href="AgentConstraint.html">AgentConstraint</a>]</span>, <span name="initialState">initialState: <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>, <span name="rewardFunction">rewardFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ (AgentType) ⇒ <span name="scala.Float" class="extype">Float</span></span>, <span name="observationFunction">observationFunction: (<a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a>, JointAction) ⇒ (AgentType) ⇒ Observation</span>)</span>
       </span>
       </h4>
       
@@ -131,6 +132,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.pomdp.POMDP#accomodatesAgents" data-isabs="false">
+      <a id="accomodatesAgents(List[AgentType]):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">accomodatesAgents</span>
+        
+        <span class="params">(<span name="agents">agents: List[AgentType]</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Checks that all supplied types are allowed and cardinalities do not
+exceed limits.</p>
     </li><li visbl="pub" name="org.enmas.pomdp.POMDP#actionsFunction" data-isabs="false">
       <a id="actionsFunction:(AgentType) ⇒ List[Action]"></a>
       <h4 class="signature">
@@ -142,12 +155,12 @@
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.enmas.pomdp.POMDP#agents" data-isabs="false">
-      <a id="agents:List[AgentConstraint]"></a>
+    </li><li visbl="pub" name="org.enmas.pomdp.POMDP#agentConstraints" data-isabs="false">
+      <a id="agentConstraints:List[AgentConstraint]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">agents</span>
+        <span class="name">agentConstraints</span>
         
         <span class="result">: List[<a name="org.enmas.pomdp.AgentConstraint" class="extype" href="AgentConstraint.html">AgentConstraint</a>]</span>
       </span>
@@ -280,6 +293,20 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.pomdp.POMDP#isSatisfiedByAgents" data-isabs="false">
+      <a id="isSatisfiedByAgents(List[AgentType]):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">isSatisfiedByAgents</span>
+        
+        <span class="params">(<span name="agents">agents: List[AgentType]</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Checks that this model accomodates the agent set and that
+the agent set satisfies the minimum cardinalities.</p><div class="fullcomment"><div class="comment cmt"><p>Checks that this model accomodates the agent set and that
+the agent set satisfies the minimum cardinalities.</p><p>This is a more stringent test than the accomodatesAgents method.
+</p></div></div>
     </li><li visbl="pub" name="org.enmas.pomdp.POMDP#name" data-isabs="false">
       <a id="name:String"></a>
       <h4 class="signature">

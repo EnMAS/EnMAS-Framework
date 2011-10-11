@@ -12,7 +12,7 @@ org.enmas.client.gui		ClientGUI					 4
 							GraphicsPlugin				√
 
 org.enmas.server			ServerManager				√
-							Server						 2
+							Server						√
 							Host						√
 							Logger						√
 							POMDPIteration				√
