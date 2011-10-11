@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">ConfirmAgentRegistration</span>
         
-        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: List[Action]</span>)</span><span class="result"> extends <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">ConfirmAgentRegistration</span>
         
-        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="agentType">agentType: AgentType</span>)</span>
+        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: List[Action]</span>)</span>
       </span>
       </h4>
       
@@ -131,6 +131,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.messaging.ConfirmAgentRegistration#actions" data-isabs="false">
+      <a id="actions:List[Action]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">actions</span>
+        
+        <span class="result">: List[Action]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.enmas.messaging.ConfirmAgentRegistration#agentType" data-isabs="false">
       <a id="agentType:AgentType"></a>
       <h4 class="signature">

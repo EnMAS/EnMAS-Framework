@@ -77,7 +77,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
         <span class="result"> = <span name="scala.Symbol" class="extype">Symbol</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">POMDP Actions are just Symbols</p><div class="fullcomment"><div class="comment cmt"><p>POMDP Actions are just Symbols</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.pomdp.package#AgentAction" data-isabs="false">
       <a id="AgentAction:()"></a>
       <h4 class="signature">
@@ -85,10 +85,21 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
       <span class="symbol"> 
         <span class="name">AgentAction</span>
         
-        <span class="result"> = (<span name="scala.Int" class="extype">Int</span>, AgentType, Action)</span>
+        <span class="result"> = (AgentType, Action)</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.pomdp.AgentConstraint" data-isabs="false">
+      <a id="AgentConstraint:AgentConstraint"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="AgentConstraint.html"><span class="name">AgentConstraint</span></a>
+        
+        <span class="params">(<span name="agentType">agentType: AgentType</span>, <span name="minAgents">minAgents: Int</span>, <span name="maxAgents">maxAgents: Int</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.enmas.pomdp.package#AgentType" data-isabs="false">
       <a id="AgentType:AgentType"></a>
       <h4 class="signature">
@@ -99,7 +110,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
         <span class="result"> = <span name="scala.Symbol" class="extype">Symbol</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">POMDP Agent types are just Symbols</p><div class="fullcomment"><div class="comment cmt"><p>POMDP Agent types are just Symbols</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.pomdp.package#JointAction" data-isabs="false">
       <a id="JointAction:JointAction"></a>
       <h4 class="signature">
@@ -111,6 +122,17 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.pomdp.package#Observation" data-isabs="false">
+      <a id="Observation:Observation"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol"> 
+        <span class="name">Observation</span>
+        
+        <span class="result"> = <a name="org.enmas.pomdp.State" class="extype" href="State.html">State</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.pomdp.POMDP" data-isabs="false">
       <a id="POMDP:POMDP"></a>
       <h4 class="signature">
@@ -118,7 +140,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
       <span class="symbol"> 
         <a href="POMDP.html"><span class="name">POMDP</span></a>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agents">agents: List[(AgentType, Int, Int)]</span>, <span name="initialState">initialState: State</span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (State, JointAction) ⇒ State</span>, <span name="rewardFunction">rewardFunction: (State, JointAction) ⇒ List[(Int, Float)]</span>, <span name="observationFunction">observationFunction: (State, JointAction) ⇒ List[(Int, State)]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agents">agents: List[AgentConstraint]</span>, <span name="initialState">initialState: State</span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (State, JointAction) ⇒ State</span>, <span name="rewardFunction">rewardFunction: (State, JointAction) ⇒ (AgentType) ⇒ Float</span>, <span name="observationFunction">observationFunction: (State, JointAction) ⇒ (AgentType) ⇒ Observation</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Represents a decentralized, partially observable Markov Decision Problem.</p>
@@ -140,7 +162,18 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.enmas.pomdp.State" data-isabs="false">
+              <ol><li visbl="pub" name="org.enmas.pomdp.package#NO_ACTION" data-isabs="false">
+      <a id="NO_ACTION:Symbol"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">NO_ACTION</span>
+        
+        <span class="result">: <span name="scala.Symbol" class="extype">Symbol</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.pomdp.State" data-isabs="false">
       <a id="State:State"></a>
       <h4 class="signature">
       <span class="kind">object</span>

@@ -51,17 +51,12 @@ package org.enmas {
     * <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">
     * Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>. */
   package object pomdp {
-
-    /** POMDP Actions are just Symbols */
     type Action = Symbol
-
-    /** POMDP Agent types are just Symbols */
     type AgentType = Symbol
-
-    type AgentAction = (Int, AgentType, Action)
-
+    type AgentAction = (AgentType, Action)
     type JointAction = List[AgentAction]
-
+    type Observation = State
+    val NO_ACTION = Symbol("")
   }
 
 }

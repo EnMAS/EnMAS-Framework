@@ -38,7 +38,8 @@ case class RegisterAgent(
 
 case class ConfirmAgentRegistration(
   recipient: ActorRef,
-  agentType: AgentType
+  agentType: AgentType,
+  actions: List[Action]
 ) extends ClientMessage
 
 
@@ -50,6 +51,6 @@ case class TakeAction( action: Action ) extends Message
 
 case class UpdateAgent(
   recipient: ActorRef,
-  observation: State,
+  observation: Observation,
   reward: Float
 ) extends ClientMessage

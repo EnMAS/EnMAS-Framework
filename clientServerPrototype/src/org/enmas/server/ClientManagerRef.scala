@@ -2,8 +2,8 @@ package org.enmas.server
 
 import akka.actor._
 
-class ClientManagerRef(
+case class ClientManagerRef (
   val ref: ActorRef,
-  var agents: List[AgentRef],
+  val host: Host,
   var isIterationSubscriber: Boolean
 )
