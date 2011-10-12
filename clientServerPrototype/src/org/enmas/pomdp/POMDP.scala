@@ -7,7 +7,7 @@ case class POMDP(
   val description: String,
   val agentConstraints: List[AgentConstraint],
   val initialState: State,
-  val actionsFunction: AgentType => List[Action],
+  val actionsFunction: AgentType => Set[Action],
   val transitionFunction: (State, JointAction) => State,
   val rewardFunction: (State, JointAction) => AgentType => Float,
   val observationFunction: (State, JointAction) => AgentType => Observation

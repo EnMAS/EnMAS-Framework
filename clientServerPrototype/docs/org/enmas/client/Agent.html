@@ -14,13 +14,13 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../lib/trait_big.png" />
+        <img src="../../../lib/class_big.png" />
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.enmas" class="extype" href="../package.html">enmas</a>.<a name="org.enmas.client" class="extype" href="package.html">client</a></p>
         <h1>Agent</h1>
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">trait</span>
+      <span class="kind">class</span>
       <span class="symbol"> 
         <span class="name">Agent</span>
         
@@ -28,7 +28,7 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a name="org.enmas.client.Client" class="extype" href="Client.html">Client</a>, <span name="akka.actor.Actor" class="extype">Actor</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -54,7 +54,21 @@
             </div>
         </div>
 
+        <div class="members" id="constructors">
+              <h3>Instance Constructors</h3>
+              <ol><li visbl="pub" name="org.enmas.client.Agent#this" data-isabs="false">
+      <a id="this:Agent"></a>
+      <h4 class="signature">
+      <span class="kind">new</span>
+      <span class="symbol"> 
+        <span class="name">Agent</span>
         
+        <span class="params">()</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
@@ -74,17 +88,17 @@
         
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
-              <ol><li visbl="prt" name="akka.actor.Actor#receive" data-isabs="true">
-      <a id="receive:Receive"></a>
+              <ol><li visbl="pub" name="org.enmas.client.Agent#policy" data-isabs="true">
+      <a id="policy:PartialFunction[Any, Unit]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
-        <span class="name">receive</span>
+        <span class="name">policy</span>
         
-        <span class="result">: Receive</span>
+        <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<span name="scala.Any" class="extype">Any</span>, <span name="scala.Unit" class="extype">Unit</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected abstract </dd><dt>Definition Classes</dt><dd>Actor</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
     </li></ol>
             </div>
 
@@ -145,6 +159,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.client.Agent#actions" data-isabs="false">
+      <a id="actions:Set[Action]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">actions</span>
+        
+        <span class="result">: <span name="scala.collection.immutable.Set" class="extype">Set</span>[Action]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.enmas.client.Agent#agentType" data-isabs="false">
+      <a id="agentType:AgentType"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">agentType</span>
+        
+        <span class="result">: AgentType</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -363,6 +399,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Actor</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.client.Agent#receive" data-isabs="false">
+      <a id="receive:PartialFunction[Any, Unit]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">receive</span>
+        
+        <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<span name="scala.Any" class="extype">Any</span>, <span name="scala.Unit" class="extype">Unit</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="">Agent</a> → Actor</dd></dl></div>
     </li><li visbl="pub" name="akka.actor.Actor#self" data-isabs="false">
       <a id="self:ScalaActorRef"></a>
       <h4 class="signature">

@@ -140,7 +140,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
       <span class="symbol"> 
         <a href="POMDP.html"><span class="name">POMDP</span></a>
         
-        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agentConstraints">agentConstraints: List[AgentConstraint]</span>, <span name="initialState">initialState: State</span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ List[Action]</span>, <span name="transitionFunction">transitionFunction: (State, JointAction) ⇒ State</span>, <span name="rewardFunction">rewardFunction: (State, JointAction) ⇒ (AgentType) ⇒ Float</span>, <span name="observationFunction">observationFunction: (State, JointAction) ⇒ (AgentType) ⇒ Observation</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agentConstraints">agentConstraints: List[AgentConstraint]</span>, <span name="initialState">initialState: State</span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ Set[Action]</span>, <span name="transitionFunction">transitionFunction: (State, JointAction) ⇒ State</span>, <span name="rewardFunction">rewardFunction: (State, JointAction) ⇒ (AgentType) ⇒ Float</span>, <span name="observationFunction">observationFunction: (State, JointAction) ⇒ (AgentType) ⇒ Observation</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">Represents a decentralized, partially observable Markov Decision Problem.</p>
