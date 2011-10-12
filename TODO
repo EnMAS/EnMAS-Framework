@@ -1,31 +1,44 @@
-Write the following classes: (22/25)
+1. Write the following classes: (22/25)
 
-org.enmas.pomdp				POMDP						√
-							State						√
-							<type aliases>				√
+	org.enmas.pomdp				POMDP						√
+								State						√
+								<type aliases>				√
 
-org.enmas.client			Client						√
-							ClientManager				 3
-							Agent						√
+	org.enmas.client			Client						√
+								ClientManager				 1
+								Agent						√
 
-org.enmas.client.gui		ClientGUI					 4
-							GraphicsPlugin				√
+	org.enmas.client.gui		ClientGUI					 2
+								GraphicsPlugin				√
 
-org.enmas.server			ServerManager				√
-							Server						√
-							Host						√
-							Logger						√
-							POMDPIteration				√
-							ClientManagerRef			√
-							AgentRef					√
+	org.enmas.server			ServerManager				√
+								Server						√
+								Host						√
+								Logger						√
+								POMDPIteration				√
+								ClientManagerRef			√
+								AgentRef					√
 
-org.enmas.messaging			MessageBundle				√
-							Message						√
-							RegisterHost				√
-							ConfirmHostRegistration		√
-							DenyHostRegistration		√
-							RegisterAgent				√
-							ConfirmAgentRegistration	√
-							DenyAgentRegistration		√
-							TakeAction					√
-							UpdateAgent					√
+	org.enmas.messaging			MessageBundle				√
+								Message						√
+								RegisterHost				√
+								ConfirmHostRegistration		√
+								DenyHostRegistration		√
+								RegisterAgent				√
+								ConfirmAgentRegistration	√
+								DenyAgentRegistration		√
+								TakeAction					√
+								UpdateAgent					√
+
+2. Figure out where Server.iterate() is called... perhaps preStart() and quasi-recursively from receive?
+
+3. Document all code, as was done with previous prototype
+
+4. Test!
+	- check out the scala.testing.Benchmark trait.  Supposedly just implement run() and get perf data
+
+5. Add encryption layer:
+	- RSA key generation
+	- Host registration & persistent storage
+	- Symmetric key encrypt / decrypt
+	- Probably manual unserialization

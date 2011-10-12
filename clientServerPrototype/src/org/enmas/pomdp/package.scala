@@ -50,6 +50,7 @@ package org.enmas {
     * is licensed under a 
     * <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">
     * Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>. */
+
   package object pomdp {
     type Action = Symbol
     type AgentType = Symbol

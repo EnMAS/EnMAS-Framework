@@ -51,14 +51,12 @@ class Server(
 
 
   def receive = {
-    case m: RegisterAgent => self.sender match {
-        case Some(source) => getCM(source) map { cm => self.reply(registerAgent(cm, m)) }
-        case _ => ()
-      }
-    case TakeAction(action) => self.sender match {
-        case Some(source) => getAgent(source) map { agent => pendingActions += (agent -> action) }
-        case _ => ()
-    }
+    case m: RegisterAgent => self.sender map { source => {
+          getCM(source) map { cm => self.reply(registerAgent(cm, m)) }}}
+
+    case TakeAction(action) => self.sender map { source => {
+        getAgent(source) map { agent => pendingActions += (agent -> action) }}}
+
     case _ => ()
   }
 
