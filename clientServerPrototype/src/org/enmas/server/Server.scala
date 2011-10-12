@@ -18,11 +18,16 @@ class Server(
 
 
   private def registerAgent(cm: ClientManagerRef, reg: RegisterAgent): ClientMessage = {
-    val newAgent = AgentRef(cm, reg.agentRef, reg.agentType)
+    val newAgent = AgentRef(cm, reg.agentRef, agents.size+1, reg.agentType)
     var newAgentSet = agents + newAgent
     if (model accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
       agents = newAgentSet
-      ConfirmAgentRegistration(reg.agentRef, reg.agentType, model.actionsFunction(reg.agentType))
+      ConfirmAgentRegistration(
+        reg.agentRef,
+        newAgent.agentNumber,
+        newAgent.agentType,
+        model.actionsFunction(reg.agentType)
+      )
     }
     else DenyAgentRegistration(reg.agentRef)
   }

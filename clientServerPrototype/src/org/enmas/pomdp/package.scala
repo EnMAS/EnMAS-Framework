@@ -54,7 +54,6 @@ package org.enmas {
   package object pomdp {
     type Action = Symbol
     type AgentType = Symbol
-    type AgentAction = (AgentType, Action)
     type JointAction = List[AgentAction]
     type Observation = State
     val NO_ACTION = Symbol("")

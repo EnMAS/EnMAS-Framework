@@ -38,6 +38,7 @@ case class RegisterAgent(
 
 case class ConfirmAgentRegistration(
   recipient: ActorRef,
+  agentNumber: Int,
   agentType: AgentType,
   actions: Set[Action]
 ) extends ClientMessage
