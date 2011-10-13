@@ -1,3 +1,7 @@
 package org.enmas.pomdp
 
-case class AgentAction(agentNumber: Int, agentType: AgentType, action: Action)
+case class AgentAction(
+  agentNumber: Int,
+  agentType: AgentType,
+  action: Action
+)

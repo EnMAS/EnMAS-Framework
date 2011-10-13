@@ -9,22 +9,23 @@ abstract class Agent extends Client {
   private var aType: AgentType = Symbol("")
   private var actionSet = Set[Action]()
 
-  def agentNumber = aNumber
-  def agentType = aType
-  def actions = actionSet
+  final def agentNumber = aNumber
+  final def agentType = aType
+  final def actions = actionSet
 
   def policy: PartialFunction[Any, Unit]
 
-  def receive = {
+  private final def defaultMessageHandler: PartialFunction[Any, Unit] = {
     case ConfirmAgentRegistration(_, n, t, a) => {
       aNumber = n
       aType = t
       actionSet = a
-      become(policy)
     }
     case DenyAgentRegistration => self ! PoisonPill
-    case _ => ()
   }
+
+  // partial function chaining ftw...
+  def receive = defaultMessageHandler orElse policy orElse { case _ => () }
 
   protected final def takeAction(action: Action) = {
     self.reply(TakeAction(action))

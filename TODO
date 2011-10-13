@@ -1,4 +1,4 @@
-1. Write the following classes: (22/25)
+1. Write the following classes: (23/25)
 
 	org.enmas.pomdp				POMDP						√
 								State						√
@@ -32,12 +32,14 @@
 
 2. Figure out where Server.iterate() is called... perhaps preStart() and quasi-recursively from receive?
 
-3. Document all code, as was done with previous prototype
+3. Update design diagrams to reflect prototyped code
 
-4. Test!
+4. Document all code, as was done with previous prototype
+
+5. Test!
 	- check out the scala.testing.Benchmark trait.  Supposedly just implement run() and get perf data
 
-5. Add encryption layer:
+6. Add encryption layer:
 	- RSA key generation
 	- Host registration & persistent storage
 	- Symmetric key encrypt / decrypt

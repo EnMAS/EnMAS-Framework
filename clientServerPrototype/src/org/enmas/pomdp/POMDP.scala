@@ -2,7 +2,7 @@ package org.enmas.pomdp
 
 /** Represents a decentralized, partially observable Markov Decision Problem.
   */
-case class POMDP(
+case class POMDP (
   val name: String,
   val description: String,
   val agentConstraints: List[AgentConstraint],
