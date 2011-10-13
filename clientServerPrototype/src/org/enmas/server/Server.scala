@@ -34,13 +34,17 @@ class Server(
 
 
   private def iterate(actions: JointAction): State = {
-    val reward = model.rewardFunction(state, actions)
-    val observation = model.observationFunction(state, actions)
+    val statePrime = model.transitionFunction(state, actions)
+    val reward = model.rewardFunction(state, actions, statePrime)
+    val observation = model.observationFunction(state, actions, statePrime)
     clientManagers map { cm => {
       messageQueue += cm -> { for (a <- agents.toList.filter(_.clientManagerRef == cm))
-        yield UpdateAgent(a.ref, observation(a.agentType), reward(a.agentType))}
+        yield UpdateAgent(
+          a.ref,
+          observation(a.agentNumber, a.agentType),
+          reward(a.agentType))}
     }}
-    model.transitionFunction(state, actions)
+    statePrime
   }
 
 

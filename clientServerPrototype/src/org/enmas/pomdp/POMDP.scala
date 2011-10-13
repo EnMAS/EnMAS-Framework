@@ -9,8 +9,8 @@ case class POMDP(
   val initialState: State,
   val actionsFunction: AgentType => Set[Action],
   val transitionFunction: (State, JointAction) => State,
-  val rewardFunction: (State, JointAction) => AgentType => Float,
-  val observationFunction: (State, JointAction) => AgentType => Observation
+  val rewardFunction: (State, JointAction, State) => AgentType => Float,
+  val observationFunction: (State, JointAction, State) => (Int, AgentType) => Observation
 ) {
 
   /** Checks that all supplied types are allowed and cardinalities do not
