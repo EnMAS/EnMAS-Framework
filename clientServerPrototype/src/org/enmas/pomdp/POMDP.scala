@@ -7,7 +7,7 @@ case class POMDP (
   val description: String,
   val agentConstraints: List[AgentConstraint],
   val initialState: State,
-  val actionsFunction: AgentType => Set[Action],
+  val actionsFunction: (AgentType) => Set[Action],
   val transitionFunction: (State, JointAction) => State,
   val rewardFunction: (State, JointAction, State) => AgentType => Float,
   val observationFunction: (State, JointAction, State) => (Int, AgentType) => Observation
@@ -18,10 +18,10 @@ case class POMDP (
     */
   def accomodatesAgents(agents: List[AgentType]): Boolean = {
 
-    val allAllowed = agents.foldLeft(true){ (a,b) => {
+    val allAllowed = agents.foldLeft(true){ (a,b)  ⇒ {
       a && { agentConstraints map(_.agentType) contains(b) }}}
 
-    val allUnderLimit = agentConstraints.foldLeft(true){ (a,b) => {
+    val allUnderLimit = agentConstraints.foldLeft(true){ (a,b)  ⇒ {
       a && { agents.filter(_ == b.agentType).length <= b.max }}}
 
     allAllowed && allUnderLimit
@@ -33,7 +33,7 @@ case class POMDP (
     * This is a more stringent test than the accomodatesAgents method.
     */
   def isSatisfiedByAgents(agents: List[AgentType]) : Boolean = {
-    accomodatesAgents(agents) && { agentConstraints.foldLeft(true){ (a,b) => {
+    accomodatesAgents(agents) && { agentConstraints.foldLeft(true){ (a,b)  ⇒ {
       a && agents.filter(_ == b.agentType).length >= b.min }}}
   }
 }

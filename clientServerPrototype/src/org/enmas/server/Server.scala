@@ -1,14 +1,19 @@
 package org.enmas.server
 
-import org.enmas.pomdp._, org.enmas.messaging._,
+import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.EncryptionUtils._,
        akka.actor._,
-       scala.collection.immutable._
+       scala.collection.immutable._,
+       java.security._
 
 class Server(
   model: POMDP,
   port: Int,
   logger: Logger
 ) extends Actor {
+
+  println("new Server")
+
+  private val keyPair = genKeyPair
 
   var state = model.initialState
   var clientManagers = Set[ClientManagerRef]()
@@ -17,19 +22,33 @@ class Server(
   var pendingActions = Map[AgentRef, Action]()
 
 
-  private def registerAgent(cm: ClientManagerRef, reg: RegisterAgent): ClientMessage = {
-    val newAgent = AgentRef(cm, reg.agentRef, agents.size+1, reg.agentType)
+  private def registerHost(
+    source: UntypedChannel,
+    hostname: String,
+    clientPublicKey: PublicKey
+  ): Message = {
+    clientManagers += ClientManagerRef(source, hostname, clientPublicKey, false)
+    ConfirmHostRegistration(keyPair.getPublic, "lame-shared-key") // TODO: gen sym key
+  }
+
+
+  private def registerAgent(
+      cm: ClientManagerRef,
+      source: UntypedChannel,
+      reg: RegisterAgent
+  ): ClientMessage = {
+    val newAgent = AgentRef(cm, source, agents.size+1, reg.agentType)
     var newAgentSet = agents + newAgent
     if (model accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
       agents = newAgentSet
       ConfirmAgentRegistration(
-        reg.agentRef,
+        source,
         newAgent.agentNumber,
         newAgent.agentType,
         model.actionsFunction(reg.agentType)
       )
     }
-    else DenyAgentRegistration(reg.agentRef)
+    else DenyAgentRegistration(source)
   }
 
 
@@ -37,10 +56,10 @@ class Server(
     val statePrime = model.transitionFunction(state, actions)
     val reward = model.rewardFunction(state, actions, statePrime)
     val observation = model.observationFunction(state, actions, statePrime)
-    clientManagers map { cm => {
-      messageQueue += cm -> { for (a <- agents.toList.filter(_.clientManagerRef == cm))
+    clientManagers map { cm  ⇒ {
+      messageQueue += cm  → { for (a  ← agents.toList.filter(_.clientManagerRef == cm))
         yield UpdateAgent(
-          a.ref,
+          a.channel,
           observation(a.agentNumber, a.agentType),
           reward(a.agentType))}
     }}
@@ -49,24 +68,36 @@ class Server(
 
 
   private def dispatchMessages(): Unit = {
-    clientManagers map { cm => {
-        messageQueue.get(cm) map {cm.ref ! MessageBundle(_) }}}
+    clientManagers map { cm  ⇒ {
+        messageQueue.get(cm) map {cm.channel ! MessageBundle(_) }}}
   }
 
 
-  private def getAgent(ref: ActorRef) = agents.find( _.ref == ref )
+  private def getAgent(c: UntypedChannel) = agents.find( _.channel == c )
 
-  private def getCM(ref: ActorRef) = clientManagers.find( _.ref == ref )
+  private def getCM(c: UntypedChannel) = clientManagers.find( _.channel == c )
 
 
   def receive = {
-    case m: RegisterAgent => self.sender map { source => {
-          getCM(source) map { cm => self.reply(registerAgent(cm, m)) }}}
+    
+    case m: RegisterHost  ⇒ {
+        val source = self.channel
+        source ! registerHost(source, m.hostname, m.clientPublicKey)
+    }
 
-    case TakeAction(action) => self.sender map { source => {
-        getAgent(source) map { agent => pendingActions += (agent -> action) }}}
+    case m: RegisterAgent  ⇒ {
+      val source = self.channel
+      getCM(source) map { cm  ⇒ source ! registerAgent(cm, source, m) }
+    }
 
-    case _ => ()
+    case TakeAction(action)  ⇒ {
+      val source = self.channel
+      getAgent(source) map { agent  ⇒ pendingActions += (agent  → action) }
+    }
+
+    case m: AnyRef  ⇒ println("Received something else: "+m.getClass.getName+"\n"+m)
+
+    case _  ⇒ ()
   }
 
 }

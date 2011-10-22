@@ -3,55 +3,39 @@ package org.enmas.messaging
 import org.enmas.pomdp._,
        org.enmas.server._,
        org.enmas.client._,
+       java.security._, java.security.interfaces._,
        akka.actor._
-
 
 case class MessageBundle( content: List[Message] )
 
+sealed trait Message {}
 
-sealed trait Message
+sealed trait ClientMessage extends Message { val recipient: UntypedChannel }
 
-
-sealed trait ClientMessage extends Message { val recipient: ActorRef }
-
-
-case class RegisterHost(
-  hostRef: ActorRef,
-  clientPublicKey: String
-) extends Message
-
+case class RegisterHost(hostname: String, clientPublicKey: PublicKey) extends Message
 
 case class ConfirmHostRegistration(
-  serverPublicKey: String,
+  serverPublicKey: PublicKey,
   encryptedSharedKey: String
 ) extends Message
 
-
 case object DenyHostRegistration extends Message
 
-
-case class RegisterAgent(
-  agentRef: ActorRef,
-  agentType: AgentType
-) extends Message
-
+case class RegisterAgent(agentType: AgentType) extends Message
 
 case class ConfirmAgentRegistration(
-  recipient: ActorRef,
+  recipient: UntypedChannel,
   agentNumber: Int,
   agentType: AgentType,
   actions: Set[Action]
 ) extends ClientMessage
 
-
-case class DenyAgentRegistration( recipient: ActorRef ) extends ClientMessage
-
+case class DenyAgentRegistration( recipient: UntypedChannel ) extends ClientMessage
 
 case class TakeAction( action: Action ) extends Message
 
-
 case class UpdateAgent(
-  recipient: ActorRef,
+  recipient: UntypedChannel,
   observation: Observation,
   reward: Float
 ) extends ClientMessage

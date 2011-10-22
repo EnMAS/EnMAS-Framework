@@ -18,7 +18,8 @@
 	<target name="init">
 		<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
 		<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar" />
-		<property name="akka-actors.jar" value="${lib.dir}/akka/actor/akka-actor-1.2.jar" />
+		<property name="akka-actors.jar" value="${lib.dir}/akka/akka-actor-1.2.jar" />
+		<property name="akka-remote.jar" value="${lib.dir}/akka/akka-remote-1.2.jar" />
 		<path id="build.classpath">
 			<pathelement location="${scala-library.jar}" />
 			<pathelement location="${akka-actors.jar}" />

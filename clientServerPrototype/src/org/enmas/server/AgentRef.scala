@@ -5,7 +5,7 @@ import org.enmas.pomdp._,
 
 case class AgentRef(
   clientManagerRef: ClientManagerRef,
-  ref: ActorRef,
+  channel: UntypedChannel,
   agentNumber: Int,
   agentType: AgentType
 )

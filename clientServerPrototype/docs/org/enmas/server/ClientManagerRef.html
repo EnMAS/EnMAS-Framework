@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">ClientManagerRef</span>
         
-        <span class="params">(<span name="ref">ref: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="host">host: <a name="org.enmas.server.Host" class="extype" href="Host.html">Host</a></span>, <span name="isIterationSubscriber">isIterationSubscriber: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="channel">channel: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="hostname">hostname: String</span>, <span name="publicKey">publicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="isIterationSubscriber">isIterationSubscriber: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">ClientManagerRef</span>
         
-        <span class="params">(<span name="ref">ref: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="host">host: <a name="org.enmas.server.Host" class="extype" href="Host.html">Host</a></span>, <span name="isIterationSubscriber">isIterationSubscriber: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
+        <span class="params">(<span name="channel">channel: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="hostname">hostname: String</span>, <span name="publicKey">publicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="isIterationSubscriber">isIterationSubscriber: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
       </span>
       </h4>
       
@@ -153,6 +153,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.ClientManagerRef" class="extype" href="">ClientManagerRef</a> → Equals</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#channel" data-isabs="false">
+      <a id="channel:UntypedChannel"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">channel</span>
+        
+        <span class="result">: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -225,14 +236,14 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.ClientManagerRef" class="extype" href="">ClientManagerRef</a> → AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#host" data-isabs="false">
-      <a id="host:Host"></a>
+    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#hostname" data-isabs="false">
+      <a id="hostname:String"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">host</span>
+        <span class="name">hostname</span>
         
-        <span class="result">: <a name="org.enmas.server.Host" class="extype" href="Host.html">Host</a></span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -335,14 +346,14 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.ClientManagerRef" class="extype" href="">ClientManagerRef</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#ref" data-isabs="false">
-      <a id="ref:ActorRef"></a>
+    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#publicKey" data-isabs="false">
+      <a id="publicKey:PublicKey"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">ref</span>
+        <span class="name">publicKey</span>
         
-        <span class="result">: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>
+        <span class="result">: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>
       </span>
       </h4>
       

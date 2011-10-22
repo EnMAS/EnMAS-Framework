@@ -16,12 +16,12 @@ abstract class Agent extends Client {
   def policy: PartialFunction[Any, Unit]
 
   private final def defaultMessageHandler: PartialFunction[Any, Unit] = {
-    case ConfirmAgentRegistration(_, n, t, a) => {
+    case ConfirmAgentRegistration(_, n, t, a)  ⇒ {
       aNumber = n
       aType = t
       actionSet = a
     }
-    case DenyAgentRegistration => self ! PoisonPill
+    case DenyAgentRegistration  ⇒ self ! PoisonPill
   }
 
   // partial function chaining ftw...

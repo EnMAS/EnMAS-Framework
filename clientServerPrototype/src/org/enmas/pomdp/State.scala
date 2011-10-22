@@ -16,9 +16,9 @@ class State(
 
   def getAs[T](key: String)(implicit m : Manifest[T]): Option[T] = {
     map.get(key) match {
-      case Some((om: Manifest[_], o: Any)) =>
+      case Some((om: Manifest[_], o: Any))  ⇒
         if (om <:< m) Some(o.asInstanceOf[T]) else None
-      case _ => None
+      case _  ⇒ None
     }
   }
 

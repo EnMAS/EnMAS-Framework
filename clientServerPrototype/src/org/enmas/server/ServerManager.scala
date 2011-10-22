@@ -12,13 +12,21 @@ class ServerManager {
   def removeHost(publicKey: String) = {}
 
   def createServer(model: POMDP, port: Int) = {
-    servers ::= actorOf( new Server(model, port, new FileLogger(model.name+".enmas")) )
+    val newServer = actorOf( new Server(model, port, new FileLogger(model.name+".enmas")) )
+    remote.start("localhost", port).register("EnMAS-service", newServer)
+    servers ::= newServer
   }
 
   def stopServer(server: ActorRef): Unit = if (servers contains server) server.stop else ()
 
 }
 
-object ServerManager {
-  def main(args: Array[String]): Unit = new ServerManager
+
+object ServerManager extends App {
+
+  import org.enmas.examples.Simple._
+
+  val manager = new ServerManager
+  manager.createServer(myModel, 1337)
+
 }

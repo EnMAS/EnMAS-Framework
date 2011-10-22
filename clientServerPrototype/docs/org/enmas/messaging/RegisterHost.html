@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">RegisterHost</span>
         
-        <span class="params">(<span name="hostRef">hostRef: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="clientPublicKey">clientPublicKey: String</span>)</span><span class="result"> extends <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="hostname">hostname: String</span>, <span name="clientPublicKey">clientPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>)</span><span class="result"> extends <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">RegisterHost</span>
         
-        <span class="params">(<span name="hostRef">hostRef: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="clientPublicKey">clientPublicKey: String</span>)</span>
+        <span class="params">(<span name="hostname">hostname: String</span>, <span name="clientPublicKey">clientPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>)</span>
       </span>
       </h4>
       
@@ -154,13 +154,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.RegisterHost" class="extype" href="">RegisterHost</a> → Equals</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.messaging.RegisterHost#clientPublicKey" data-isabs="false">
-      <a id="clientPublicKey:String"></a>
+      <a id="clientPublicKey:PublicKey"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">clientPublicKey</span>
         
-        <span class="result">: String</span>
+        <span class="result">: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>
       </span>
       </h4>
       
@@ -236,14 +236,14 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.RegisterHost" class="extype" href="">RegisterHost</a> → AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.messaging.RegisterHost#hostRef" data-isabs="false">
-      <a id="hostRef:ActorRef"></a>
+    </li><li visbl="pub" name="org.enmas.messaging.RegisterHost#hostname" data-isabs="false">
+      <a id="hostname:String"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">hostRef</span>
+        <span class="name">hostname</span>
         
-        <span class="result">: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>
+        <span class="result">: String</span>
       </span>
       </h4>
       

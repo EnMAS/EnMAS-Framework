@@ -65,7 +65,7 @@
       <span class="symbol"> 
         <a href="ConfirmAgentRegistration.html"><span class="name">ConfirmAgentRegistration</span></a>
         
-        <span class="params">(<span name="recipient">recipient: ActorRef</span>, <span name="agentNumber">agentNumber: Int</span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
+        <span class="params">(<span name="recipient">recipient: UntypedChannel</span>, <span name="agentNumber">agentNumber: Int</span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
       </span>
       </h4>
       
@@ -76,7 +76,7 @@
       <span class="symbol"> 
         <a href="ConfirmHostRegistration.html"><span class="name">ConfirmHostRegistration</span></a>
         
-        <span class="params">(<span name="serverPublicKey">serverPublicKey: String</span>, <span name="encryptedSharedKey">encryptedSharedKey: String</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+        <span class="params">(<span name="serverPublicKey">serverPublicKey: PublicKey</span>, <span name="encryptedSharedKey">encryptedSharedKey: String</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
       
@@ -87,7 +87,7 @@
       <span class="symbol"> 
         <a href="DenyAgentRegistration.html"><span class="name">DenyAgentRegistration</span></a>
         
-        <span class="params">(<span name="recipient">recipient: ActorRef</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
+        <span class="params">(<span name="recipient">recipient: UntypedChannel</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
       </span>
       </h4>
       
@@ -120,7 +120,7 @@
       <span class="symbol"> 
         <a href="RegisterAgent.html"><span class="name">RegisterAgent</span></a>
         
-        <span class="params">(<span name="agentRef">agentRef: ActorRef</span>, <span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+        <span class="params">(<span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
       
@@ -131,7 +131,7 @@
       <span class="symbol"> 
         <a href="RegisterHost.html"><span class="name">RegisterHost</span></a>
         
-        <span class="params">(<span name="hostRef">hostRef: ActorRef</span>, <span name="clientPublicKey">clientPublicKey: String</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+        <span class="params">(<span name="hostname">hostname: String</span>, <span name="clientPublicKey">clientPublicKey: PublicKey</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
       
@@ -153,7 +153,7 @@
       <span class="symbol"> 
         <a href="UpdateAgent.html"><span class="name">UpdateAgent</span></a>
         
-        <span class="params">(<span name="recipient">recipient: ActorRef</span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: Float</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
+        <span class="params">(<span name="recipient">recipient: UntypedChannel</span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: Float</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
       </span>
       </h4>
       

@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">ConfirmAgentRegistration</span>
         
-        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span><span class="result"> extends <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span><span class="result"> extends <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">ConfirmAgentRegistration</span>
         
-        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span>
+        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span>
       </span>
       </h4>
       
@@ -347,13 +347,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.ConfirmAgentRegistration" class="extype" href="">ConfirmAgentRegistration</a> → Product</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.messaging.ConfirmAgentRegistration#recipient" data-isabs="false">
-      <a id="recipient:ActorRef"></a>
+      <a id="recipient:UntypedChannel"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">recipient</span>
         
-        <span class="result">: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>
+        <span class="result">: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.ConfirmAgentRegistration" class="extype" href="">ConfirmAgentRegistration</a> → <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a></dd></dl></div>

@@ -5,10 +5,10 @@
 								<type aliases>				√
 
 	org.enmas.client			Client						√
-								ClientManager				 1
+								ClientManager				√
 								Agent						√
 
-	org.enmas.client.gui		ClientGUI					 2
+	org.enmas.client.gui		ClientGUI					
 								GraphicsPlugin				√
 
 	org.enmas.server			ServerManager				√
