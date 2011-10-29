@@ -47,12 +47,12 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.enmas.messaging.ClientMessage" data-isabs="true">
-      <a id="ClientMessage:ClientMessage"></a>
+              <ol><li visbl="pub" name="org.enmas.messaging.AgentMessage" data-isabs="true">
+      <a id="AgentMessage:AgentMessage"></a>
       <h4 class="signature">
       <span class="kind">trait</span>
       <span class="symbol"> 
-        <a href="ClientMessage.html"><span class="name">ClientMessage</span></a>
+        <a href="AgentMessage.html"><span class="name">AgentMessage</span></a>
         
         <span class="result"> extends Message</span>
       </span>
@@ -65,7 +65,7 @@
       <span class="symbol"> 
         <a href="ConfirmAgentRegistration.html"><span class="name">ConfirmAgentRegistration</span></a>
         
-        <span class="params">(<span name="recipient">recipient: UntypedChannel</span>, <span name="agentNumber">agentNumber: Int</span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
+        <span class="params">(<span name="agentNumber">agentNumber: Int</span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
       
@@ -76,18 +76,7 @@
       <span class="symbol"> 
         <a href="ConfirmHostRegistration.html"><span class="name">ConfirmHostRegistration</span></a>
         
-        <span class="params">(<span name="serverPublicKey">serverPublicKey: PublicKey</span>, <span name="encryptedSharedKey">encryptedSharedKey: String</span>)</span><span class="result"> extends Message with Product with Serializable</span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.enmas.messaging.DenyAgentRegistration" data-isabs="false">
-      <a id="DenyAgentRegistration:DenyAgentRegistration"></a>
-      <h4 class="signature">
-      <span class="kind">case class</span>
-      <span class="symbol"> 
-        <a href="DenyAgentRegistration.html"><span class="name">DenyAgentRegistration</span></a>
-        
-        <span class="params">(<span name="recipient">recipient: UntypedChannel</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
+        <span class="params">(<span name="id">id: Int</span>, <span name="serverPublicKey">serverPublicKey: PublicKey</span>, <span name="encryptedSharedKey">encryptedSharedKey: Array[Byte]</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
       
@@ -109,7 +98,7 @@
       <span class="symbol"> 
         <a href="MessageBundle.html"><span class="name">MessageBundle</span></a>
         
-        <span class="params">(<span name="content">content: List[Message]</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="content">content: List[AgentMessage]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
       
@@ -120,7 +109,7 @@
       <span class="symbol"> 
         <a href="RegisterAgent.html"><span class="name">RegisterAgent</span></a>
         
-        <span class="params">(<span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+        <span class="params">(<span name="clientManagerID">clientManagerID: Int</span>, <span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
       
@@ -131,7 +120,7 @@
       <span class="symbol"> 
         <a href="RegisterHost.html"><span class="name">RegisterHost</span></a>
         
-        <span class="params">(<span name="hostname">hostname: String</span>, <span name="clientPublicKey">clientPublicKey: PublicKey</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+        <span class="params">(<span name="service">service: String</span>, <span name="hostname">hostname: String</span>, <span name="port">port: Int</span>, <span name="clientPublicKey">clientPublicKey: PublicKey</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
       
@@ -142,7 +131,7 @@
       <span class="symbol"> 
         <a href="TakeAction.html"><span class="name">TakeAction</span></a>
         
-        <span class="params">(<span name="action">action: Action</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+        <span class="params">(<span name="agentID">agentID: Int</span>, <span name="action">action: Action</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
       
@@ -153,7 +142,7 @@
       <span class="symbol"> 
         <a href="UpdateAgent.html"><span class="name">UpdateAgent</span></a>
         
-        <span class="params">(<span name="recipient">recipient: UntypedChannel</span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: Float</span>)</span><span class="result"> extends ClientMessage with Product with Serializable</span>
+        <span class="params">(<span name="agentNumber">agentNumber: Int</span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: Float</span>)</span><span class="result"> extends AgentMessage with Product with Serializable</span>
       </span>
       </h4>
       
@@ -164,7 +153,18 @@
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.enmas.messaging.DenyHostRegistration" data-isabs="false">
+              <ol><li visbl="pub" name="org.enmas.messaging.DenyAgentRegistration" data-isabs="false">
+      <a id="DenyAgentRegistration:DenyAgentRegistration"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="DenyAgentRegistration$.html"><span class="name">DenyAgentRegistration</span></a>
+        
+        <span class="result"> extends Message with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.enmas.messaging.DenyHostRegistration" data-isabs="false">
       <a id="DenyHostRegistration:DenyHostRegistration"></a>
       <h4 class="signature">
       <span class="kind">object</span>

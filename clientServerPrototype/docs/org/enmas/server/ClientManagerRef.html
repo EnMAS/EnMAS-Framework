@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">ClientManagerRef</span>
         
-        <span class="params">(<span name="channel">channel: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="hostname">hostname: String</span>, <span name="publicKey">publicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="isIterationSubscriber">isIterationSubscriber: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="id">id: <span name="scala.Int" class="extype">Int</span></span>, <span name="channel">channel: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="publicKey">publicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="symmetricKey">symmetricKey: <span name="java.security.Key" class="extype">Key</span></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">ClientManagerRef</span>
         
-        <span class="params">(<span name="channel">channel: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="hostname">hostname: String</span>, <span name="publicKey">publicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="isIterationSubscriber">isIterationSubscriber: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span>
+        <span class="params">(<span name="id">id: <span name="scala.Int" class="extype">Int</span></span>, <span name="channel">channel: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>, <span name="publicKey">publicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="symmetricKey">symmetricKey: <span name="java.security.Key" class="extype">Key</span></span>)</span>
       </span>
       </h4>
       
@@ -154,13 +154,13 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.ClientManagerRef" class="extype" href="">ClientManagerRef</a> → Equals</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#channel" data-isabs="false">
-      <a id="channel:UntypedChannel"></a>
+      <a id="channel:ActorRef"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">channel</span>
         
-        <span class="result">: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>
+        <span class="result">: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>
       </span>
       </h4>
       
@@ -236,14 +236,14 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.ClientManagerRef" class="extype" href="">ClientManagerRef</a> → AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#hostname" data-isabs="false">
-      <a id="hostname:String"></a>
+    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#id" data-isabs="false">
+      <a id="id:Int"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">hostname</span>
+        <span class="name">id</span>
         
-        <span class="result">: String</span>
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       
@@ -258,17 +258,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#isIterationSubscriber" data-isabs="false">
-      <a id="isIterationSubscriber:Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">isIterationSubscriber</span>
-        
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -354,6 +343,17 @@
         <span class="name">publicKey</span>
         
         <span class="result">: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.enmas.server.ClientManagerRef#symmetricKey" data-isabs="false">
+      <a id="symmetricKey:Key"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">symmetricKey</span>
+        
+        <span class="result">: <span name="java.security.Key" class="extype">Key</span></span>
       </span>
       </h4>
       

@@ -24,13 +24,13 @@
       <span class="symbol"> 
         <span class="name">UpdateAgent</span>
         
-        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: <span name="scala.Float" class="extype">Float</span></span>)</span><span class="result"> extends <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: <span name="scala.Float" class="extype">Float</span></span>)</span><span class="result"> extends <a name="org.enmas.messaging.AgentMessage" class="extype" href="AgentMessage.html">AgentMessage</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
           <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a>, <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.enmas.messaging.AgentMessage" class="extype" href="AgentMessage.html">AgentMessage</a>, <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -46,7 +46,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.enmas.messaging.UpdateAgent" class="in"><span>UpdateAgent</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.enmas.messaging.ClientMessage" class="in"><span>ClientMessage</span></li><li name="org.enmas.messaging.Message" class="in"><span>Message</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.enmas.messaging.UpdateAgent" class="in"><span>UpdateAgent</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="org.enmas.messaging.AgentMessage" class="in"><span>AgentMessage</span></li><li name="org.enmas.messaging.Message" class="in"><span>Message</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">UpdateAgent</span>
         
-        <span class="params">(<span name="recipient">recipient: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: <span name="scala.Float" class="extype">Float</span></span>)</span>
+        <span class="params">(<span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: <span name="scala.Float" class="extype">Float</span></span>)</span>
       </span>
       </h4>
       
@@ -131,6 +131,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.messaging.UpdateAgent#agentNumber" data-isabs="false">
+      <a id="agentNumber:Int"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">agentNumber</span>
+        
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.UpdateAgent" class="extype" href="">UpdateAgent</a> → <a name="org.enmas.messaging.AgentMessage" class="extype" href="AgentMessage.html">AgentMessage</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -324,17 +335,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.UpdateAgent" class="extype" href="">UpdateAgent</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.messaging.UpdateAgent#recipient" data-isabs="false">
-      <a id="recipient:UntypedChannel"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">recipient</span>
-        
-        <span class="result">: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.UpdateAgent" class="extype" href="">UpdateAgent</a> → <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.messaging.UpdateAgent#reward" data-isabs="false">
       <a id="reward:Float"></a>
       <h4 class="signature">
@@ -435,8 +435,8 @@
               <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
             </div><div name="scala.Equals" class="parent">
               <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
-            </div><div name="org.enmas.messaging.ClientMessage" class="parent">
-              <h3>Inherited from <a name="org.enmas.messaging.ClientMessage" class="extype" href="ClientMessage.html">ClientMessage</a></h3>
+            </div><div name="org.enmas.messaging.AgentMessage" class="parent">
+              <h3>Inherited from <a name="org.enmas.messaging.AgentMessage" class="extype" href="AgentMessage.html">AgentMessage</a></h3>
             </div><div name="org.enmas.messaging.Message" class="parent">
               <h3>Inherited from <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a></h3>
             </div><div name="scala.AnyRef" class="parent">

@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">RegisterHost</span>
         
-        <span class="params">(<span name="hostname">hostname: String</span>, <span name="clientPublicKey">clientPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>)</span><span class="result"> extends <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="service">service: String</span>, <span name="hostname">hostname: String</span>, <span name="port">port: <span name="scala.Int" class="extype">Int</span></span>, <span name="clientPublicKey">clientPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>)</span><span class="result"> extends <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">RegisterHost</span>
         
-        <span class="params">(<span name="hostname">hostname: String</span>, <span name="clientPublicKey">clientPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>)</span>
+        <span class="params">(<span name="service">service: String</span>, <span name="hostname">hostname: String</span>, <span name="port">port: <span name="scala.Int" class="extype">Int</span></span>, <span name="clientPublicKey">clientPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>)</span>
       </span>
       </h4>
       
@@ -291,6 +291,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.messaging.RegisterHost#port" data-isabs="false">
+      <a id="port:Int"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">port</span>
+        
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.enmas.messaging.RegisterHost#productArity" data-isabs="false">
       <a id="productArity:Int"></a>
       <h4 class="signature">
@@ -335,6 +346,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.RegisterHost" class="extype" href="">RegisterHost</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.messaging.RegisterHost#service" data-isabs="false">
+      <a id="service:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">service</span>
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">

@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">AgentRef</span>
         
-        <span class="params">(<span name="clientManagerRef">clientManagerRef: <a name="org.enmas.server.ClientManagerRef" class="extype" href="ClientManagerRef.html">ClientManagerRef</a></span>, <span name="channel">channel: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="clientManagerID">clientManagerID: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">AgentRef</span>
         
-        <span class="params">(<span name="clientManagerRef">clientManagerRef: <a name="org.enmas.server.ClientManagerRef" class="extype" href="ClientManagerRef.html">ClientManagerRef</a></span>, <span name="channel">channel: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>, <span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentType">agentType: AgentType</span>)</span>
+        <span class="params">(<span name="clientManagerID">clientManagerID: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentNumber">agentNumber: <span name="scala.Int" class="extype">Int</span></span>, <span name="agentType">agentType: AgentType</span>)</span>
       </span>
       </h4>
       
@@ -175,25 +175,14 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.AgentRef" class="extype" href="">AgentRef</a> → Equals</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.AgentRef#channel" data-isabs="false">
-      <a id="channel:UntypedChannel"></a>
+    </li><li visbl="pub" name="org.enmas.server.AgentRef#clientManagerID" data-isabs="false">
+      <a id="clientManagerID:Int"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">channel</span>
+        <span class="name">clientManagerID</span>
         
-        <span class="result">: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.enmas.server.AgentRef#clientManagerRef" data-isabs="false">
-      <a id="clientManagerRef:ClientManagerRef"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">clientManagerRef</span>
-        
-        <span class="result">: <a name="org.enmas.server.ClientManagerRef" class="extype" href="ClientManagerRef.html">ClientManagerRef</a></span>
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
       

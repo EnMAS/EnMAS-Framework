@@ -1,46 +1,34 @@
-1. Write the following classes: (23/25)
+EnMAS Punch List:
 
-	org.enmas.pomdp				POMDP						√
-								State						√
-								<type aliases>				√
+_ Expose ServerManager with Lift web framework
+	_ server status, uptime
+	_ approve/deny/remove hosts
+	_ active POMDP server instances
+		- status, uptime
+		- hosts, agents
+		- start/pause/stop server
+		- download log snapshot
 
-	org.enmas.client			Client						√
-								ClientManager				√
-								Agent						√
+X guard against 3rd actor hijacking the reply channel for agents
+	X set replyChannel explicitly
 
-	org.enmas.client.gui		ClientGUI					
-								GraphicsPlugin				√
+X guard against agent spoofing
+	X keep a map agents: of (agentID  → ActorRef)
+	X verify: for each TakeAction t, t.id  → self.sender elem
+	X kill agents that violate the above invariant
 
-	org.enmas.server			ServerManager				√
-								Server						√
-								Host						√
-								Logger						√
-								POMDPIteration				√
-								ClientManagerRef			√
-								AgentRef					√
+_ make sure remote actors are run in untrusted (safe) mode
+	- i.e. no "lifecycle" messages allowed
 
-	org.enmas.messaging			MessageBundle				√
-								Message						√
-								RegisterHost				√
-								ConfirmHostRegistration		√
-								DenyHostRegistration		√
-								RegisterAgent				√
-								ConfirmAgentRegistration	√
-								DenyAgentRegistration		√
-								TakeAction					√
-								UpdateAgent					√
+_ Update design diagrams to reflect prototyped code
 
-2. Figure out where Server.iterate() is called... perhaps preStart() and quasi-recursively from receive?
+_ Document all methods in all classes and all type aliases
 
-3. Update design diagrams to reflect prototyped code
-
-4. Document all code, as was done with previous prototype
-
-5. Test!
+_ Test
+	- behavioral and unit tests with scalatest
 	- check out the scala.testing.Benchmark trait.  Supposedly just implement run() and get perf data
 
-6. Add encryption layer:
-	- RSA key generation
+_ Turn on encryption layer
 	- Host registration & persistent storage
+	- RSA key generation
 	- Symmetric key encrypt / decrypt
-	- Probably manual unserialization

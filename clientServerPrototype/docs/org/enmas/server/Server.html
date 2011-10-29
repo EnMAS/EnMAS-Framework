@@ -145,17 +145,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.Server#agents" data-isabs="false">
-      <a id="agents:Set[AgentRef]"></a>
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">agents</span>
-        
-        <span class="result">: <span name="scala.collection.immutable.Set" class="extype">Set</span>[<a name="org.enmas.server.AgentRef" class="extype" href="AgentRef.html">AgentRef</a>]</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -178,17 +167,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Actor</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.Server#clientManagers" data-isabs="false">
-      <a id="clientManagers:Set[ClientManagerRef]"></a>
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">clientManagers</span>
-        
-        <span class="result">: <span name="scala.collection.immutable.Set" class="extype">Set</span>[<a name="org.enmas.server.ClientManagerRef" class="extype" href="ClientManagerRef.html">ClientManagerRef</a>]</span>
-      </span>
-      </h4>
-      
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -297,17 +275,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.Server#messageQueue" data-isabs="false">
-      <a id="messageQueue:Map[ClientManagerRef, List[Message]]"></a>
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">messageQueue</span>
-        
-        <span class="result">: <span name="scala.collection.immutable.Map" class="extype">Map</span>[<a name="org.enmas.server.ClientManagerRef" class="extype" href="ClientManagerRef.html">ClientManagerRef</a>, <span name="scala.collection.immutable.List" class="extype">List</span>[<a name="org.enmas.messaging.Message" class="extype" href="../messaging/Message.html">Message</a>]]</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -352,17 +319,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Actor</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.Server#pendingActions" data-isabs="false">
-      <a id="pendingActions:Map[AgentRef, Action]"></a>
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">pendingActions</span>
-        
-        <span class="result">: <span name="scala.collection.immutable.Map" class="extype">Map</span>[<a name="org.enmas.server.AgentRef" class="extype" href="AgentRef.html">AgentRef</a>, Action]</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="akka.actor.Actor#postRestart" data-isabs="false">
       <a id="postRestart(Throwable):Unit"></a>
       <h4 class="signature">
@@ -417,7 +373,10 @@
         <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<span name="scala.Any" class="extype">Any</span>, <span name="scala.Unit" class="extype">Unit</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.Server" class="extype" href="">Server</a> → Actor</dd></dl></div>
+      <p class="shortcomment cmt">Handles RegisterHost, RegisterAgent, and TakeAction messages by delegating to
+the appropriate handler method.</p><div class="fullcomment"><div class="comment cmt"><p>Handles RegisterHost, RegisterAgent, and TakeAction messages by delegating to
+the appropriate handler method.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.Server" class="extype" href="">Server</a> → Actor</dd></dl></div>
     </li><li visbl="pub" name="akka.actor.Actor#self" data-isabs="false">
       <a id="self:ScalaActorRef"></a>
       <h4 class="signature">
@@ -440,17 +399,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Actor</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.Server#state" data-isabs="false">
-      <a id="state:State"></a>
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">state</span>
-        
-        <span class="result">: <a name="org.enmas.pomdp.State" class="extype" href="../pomdp/State.html">State</a></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">

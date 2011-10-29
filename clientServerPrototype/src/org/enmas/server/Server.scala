@@ -1,55 +1,62 @@
 package org.enmas.server
 
 import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.EncryptionUtils._,
-       akka.actor._,
+       akka.actor._, akka.actor.Actor._,
        scala.collection.immutable._,
        java.security._
 
-class Server(
-  model: POMDP,
-  port: Int,
-  logger: Logger
-) extends Actor {
-
-  println("new Server")
+class Server(model: POMDP, port: Int, logger: Logger) extends Actor {
 
   private val keyPair = genKeyPair
+  private var state = model.initialState
+  private var clientManagers = Set[ClientManagerRef]()
+  private var agents = Set[AgentRef]()
+  private var messageQueue = Map[ClientManagerRef, List[AgentMessage]]()
+  private var pendingActions = List[AgentAction]()
 
-  var state = model.initialState
-  var clientManagers = Set[ClientManagerRef]()
-  var agents = Set[AgentRef]()
-  var messageQueue = Map[ClientManagerRef, List[Message]]()
-  var pendingActions = Map[AgentRef, Action]()
 
-
+  /** Handler for RegisterHost messages.
+    * 
+    * Creates a new ClientManagerRef object for the new host and stores it in the local
+    * list of client managers.  The ClientManagerRef contains a unique id for this
+    * host, as well as a newly generated symmetric key.
+    */
   private def registerHost(
-    source: UntypedChannel,
-    hostname: String,
-    clientPublicKey: PublicKey
+      service: String,
+      hostname: String,
+      port: Int,
+      clientPublicKey: PublicKey
   ): Message = {
-    clientManagers += ClientManagerRef(source, hostname, clientPublicKey, false)
-    ConfirmHostRegistration(keyPair.getPublic, "lame-shared-key") // TODO: gen sym key
+    val actorRef = remote.actorFor(service, hostname, port)
+    val cmID = clientManagers.size + 1
+    val symKey = createSymKey
+    clientManagers += ClientManagerRef(cmID, actorRef, clientPublicKey, symKey)
+    ConfirmHostRegistration(cmID, keyPair.getPublic, symKey.getEncoded)  // TODO: check for approval, encrypt!
   }
 
 
-  private def registerAgent(
-      cm: ClientManagerRef,
-      source: UntypedChannel,
-      reg: RegisterAgent
-  ): ClientMessage = {
-    val newAgent = AgentRef(cm, source, agents.size+1, reg.agentType)
-    var newAgentSet = agents + newAgent
+  private def registerAgent(clientManagerID: Int, agentType: AgentType): Message = {
+    val a = AgentRef(clientManagerID, agents.size+1, agentType)
+    var newAgentSet = agents + a
     if (model accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
       agents = newAgentSet
-      ConfirmAgentRegistration(
-        source,
-        newAgent.agentNumber,
-        newAgent.agentType,
-        model.actionsFunction(reg.agentType)
-      )
+      self ! TakeAction(a.agentNumber, NO_ACTION)
+      ConfirmAgentRegistration(a.agentNumber, a.agentType, model.actionsFunction(agentType))
     }
-    else DenyAgentRegistration(source)
+    else DenyAgentRegistration
   }
+
+
+  private def takeAction(agentNumber: Int, action: Action) =
+    if ( (pendingActions filter { _.agentNumber == agentNumber }).isEmpty ) {
+      getAgent(agentNumber) map { 
+        a  ⇒ pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
+      }
+      if (
+        model.isSatisfiedByAgents(agents.toList map {_.agentType}) &&
+        pendingActions.length == agents.size
+      ) { state = iterate(pendingActions) }
+    }
 
 
   private def iterate(actions: JointAction): State = {
@@ -57,47 +64,55 @@ class Server(
     val reward = model.rewardFunction(state, actions, statePrime)
     val observation = model.observationFunction(state, actions, statePrime)
     clientManagers map { cm  ⇒ {
-      messageQueue += cm  → { for (a  ← agents.toList.filter(_.clientManagerRef == cm))
+      messageQueue += cm  → { for (a  ← agents.toList.filter(_.clientManagerID == cm.id))
         yield UpdateAgent(
-          a.channel,
+          a.agentNumber,
           observation(a.agentNumber, a.agentType),
           reward(a.agentType))}
     }}
+    pendingActions = pendingActions take 0
+    dispatchMessages
     statePrime
   }
 
 
-  private def dispatchMessages(): Unit = {
-    clientManagers map { cm  ⇒ {
-        messageQueue.get(cm) map {cm.channel ! MessageBundle(_) }}}
+  /** Sends a MessageBundle object to each ClientManager in the list of hosts.
+    * The MessageBundle objects are culled from the outbound message queue.
+    * This method also resets the outbound message queue.
+    */
+  private def dispatchMessages: Unit = {
+    clientManagers map { cm  ⇒ { messageQueue.get(cm) map { cm.channel ! MessageBundle(_) }}}
+    messageQueue = messageQueue.empty
   }
 
 
-  private def getAgent(c: UntypedChannel) = agents.find( _.channel == c )
+  /** Returns either Some[AgentRef] containing an AgentRef with the
+    * supplied agentNumber, or None if no such object exists in the local
+    * list of connected agents.
+    */
+  private def getAgent(agentNumber: Int) = agents.find( _.agentNumber == agentNumber )
 
-  private def getCM(c: UntypedChannel) = clientManagers.find( _.channel == c )
+
+  /** Returns either Some[ClientManager] containing a ClientManager with the
+    * supplied id, or None if no such object exists in the local
+    * list of connected client managers.
+    */
+  private def getCM(id: Int) = clientManagers.find( _.id == id )
 
 
+  /** Handles RegisterHost, RegisterAgent, and TakeAction messages by delegating to
+    * the appropriate handler method.
+    */
   def receive = {
-    
     case m: RegisterHost  ⇒ {
-        val source = self.channel
-        source ! registerHost(source, m.hostname, m.clientPublicKey)
-    }
-
-    case m: RegisterAgent  ⇒ {
       val source = self.channel
-      getCM(source) map { cm  ⇒ source ! registerAgent(cm, source, m) }
-    }
+      source ! registerHost(m.service, m.hostname, m.port, m.clientPublicKey)}
 
-    case TakeAction(action)  ⇒ {
-      val source = self.channel
-      getAgent(source) map { agent  ⇒ pendingActions += (agent  → action) }
-    }
+    case m: RegisterAgent  ⇒ getCM(m.clientManagerID) map {
+      cm  ⇒ self.channel ! registerAgent(cm.id, m.agentType)}
 
-    case m: AnyRef  ⇒ println("Received something else: "+m.getClass.getName+"\n"+m)
+    case TakeAction(agentNumber, action)  ⇒ takeAction(agentNumber, action)
 
     case _  ⇒ ()
   }
-
 }

@@ -24,7 +24,7 @@
       <span class="symbol"> 
         <span class="name">ConfirmHostRegistration</span>
         
-        <span class="params">(<span name="serverPublicKey">serverPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="encryptedSharedKey">encryptedSharedKey: String</span>)</span><span class="result"> extends <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="params">(<span name="id">id: <span name="scala.Int" class="extype">Int</span></span>, <span name="serverPublicKey">serverPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="encryptedSharedKey">encryptedSharedKey: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>)</span><span class="result"> extends <a name="org.enmas.messaging.Message" class="extype" href="Message.html">Message</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -63,7 +63,7 @@
       <span class="symbol"> 
         <span class="name">ConfirmHostRegistration</span>
         
-        <span class="params">(<span name="serverPublicKey">serverPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="encryptedSharedKey">encryptedSharedKey: String</span>)</span>
+        <span class="params">(<span name="id">id: <span name="scala.Int" class="extype">Int</span></span>, <span name="serverPublicKey">serverPublicKey: <span name="java.security.PublicKey" class="extype">PublicKey</span></span>, <span name="encryptedSharedKey">encryptedSharedKey: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>)</span>
       </span>
       </h4>
       
@@ -168,13 +168,13 @@
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.enmas.messaging.ConfirmHostRegistration#encryptedSharedKey" data-isabs="false">
-      <a id="encryptedSharedKey:String"></a>
+      <a id="encryptedSharedKey:Array[Byte]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol"> 
         <span class="name">encryptedSharedKey</span>
         
-        <span class="result">: String</span>
+        <span class="result">: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
       </span>
       </h4>
       
@@ -236,6 +236,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.messaging.ConfirmHostRegistration" class="extype" href="">ConfirmHostRegistration</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.messaging.ConfirmHostRegistration#id" data-isabs="false">
+      <a id="id:Int"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">id</span>
+        
+        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
