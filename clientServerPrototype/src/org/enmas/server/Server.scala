@@ -48,7 +48,7 @@ class Server(model: POMDP, port: Int, logger: Logger) extends Actor {
 
 
   private def takeAction(agentNumber: Int, action: Action) =
-    if ( (pendingActions filter { _.agentNumber == agentNumber }).isEmpty ) {
+    if ((pendingActions filter { _.agentNumber == agentNumber }).isEmpty ) {
       getAgent(agentNumber) map { 
         a  ⇒ pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
       }
@@ -76,10 +76,11 @@ class Server(model: POMDP, port: Int, logger: Logger) extends Actor {
   }
   
   
-  private def selectState(possible: List[(State, Int)]) = {
+  private def selectState(all: List[(State, Int)]) = {
     def nthState(possible: List[(State, Int)], scalar: Int): State =
-      if (scalar <= 0) possible.head._1 else nthState(possible, scalar - possible.head._2)
+      if (scalar <= 0) possible.head._1 else nthState(possible.tail, scalar - possible.head._2)
 
+    val possible = all filter { _._2 > 0 }
     val totalWeight = possible.foldLeft(0)((a, b)  ⇒ a + b._2)
     val randomScalar = (new Random) nextInt totalWeight
     nthState(possible, randomScalar)
