@@ -10,7 +10,7 @@ object Simple {
 
     description = "Just for illustration",
 
-    agentConstraints = List ( AgentConstraint('A1, 1, 1) ),
+    agentConstraints = List ( AgentConstraint('A1, 1, 1), AgentConstraint('A2, 1, 1)),
 
     initialState = State.empty + ("time"  → 0),
 
@@ -18,8 +18,8 @@ object Simple {
 
     transitionFunction = (state, _)  ⇒ {
       state.getAs[Int]("time") match {
-        case Some(t)  ⇒ state + ("time"  → (t + 1))
-        case _  ⇒ state
+        case Some(t)  ⇒ List((state + ("time"  → (t+1)), 1))
+        case _  ⇒ List((state, 1))
       }
     },
 

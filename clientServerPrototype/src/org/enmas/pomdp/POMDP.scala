@@ -8,7 +8,7 @@ case class POMDP (
   agentConstraints: List[AgentConstraint],
   initialState: State,
   actionsFunction: (AgentType) => Set[Action],
-  transitionFunction: (State, JointAction) => State,
+  transitionFunction: (State, JointAction) => List[(State, Int)],
   rewardFunction: (State, JointAction, State) => AgentType => Float,
   observationFunction: (State, JointAction, State) => (Int, AgentType) => Observation
 ) {

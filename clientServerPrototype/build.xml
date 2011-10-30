@@ -38,7 +38,15 @@
 		<scalac srcdir="${sources.dir}" destdir="${build.dir}" classpathref="build.classpath" unchecked="on" deprecation="on">
 			<include name="**/*.scala"   />
 		</scalac>
+	</target>
 
+	<target name="dist" depends="clean, compile" description="generate the distribution">
+		<mkdir dir="${dist.dir}/lib" />
+		<!-- Put everything in ${build} into the EnMAS.jar file -->
+		<jar jarfile="${dist.dir}/lib/EnMAS.jar" basedir="${build.dir}"/>
+	</target>
+
+	<target name="doc" depends="init" description="generate the documentation">
 		<delete dir="${docs.dir}" />
 		<mkdir dir="${docs.dir}" />
 		<scaladoc 
@@ -51,12 +59,6 @@
 		>
 			<include name="**/*.scala"   />
 		</scaladoc>
-	</target>
-
-	<target name="dist" depends="clean, compile" description="generate the distribution">
-		<mkdir dir="${dist.dir}/lib" />
-		<!-- Put everything in ${build} into the EnMAS.jar file -->
-		<jar jarfile="${dist.dir}/lib/EnMAS.jar" basedir="${build.dir}"/>
 	</target>
 	
 	<target name="clean" description="clean up" >

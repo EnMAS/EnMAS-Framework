@@ -1,13 +1,6 @@
 EnMAS Punch List:
 
-_ Expose ServerManager with Lift web framework
-	_ server status, uptime
-	_ approve/deny/remove hosts
-	_ active POMDP server instances
-		- status, uptime
-		- hosts, agents
-		- start/pause/stop server
-		- download log snapshot
+X modify transition function to return a List[(State, Int)]
 
 X guard against 3rd actor hijacking the reply channel for agents
 	X set replyChannel explicitly
@@ -20,15 +13,24 @@ X guard against agent spoofing
 _ make sure remote actors are run in untrusted (safe) mode
 	- i.e. no "lifecycle" messages allowed
 
-_ Update design diagrams to reflect prototyped code
+_ update design diagrams to reflect prototyped code
 
-_ Document all methods in all classes and all type aliases
+_ document all methods in all classes and all type aliases
 
-_ Test
+_ test
 	- behavioral and unit tests with scalatest
 	- check out the scala.testing.Benchmark trait.  Supposedly just implement run() and get perf data
 
-_ Turn on encryption layer
-	- Host registration & persistent storage
+_ expose ServerManager with Lift web framework
+	_ server status, uptime
+	_ approve/deny/remove hosts
+	_ active POMDP server instances
+		- status, uptime
+		- hosts, agents
+		- start/pause/stop server
+		- download log snapshot
+
+_ turn on encryption layer
+	- host registration & persistent storage
 	- RSA key generation
-	- Symmetric key encrypt / decrypt
+	- symmetric key encrypt / decrypt

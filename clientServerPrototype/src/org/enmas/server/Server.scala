@@ -2,7 +2,7 @@ package org.enmas.server
 
 import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.EncryptionUtils._,
        akka.actor._, akka.actor.Actor._,
-       scala.collection.immutable._,
+       scala.util._, scala.collection.immutable._,
        java.security._
 
 class Server(model: POMDP, port: Int, logger: Logger) extends Actor {
@@ -60,7 +60,7 @@ class Server(model: POMDP, port: Int, logger: Logger) extends Actor {
 
 
   private def iterate(actions: JointAction): State = {
-    val statePrime = model.transitionFunction(state, actions)
+    val statePrime = selectState(model.transitionFunction(state, actions))
     val reward = model.rewardFunction(state, actions, statePrime)
     val observation = model.observationFunction(state, actions, statePrime)
     clientManagers map { cm  ⇒ {
@@ -73,6 +73,16 @@ class Server(model: POMDP, port: Int, logger: Logger) extends Actor {
     pendingActions = pendingActions take 0
     dispatchMessages
     statePrime
+  }
+  
+  
+  private def selectState(possible: List[(State, Int)]) = {
+    def nthState(possible: List[(State, Int)], scalar: Int): State =
+      if (scalar <= 0) possible.head._1 else nthState(possible, scalar - possible.head._2)
+
+    val totalWeight = possible.foldLeft(0)((a, b)  ⇒ a + b._2)
+    val randomScalar = (new Random) nextInt totalWeight
+    nthState(possible, randomScalar)
   }
 
 

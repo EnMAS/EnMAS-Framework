@@ -9,7 +9,6 @@ import org.enmas.pomdp._, org.enmas.messaging._,
        java.net.InetAddress._,
        org.enmas.examples.Simple._ // for testing only
 
-
 class ClientManager extends Actor {
   val hostname = getLocalHost.getHostName
   private var uniqueID = 0
@@ -20,9 +19,7 @@ class ClientManager extends Actor {
   private var agents = Map[Int, ActorRef]()
 
   def registerHost(clientHost: String, clientPort: Int, serverHost: String, serverPort: Int): Boolean = {
-
     server = remote.actorFor("EnMAS-service", serverHost, serverPort)
-
     (server ? RegisterHost("EnMAS-client", clientHost, clientPort, keyPair.getPublic)).onException {
       case t: Throwable  ⇒ println(t.getClass.getName)
     }.as[Message].get match {
@@ -32,7 +29,6 @@ class ClientManager extends Actor {
         sharedKey = asymEncrypt(serverPubKey,
           asymEncrypt(keyPair.getPrivate,confirmation.encryptedSharedKey))
       }
-      case DenyHostRegistration  ⇒ ()
       case _  ⇒ ()
     }
     serverPubKey != null && sharedKey != null
@@ -46,10 +42,10 @@ class ClientManager extends Actor {
         val client = actorOf(new myAgent repliesTo self)
         client setId confirmation.agentNumber.toString
         agents += (confirmation.agentNumber  → client)
+        self link client
         client.start forward confirmation
         true
       }
-      case DenyAgentRegistration  ⇒  false
       case _  ⇒ false
     }
   }
@@ -66,10 +62,9 @@ class ClientManager extends Actor {
     case t: TakeAction  ⇒ {
       if (! (agents contains t.agentID)) self.channel ! Kill
       agents.get(t.agentID) map { a  ⇒ {
-        self.sender map { s  ⇒ if (s == a) server forward t else s ! Kill }}}
-    }
+        self.sender map { s  ⇒ if (s == a) server forward t else { s ! Kill }}}}}
 
-    case _  ⇒ ()
+    case a: AnyRef  ⇒ println(a.getClass.getName + " \n" + a)
   }
 }
 
@@ -95,5 +90,5 @@ object ClientManager extends App {
   manager ? Init(clientHost, clientPort, serverHost, serverPort)
 
   print("Launch client of type: ")
-  manager ! LaunchAgent(Symbol(in.next.trim))
+  manager ? LaunchAgent(Symbol(in.next.trim))
 }
