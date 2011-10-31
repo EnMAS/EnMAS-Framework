@@ -18,6 +18,7 @@ class ClientManager extends Actor {
   private var sharedKey: Array[Byte] = null
   private var agents = Map[Int, ActorRef]()
 
+
   def registerHost(clientHost: String, clientPort: Int, serverHost: String, serverPort: Int): Boolean = {
     server = remote.actorFor("EnMAS-service", serverHost, serverPort)
     (server ? RegisterHost("EnMAS-client", clientHost, clientPort, keyPair.getPublic)).onException {
@@ -33,6 +34,7 @@ class ClientManager extends Actor {
     }
     serverPubKey != null && sharedKey != null
   }
+
 
   def registerAgent(agentType: AgentType): Boolean = {
     (server ? RegisterAgent(uniqueID, agentType)).onException {
@@ -50,19 +52,20 @@ class ClientManager extends Actor {
     }
   }
 
+
   def receive = {
     case m: ClientManager.Init  ⇒
       self.channel ! registerHost(m.clientHost, m.clientPort, m.serverHost, m.serverPort)
 
     case m: ClientManager.LaunchAgent  ⇒ self.channel ! registerAgent(m.agentType)
 
-    case MessageBundle(content)  ⇒ content map { c  ⇒ {
-        agents.find(_._2.getId == c.agentNumber.toString) map { a  ⇒ a._2.forward(c) }}}
+    case MessageBundle(content)  ⇒ content map { c  ⇒
+        agents.find(_._2.getId == c.agentNumber.toString) map { a  ⇒ a._2.forward(c) }}
 
     case t: TakeAction  ⇒ {
       if (! (agents contains t.agentID)) self.channel ! Kill
-      agents.get(t.agentID) map { a  ⇒ {
-        self.sender map { s  ⇒ if (s == a) server forward t else { s ! Kill }}}}}
+      agents.get(t.agentID) map { a  ⇒
+        self.sender map { s  ⇒ if (s == a) server forward t else s ! Kill }}}
 
     case a: AnyRef  ⇒ println(a.getClass.getName + " \n" + a)
   }

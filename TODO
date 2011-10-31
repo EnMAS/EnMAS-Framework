@@ -10,12 +10,38 @@ X guard against agent spoofing
 	X verify: for each TakeAction t, t.id  → self.sender elem
 	X kill agents that violate the above invariant
 
-_ make sure remote actors are run in untrusted (safe) mode
-	- i.e. no "lifecycle" messages allowed
+_ document: 1 of 21
+	X  Agent
+	_  Client
+	_  ClientManager
+	_ ClientGUI
+	_ GraphicsPlugin
+	_ gui package object
+	_ simple example
+	_ messages.scala
+	_ AgentAction
+	_ pomdp package object
+	_ POMDP
+	_ State
+	_ AgentRef
+	_ ClientManagerRef
+	_ Host
+	_ Logger
+	_ server package object
+	_ POMDPIteration
+	_ Server
+	_ ServerManager
+	_ EncryptionUtils
 
 _ update design diagrams to reflect prototyped code
 
-_ document all methods in all classes and all type aliases
+_ investigate & implement dynamic compilation and class loading
+	- for agents
+	- for models
+
+_ make sure remote actors are run in untrusted (safe) mode
+	- i.e. no "lifecycle" messages allowed
+	- this is a configuration issue (akka.conf)
 
 _ test
 	- behavioral and unit tests with scalatest

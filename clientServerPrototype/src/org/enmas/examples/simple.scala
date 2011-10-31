@@ -34,7 +34,8 @@ object Simple {
   class myAgent extends Agent {
     def policy = { case u: UpdateAgent  ⇒ {
       u.observation.getAs[Int]("time") map { t  ⇒ if (t % 1000 == 0) { println(t.toString) }}
-      takeAction( 'win ) }}
+      takeAction( 'win )
+    }}
   }
 
 }

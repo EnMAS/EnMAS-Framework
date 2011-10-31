@@ -155,7 +155,8 @@
         <span class="result">: <span name="scala.collection.immutable.Set" class="extype">Set</span>[Action]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the set of actions that this agent may choose to take.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the set of actions that this agent may choose to take.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#agentNumber" data-isabs="false">
       <a id="agentNumber:Int"></a>
       <h4 class="signature">
@@ -166,7 +167,8 @@
         <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the unique (per-server instance) identifier for this agent.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the unique (per-server instance) identifier for this agent.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#agentType" data-isabs="false">
       <a id="agentType:AgentType"></a>
       <h4 class="signature">
@@ -177,7 +179,8 @@
         <span class="result">: AgentType</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns the type of this agent, as defined by the POMDP model.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the type of this agent, as defined by the POMDP model.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -362,7 +365,15 @@
         <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<span name="scala.Any" class="extype">Any</span>, <span name="scala.Unit" class="extype">Unit</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.examples.Simple.myAgent" class="extype" href="">myAgent</a> → <a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
+      <p class="shortcomment cmt">Defines this agent's behavior.</p><div class="fullcomment"><div class="comment cmt"><p>Defines this agent's behavior.  This abstract method is the only one
+that user code must implement.  To make sense, the policy should handle
+UpdateAgent messages and call takeAction like so:</p><pre>
+def policy = { case UpdateAgent(_, observation, reward)  ⇒ {
+  // learn
+  // decide
+  takeAction(decision)
+}}
+</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.examples.Simple.myAgent" class="extype" href="">myAgent</a> → <a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#postRestart" data-isabs="false">
       <a id="postRestart(Throwable):Unit"></a>
       <h4 class="signature">
@@ -373,7 +384,8 @@
         <span class="params">(<span name="t">t: Throwable</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
+      <p class="shortcomment cmt">This method is overridden and made final to sandbox user code.</p><div class="fullcomment"><div class="comment cmt"><p>This method is overridden and made final to sandbox user code.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#postStop" data-isabs="false">
       <a id="postStop():Unit"></a>
       <h4 class="signature">
@@ -384,7 +396,8 @@
         <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
+      <p class="shortcomment cmt">This method is overridden and made final to sandbox user code.</p><div class="fullcomment"><div class="comment cmt"><p>This method is overridden and made final to sandbox user code.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#preRestart" data-isabs="false">
       <a id="preRestart(Throwable,Option[Any]):Unit"></a>
       <h4 class="signature">
@@ -395,7 +408,8 @@
         <span class="params">(<span name="t">t: Throwable</span>, <span name="o">o: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Any" class="extype">Any</span>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
+      <p class="shortcomment cmt">This method is overridden and made final to sandbox user code.</p><div class="fullcomment"><div class="comment cmt"><p>This method is overridden and made final to sandbox user code.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#preStart" data-isabs="false">
       <a id="preStart():Unit"></a>
       <h4 class="signature">
@@ -406,7 +420,8 @@
         <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
+      <p class="shortcomment cmt">This method is overridden and made final to sandbox user code.</p><div class="fullcomment"><div class="comment cmt"><p>This method is overridden and made final to sandbox user code.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#receive" data-isabs="false">
       <a id="receive:PartialFunction[Any, Unit]"></a>
       <h4 class="signature">
@@ -417,7 +432,8 @@
         <span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<span name="scala.Any" class="extype">Any</span>, <span name="scala.Unit" class="extype">Unit</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
+      <p class="shortcomment cmt">Initially defaultMessageHandler.</p><div class="fullcomment"><div class="comment cmt"><p>Initially defaultMessageHandler.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a> → Actor</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#repliesTo" data-isabs="false">
       <a id="repliesTo(UntypedChannel):Agent"></a>
       <h4 class="signature">
@@ -428,7 +444,11 @@
         <span class="params">(<span name="chan">chan: <span name="akka.actor.UntypedChannel" class="extype">UntypedChannel</span></span>)</span><span class="result">: <a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
+      <p class="shortcomment cmt">Returns this instance, after setting the reply channel.</p><div class="fullcomment"><div class="comment cmt"><p>Returns this instance, after setting the reply channel.  The
+return value is to promote method chaining at the call site,
+as in:</p><pre>
+val myAgent = actorOf(new MyAgent repliesTo self)
+</pre></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="akka.actor.Actor#self" data-isabs="false">
       <a id="self:ScalaActorRef"></a>
       <h4 class="signature">
@@ -472,7 +492,10 @@
         <span class="params">(<span name="action">action: Action</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
+      <p class="shortcomment cmt">Replies to the replyChannel (a local client manager) with a TakeAction
+message indicating that this agent wants to take the supplied action.</p><div class="fullcomment"><div class="comment cmt"><p>Replies to the replyChannel (a local client manager) with a TakeAction
+message indicating that this agent wants to take the supplied action.</p><p>If the message passes security checks, it is forwarded to the server.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected final </dd><dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
