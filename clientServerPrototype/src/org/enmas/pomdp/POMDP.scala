@@ -12,6 +12,7 @@ case class POMDP (
   rewardFunction: (State, JointAction, State) => AgentType => Float,
   observationFunction: (State, JointAction, State) => (Int, AgentType) => Observation
 ) {
+
   /** Checks that all supplied types are allowed and cardinalities do not
     * exceed limits.
     */

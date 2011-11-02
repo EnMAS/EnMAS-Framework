@@ -45,5 +45,4 @@ object EncryptionUtils {
     }
     bytes
   }
-
 }

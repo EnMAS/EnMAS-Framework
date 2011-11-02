@@ -7,7 +7,7 @@ import org.enmas.pomdp._, org.enmas.messaging._,
        java.security._, java.security.interfaces._,
        javax.crypto._,
        java.net.InetAddress._,
-       org.enmas.examples.Simple._ // for testing only
+       org.enmas.examples.Broadcast._ // for testing only
 
 class ClientManager extends Actor {
   val hostname = getLocalHost.getHostName
@@ -41,7 +41,7 @@ class ClientManager extends Actor {
       case t: Throwable  ⇒ println(t.getClass.getName)
     }.as[Message].get match {
       case confirmation: ConfirmAgentRegistration  ⇒ {
-        val client = actorOf(new myAgent repliesTo self)
+        val client = actorOf(new simpleAgent repliesTo self)
         client setId confirmation.agentNumber.toString
         agents += (confirmation.agentNumber  → client)
         self link client

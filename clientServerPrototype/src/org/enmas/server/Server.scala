@@ -49,7 +49,7 @@ class Server(model: POMDP, port: Int, logger: Logger) extends Actor {
 
   private def takeAction(agentNumber: Int, action: Action) =
     if ((pendingActions filter { _.agentNumber == agentNumber }).isEmpty ) {
-      getAgent(agentNumber) map { 
+      getAgent(agentNumber) map {
         a  ⇒ pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
       }
       if (

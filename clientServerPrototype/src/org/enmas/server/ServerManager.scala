@@ -24,13 +24,13 @@ class ServerManager {
 
 object ServerManager extends App {
 
-  import org.enmas.examples.Simple._,
+  import org.enmas.examples.Broadcast._,
          java.util.Scanner
 
   val in = new Scanner(System.in)
   print("Server port: ")
 
   val manager = new ServerManager
-  manager.createServer(myModel, in.nextInt())
+  manager.createServer(broadcastProblem, in.nextInt())
 
 }
