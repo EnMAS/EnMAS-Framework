@@ -25,7 +25,7 @@ class State(
 }
 
 object State {
-  def apply() = new State()
+  def apply() = new State
   def apply(map: HashMap[String, (Manifest[_], Any)]) = new State(map)
   def empty = State()
 }

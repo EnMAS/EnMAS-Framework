@@ -3,24 +3,38 @@ package org.enmas.examples
 import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._,
        scala.util._
 
-object Broadcast {  
-
+object Broadcast {
   val broadcastProblem = POMDP (
+    name = "Broadcast Problem",
+    description = """
+There are two agents in this scenario.  Each agent represents
+a relay on a network.  The agents receive messages, which are stored
+in a local buffer which holds at most one message at a time.  At each
+time step, each agent can choose to "send" (forward the message) 
+or to "wait".  Both agents are rewarded whenever a message is sent
+successfully.  However!  The agents share a single outbound serial line
+and if BOTH agents a) have a message and b) choose to "send", a
+collision results and both send attempts fail.  At each time step,
+agents are updated with a reward from the previous step (either 1 or 0)
+and an observation (a Boolean value) indicating whether their sensors
+indicate that a message is waiting in their local buffer.  This value
+is noisy.  10% of the time, the observed sensor value indicates the
+wrong state of the buffer.
+""",
 
-    name = "2 Agent Broadcast Problem",
-    description = "description to come later...",
-
-    agentConstraints = List ( AgentConstraint('A1, 2, 2)),
+    agentConstraints = List(AgentConstraint('A1, 2, 2)),
 
     initialState = State.empty + ("1"  → false) + ("2"  → false),
 
-    actionsFunction = (_)  ⇒ Set('send, 'wait),
+    actionsFunction = (agentType)  ⇒ Set('send, 'wait),
 
     transitionFunction = (state, actions)  ⇒ {
-      val m1 = state.getAs[Boolean]("1") match { case Some(true)  ⇒ true; case _  ⇒ false }
-      val m2 = state.getAs[Boolean]("2") match { case Some(true)  ⇒ true; case _  ⇒ false }
-      val a1 = actions contains { a: AgentAction  ⇒ a.agentNumber == 1 && a.action == 'send }
-      val a2 = actions contains { a: AgentAction  ⇒ a.agentNumber == 2 && a.action == 'send }
+      val m1 = state.getAs[Boolean]("1") getOrElse false
+      val m2 = state.getAs[Boolean]("2") getOrElse false
+      val a1 = actions contains {
+        a: AgentAction  ⇒ a.agentNumber == 1 && a.action == 'send }
+      val a2 = actions contains {
+        a: AgentAction  ⇒ a.agentNumber == 2 && a.action == 'send }
 
       val allClearDistribution = List(
         (State.empty + ("1"  → true) + ("2"  → true), 9),
@@ -62,55 +76,56 @@ object Broadcast {
           )
           else allClearDistribution
         }
-      }
-      
+      }      
     },
 
-    rewardFunction = (s, actions, sPrime)  ⇒ (_)  ⇒ {
+    rewardFunction = (s, actions, sPrime)  ⇒ (agentType)  ⇒ {
       val sendActions = actions filter {_.action == 'send}
-      if (sendActions.size == 1) {
-        val a = sendActions.head
-        s.getAs[Boolean](a.agentNumber.toString) match {
-          case Some(true)  ⇒ 1
-          case _  ⇒ 0
-        }
-      }
-      else if (sendActions.size == 2) {
-        val test = actions filter { a: AgentAction  ⇒ {
+      sendActions.size match {
+        case 1  ⇒ {
+          val a = sendActions.head
           s.getAs[Boolean](a.agentNumber.toString) match {
-            case Some(true)  ⇒ true
-            case _  ⇒ false
+            case Some(true)  ⇒ 1
+            case _  ⇒ 0
           }
-        }}
-        if (test.size == 1) 1 else 0
+        }
+        case 2  ⇒ {
+          val test = actions filter { a: AgentAction  ⇒ {
+            s.getAs[Boolean](a.agentNumber.toString) getOrElse false
+          }}
+          if (test.size == 1) 1 else 0
+        }
+        case _  ⇒ 0
       }
-      else 0
     },
 
     observationFunction = (s, actions, sPrime)  ⇒ (aNum, aType)  ⇒ {
-      val hasMessage = s.getAs[Boolean](aNum.toString) match {
-        case Some(true)  ⇒ true
-        case _  ⇒ false
-      }
+      val hasMessage = s.getAs[Boolean](aNum.toString) getOrElse false
       if (((new Random) nextInt 10) < 1) State.empty + ("queue", !hasMessage)
       else State.empty + ("queue", hasMessage)
     }
   )
 
+  /** simpleAgent lives up to its name!
+    *
+    * 90% of the time it sends and 10% of the time it waits
+    * without regard for observations or rewards
+    */
   class simpleAgent extends Agent {
     def policy = { case u: UpdateAgent  ⇒ {
-
-      println("Received reward: "+u.reward)
-
-      if (agentNumber == 1) {
+      print("I think my queue is ")
+      println(u.observation.getAs[Boolean]("queue").getOrElse(false) match {
+        case true  ⇒ "full"
+        case _  ⇒ "empty"
+      })
+      println("I received "+u.reward+" as a reward\n")
+      if (agentNumber == 1)
         if (((new Random) nextInt 10) < 1) takeAction('wait)
         else takeAction('send)
-      }
-      if (agentNumber == 2) {
+
+      if (agentNumber == 2)
         if (((new Random) nextInt 10) < 1) takeAction('send)
         else takeAction('wait)
-      }
     }}
   }
-
 }
