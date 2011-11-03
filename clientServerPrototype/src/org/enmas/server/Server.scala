@@ -75,15 +75,19 @@ class Server(model: POMDP, port: Int, logger: Logger) extends Actor {
     statePrime
   }
   
-  
+
   private def selectState(all: List[(State, Int)]) = {
     def stateAt(possible: List[(State, Int)], scalar: Int): State =
       if (scalar <= 0) possible.head._1 else stateAt(possible.tail, scalar - possible.head._2)
 
     val possible = all filter { _._2 > 0 }
-    val totalWeight = possible.foldLeft(0)((a, b)  ⇒ a + b._2)
-    val randomScalar = (new Random) nextInt totalWeight
-    stateAt(possible, randomScalar)
+
+    if (possible.size > 0) {
+      val totalWeight = possible.foldLeft(0)((a, b)  ⇒ a + b._2)
+      val randomScalar = (new Random) nextInt totalWeight
+      stateAt(possible, randomScalar)
+    }
+    else state
   }
 
 
