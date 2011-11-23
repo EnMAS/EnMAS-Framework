@@ -58,6 +58,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>sealed </dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.messaging.ClientError" data-isabs="false">
+      <a id="ClientError:ClientError"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="ClientError.html"><span class="name">ClientError</span></a>
+        
+        <span class="params">(<span name="cause">cause: Throwable</span>)</span><span class="result"> extends Error with Product with Serializable</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.enmas.messaging.ConfirmAgentRegistration" data-isabs="false">
       <a id="ConfirmAgentRegistration:ConfirmAgentRegistration"></a>
       <h4 class="signature">
@@ -65,10 +76,11 @@
       <span class="symbol"> 
         <a href="ConfirmAgentRegistration.html"><span class="name">ConfirmAgentRegistration</span></a>
         
-        <span class="params">(<span name="agentNumber">agentNumber: Int</span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+        <span class="params">(<span name="agentNumber">agentNumber: Int</span>, <span name="agentType">agentType: AgentType</span>, <span name="actions">actions: Set[Action]</span>)</span><span class="result"> extends AgentMessage with Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Sent from a Server to a ClientManager
+</p>
     </li><li visbl="pub" name="org.enmas.messaging.ConfirmHostRegistration" data-isabs="false">
       <a id="ConfirmHostRegistration:ConfirmHostRegistration"></a>
       <h4 class="signature">
@@ -79,7 +91,30 @@
         <span class="params">(<span name="id">id: Int</span>, <span name="serverPublicKey">serverPublicKey: PublicKey</span>, <span name="encryptedSharedKey">encryptedSharedKey: Array[Byte]</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
+      <p class="comment cmt">Sent from a Server to a ClientManager
+</p>
+    </li><li visbl="pub" name="org.enmas.messaging.DiscoveryReply" data-isabs="false">
+      <a id="DiscoveryReply:DiscoveryReply"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="DiscoveryReply.html"><span class="name">DiscoveryReply</span></a>
+        
+        <span class="params">(<span name="host">host: String</span>, <span name="service">service: String</span>, <span name="port">port: Int</span>, <span name="modelName">modelName: String</span>, <span name="iterating">iterating: Boolean</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+      </span>
+      </h4>
       
+    </li><li visbl="pub" name="org.enmas.messaging.Error" data-isabs="true">
+      <a id="Error:Error"></a>
+      <h4 class="signature">
+      <span class="kind">trait</span>
+      <span class="symbol"> 
+        <a href="Error.html"><span class="name">Error</span></a>
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>sealed </dd></dl></div>
     </li><li visbl="pub" name="org.enmas.messaging.Message" data-isabs="true">
       <a id="Message:Message"></a>
       <h4 class="signature">
@@ -101,7 +136,8 @@
         <span class="params">(<span name="content">content: List[AgentMessage]</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Wraps a series of Messages destined for agents
+cohabitating on a given host.</p>
     </li><li visbl="pub" name="org.enmas.messaging.RegisterAgent" data-isabs="false">
       <a id="RegisterAgent:RegisterAgent"></a>
       <h4 class="signature">
@@ -112,7 +148,8 @@
         <span class="params">(<span name="clientManagerID">clientManagerID: Int</span>, <span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Sent from a ClientManger to a Server
+</p>
     </li><li visbl="pub" name="org.enmas.messaging.RegisterHost" data-isabs="false">
       <a id="RegisterHost:RegisterHost"></a>
       <h4 class="signature">
@@ -123,6 +160,18 @@
         <span class="params">(<span name="service">service: String</span>, <span name="hostname">hostname: String</span>, <span name="port">port: Int</span>, <span name="clientPublicKey">clientPublicKey: PublicKey</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
+      <p class="comment cmt">Sent from a ClientManger to a Server
+</p>
+    </li><li visbl="pub" name="org.enmas.messaging.ServerError" data-isabs="false">
+      <a id="ServerError:ServerError"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="ServerError.html"><span class="name">ServerError</span></a>
+        
+        <span class="params">(<span name="cause">cause: Throwable</span>)</span><span class="result"> extends Error with Product with Serializable</span>
+      </span>
+      </h4>
       
     </li><li visbl="pub" name="org.enmas.messaging.TakeAction" data-isabs="false">
       <a id="TakeAction:TakeAction"></a>
@@ -131,10 +180,12 @@
       <span class="symbol"> 
         <a href="TakeAction.html"><span class="name">TakeAction</span></a>
         
-        <span class="params">(<span name="agentID">agentID: Int</span>, <span name="action">action: Action</span>)</span><span class="result"> extends Message with Product with Serializable</span>
+        <span class="params">(<span name="agentNumber">agentNumber: Int</span>, <span name="action">action: Action</span>)</span><span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Sent from an Agent to a ClientManager, then
+forwarded from that ClientManager to a Server
+</p>
     </li><li visbl="pub" name="org.enmas.messaging.UpdateAgent" data-isabs="false">
       <a id="UpdateAgent:UpdateAgent"></a>
       <h4 class="signature">
@@ -145,7 +196,9 @@
         <span class="params">(<span name="agentNumber">agentNumber: Int</span>, <span name="observation">observation: Observation</span>, <span name="reward">reward: Float</span>)</span><span class="result"> extends AgentMessage with Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Sent from a Server to a ClientManager, then
+forwarded from that ClientManager to an Agent
+</p>
     </li></ol>
             </div>
         
@@ -163,13 +216,26 @@
         <span class="result"> extends Message with Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Sent from a Server to a ClientManager
+</p>
     </li><li visbl="pub" name="org.enmas.messaging.DenyHostRegistration" data-isabs="false">
       <a id="DenyHostRegistration:DenyHostRegistration"></a>
       <h4 class="signature">
       <span class="kind">object</span>
       <span class="symbol"> 
         <a href="DenyHostRegistration$.html"><span class="name">DenyHostRegistration</span></a>
+        
+        <span class="result"> extends Message with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Sent from a Server to a ClientManager
+</p>
+    </li><li visbl="pub" name="org.enmas.messaging.Discovery" data-isabs="false">
+      <a id="Discovery:Discovery"></a>
+      <h4 class="signature">
+      <span class="kind">object</span>
+      <span class="symbol"> 
+        <a href="Discovery$.html"><span class="name">Discovery</span></a>
         
         <span class="result"> extends Message with Product with Serializable</span>
       </span>

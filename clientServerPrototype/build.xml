@@ -17,12 +17,19 @@
 
 	<target name="init">
 		<property name="scala-library.jar" value="${scala.home}/lib/scala-library.jar" />
+		<property name="scala-swing.jar" value="${scala.home}/lib/scala-swing.jar" />		
 		<property name="scala-compiler.jar" value="${scala.home}/lib/scala-compiler.jar" />
 		<property name="akka-actors.jar" value="${lib.dir}/akka/akka-actor-1.2.jar" />
 		<property name="akka-remote.jar" value="${lib.dir}/akka/akka-remote-1.2.jar" />
+		<property name="protobuf.jar" value="${lib.dir}/akka/protobuf-java-2.4.1.jar" />
+
 		<path id="build.classpath">
 			<pathelement location="${scala-library.jar}" />
+			<pathelement location="${scala-swing.jar}" />
+			<pathelement location="${scala-compiler.jar}" />
 			<pathelement location="${akka-actors.jar}" />
+			<pathelement location="${akka-remote.jar}" />
+			<pathelement location="${protobuf.jar}" />
 			<pathelement location="${build.dir}" />
 		</path>
 		<taskdef resource="scala/tools/ant/antlib.xml">
@@ -33,14 +40,39 @@
 		</taskdef>
 	</target>
 
-	<target name="compile" depends="init">
+	<target name="compileCore" depends="init">
 		<mkdir dir="${build.dir}" />
-		<scalac srcdir="${sources.dir}" destdir="${build.dir}" classpathref="build.classpath" unchecked="on" deprecation="on">
-			<include name="**/*.scala"   />
+		<scalac
+			srcdir="${sources.dir}"
+			destdir="${build.dir}"
+			classpathref="build.classpath"
+			unchecked="on"
+			deprecation="on"
+		>
+			<include name="**/pomdp/*.scala" />
+			<include name="**/messaging/*.scala" />
+			<include name="**/client/Client.scala" />
+			<include name="**/client/Agent.scala" />
 		</scalac>
 	</target>
 
-	<target name="dist" depends="clean, compile" description="generate the distribution">
+	<target name="compile" depends="compileCore">
+		<javac includeantruntime="false"
+			srcdir="${sources.dir}"
+			destdir="${build.dir}"
+			classpathref="build.classpath"
+			includes="**/*.java"
+		/>
+		<scalac failonerror="true"
+			srcdir="${sources.dir}"
+			destdir="${build.dir}"
+			classpathref="build.classpath"
+			unchecked="on"
+			deprecation="on"
+		><include name="**/*.scala" /></scalac>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
 		<mkdir dir="${dist.dir}/lib" />
 		<!-- Put everything in ${build} into the EnMAS.jar file -->
 		<jar jarfile="${dist.dir}/lib/EnMAS.jar" basedir="${build.dir}"/>
@@ -56,11 +88,9 @@
 			unchecked="yes"
 			doctitle="EnMAS API Specification"
 			classpathref="build.classpath"
-		>
-			<include name="**/*.scala"   />
-		</scaladoc>
+		><include name="**/*.scala"   /></scaladoc>
 	</target>
-	
+
 	<target name="clean" description="clean up" >
 		<!-- Delete the ${build} and ${dist} directory trees -->
 		<delete dir="${build.dir}"/>

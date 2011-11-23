@@ -1,51 +1,93 @@
-EnMAS Punch List:
-
 X modify transition function to return a List[(State, Int)]
 
 X guard against 3rd actor hijacking the reply channel for agents
 	X set replyChannel explicitly
 
-X guard against agent spoofing
-	X keep a map agents: of (agentID  → ActorRef)
-	X verify: for each TakeAction t, t.id  → self.sender elem
-	X kill agents that violate the above invariant
+X write more interesting example problem using our POMDP specification format
 
-_ document: 1 of 21
-	X  Agent
-	_  Client
-	_  ClientManager
-	_ ClientGUI
-	_ GraphicsPlugin
-	_ gui package object
-	_ simple example
-	_ messages.scala
-	_ AgentAction
-	_ pomdp package object
-	_ POMDP
-	_ State
-	_ AgentRef
-	_ ClientManagerRef
-	_ Host
-	_ Logger
-	_ server package object
-	_ POMDPIteration
-	_ Server
-	_ ServerManager
-	_ EncryptionUtils
+X update design diagrams to reflect prototyped code
+	X Client Subsystem
+	X Messaging Utils
+	X POMDP Subsystem
+	X Server Subsystem
+	X Encryption Utils
+	X Serialization Utils
+	X Architectural View
+	X Client-Server Interaction (Sequence Diagram)
 
-_ update design diagrams to reflect prototyped code
+X document:
+	X Agent
+	X Client
+	X ClientManager
+	X ClientGUI
+	X GraphicsPlugin
+	X gui package object
+	X simple example
+	X messages.scala
+	X AgentAction
+	X pomdp package object
+	X POMDP
+	X State
+	X AgentRef
+	X ClientManagerRef
+	X Host
+	X POMDPIteration
+	X Server
+	X ServerManager
+	X EncryptionUtils
+	X SerializationUtils
+
+_ use case document
+	X diagrams
+	_ narratives
+
+_ architectural design document
+
+_ detailed design document
+	- include all design diagrams
+
+_ update functional requirements document
+
+_ write a simple agent in Java
+	- problems! all related to the definition of State and the fact
+	  that the Java agent needs to call methods of it
+
+_ look at GNUPlot project (open source graphing framework)
+
+X wrap all calls to user-written code in try blocks to prevent runtime exceptions
+  from crashing the server
+	X forward any Throwable object to all clientManagers
+	X handle Throwable in receive, do something reasonable
+
+_ allow clientManagers to subscribe to POMDPIteration messages from the Server
+	X Server keeps a iterationSubscribers: Set[ClientManagerRef] that is a subset of clientManagers
+	- define messages to subscribe / unsubscribe, handle in Server
+	- just send the POMDPIteration as is -- case class makes a fine message already
+	- handle POMDPIteration messages in ClientManager
+		- i.e. forward to Logger and GUI clients
+
+_ custom logging
+	X ditch exhaustive "playable" logs -- too messy, probably not useful
+	- allow definition of logging clients (extends Client) attached to client manager
+		- causes client manager to subscribe to POMDPIteration messages; these are forwarded
+		  to logging clients and GUI clients when received
+	_ log Throwables on the client side
+		X catch & forward Throwables at the Server
+		- receive & log ServerError(t: Throwable) and ClientError(t: Throwable)
+		  at the ClientManager
+		- write these errors to a log file relative to the client manager, or the EnMAS jar
 
 _ investigate & implement dynamic compilation and class loading
 	- for agents
-	- for models
+	- for loggers and GUI clients
+	- for models -- with help from clientManager:
+		- clientManager attempts compilation of the scala source file
+		- if errors, report them
+		- else upload the file to the server, compile and load it there
 
 _ make sure remote actors are run in untrusted (safe) mode
 	- i.e. no "lifecycle" messages allowed
 	- this is a configuration issue (akka.conf)
-
-_ test
-	- behavioral and unit tests with scalatest
-	- check out the scala.testing.Benchmark trait.  Supposedly just implement run() and get perf data
 
 _ expose ServerManager with Lift web framework
 	_ server status, uptime
@@ -56,7 +98,23 @@ _ expose ServerManager with Lift web framework
 		- start/pause/stop server
 		- download log snapshot
 
-_ turn on encryption layer
-	- host registration & persistent storage
-	- RSA key generation
+_ testing
+	- behavioral and unit tests with scalatest
+	- check out the scala.testing.Benchmark trait.  Supposedly just implement run() and get perf data
+
+_ security issues
+	X RSA key generation
+	- key exchange
 	- symmetric key encrypt / decrypt
+	- host registration & persistent storage
+	X guard against agent spoofing
+		X keep a map agents: of (agentID  → ActorRef)
+		X verify: for each TakeAction t, (t.id  → self.sender) elem agents
+		X kill agents that violate the above invariant
+	- show that the protocol ensures authenticity and integrity:
+		- from server to clientManager
+		- from clientManager to server
+		- from clientManager to agent
+		X from agent to clientManager
+	- protect against replay attacks from spoofed client managers
+		- sequence or n-once value?

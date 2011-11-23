@@ -65,10 +65,10 @@
       <span class="symbol"> 
         <a href="ClientManager$$Init.html"><span class="name">Init</span></a>
         
-        <span class="params">(<span name="clientHost">clientHost: String</span>, <span name="clientPort">clientPort: Int</span>, <span name="serverHost">serverHost: String</span>, <span name="serverPort">serverPort: Int</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="clientPort">clientPort: Int</span>, <span name="serverHost">serverHost: String</span>, <span name="serverPort">serverPort: Int</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>sealed </dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.ClientManager.LaunchAgent" data-isabs="false">
       <a id="LaunchAgent:LaunchAgent"></a>
       <h4 class="signature">
@@ -76,10 +76,32 @@
       <span class="symbol"> 
         <a href="ClientManager$$LaunchAgent.html"><span class="name">LaunchAgent</span></a>
         
-        <span class="params">(<span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="agentType">agentType: AgentType</span>, <span name="className">className: String</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>sealed </dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.client.ClientManager.ScanHost" data-isabs="false">
+      <a id="ScanHost:ScanHost"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="ClientManager$$ScanHost.html"><span class="name">ScanHost</span></a>
+        
+        <span class="params">(<span name="serverHost">serverHost: String</span>, <span name="serverPort">serverPort: Int</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>sealed </dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.client.ClientManager.ScanResult" data-isabs="false">
+      <a id="ScanResult:ScanResult"></a>
+      <h4 class="signature">
+      <span class="kind">case class</span>
+      <span class="symbol"> 
+        <a href="ClientManager$$ScanResult.html"><span class="name">ScanResult</span></a>
+        
+        <span class="params">(<span name="replies">replies: List[DiscoveryReply]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>sealed </dd></dl></div>
     </li></ol>
             </div>
         
@@ -269,6 +291,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.client.ClientManager#gui" data-isabs="false">
+      <a id="gui:ClientGUI"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">gui</span>
+        
+        <span class="result">: <a name="org.enmas.client.gui.ClientGUI" class="extype" href="gui/ClientGUI.html">ClientGUI</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -280,17 +313,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.client.ClientManager#in" data-isabs="false">
-      <a id="in:Scanner"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">in</span>
-        
-        <span class="result">: <span name="java.util.Scanner" class="extype">Scanner</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -357,28 +379,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.client.ClientManager#serverHost" data-isabs="false">
-      <a id="serverHost:String"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">serverHost</span>
-        
-        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.enmas.client.ClientManager#serverPort" data-isabs="false">
-      <a id="serverPort:Int"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">serverPort</span>
-        
-        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">

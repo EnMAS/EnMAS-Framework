@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.enmas.server.POMDPIteration</title>
+          <title>org.enmas.examples.Broadcast</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -12,28 +12,38 @@
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <img src="../../../lib/class_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.enmas" class="extype" href="../package.html">enmas</a>.<a name="org.enmas.server" class="extype" href="package.html">server</a></p>
-        <h1>POMDPIteration</h1>
+        <img src="../../../lib/object_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.enmas" class="extype" href="../package.html">enmas</a>.<a name="org.enmas.examples" class="extype" href="package.html">examples</a></p>
+        <h1>Broadcast</h1>
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">case class</span>
+      <span class="kind">object</span>
       <span class="symbol"> 
-        <span class="name">POMDPIteration</span>
+        <span class="name">Broadcast</span>
         
-        <span class="params">(<span name="ordinality">ordinality: <span name="scala.Long" class="extype">Long</span></span>, <span name="observations">observations: Set[(<a name="org.enmas.server.AgentRef" class="extype" href="AgentRef.html">AgentRef</a>, <a name="org.enmas.pomdp.State" class="extype" href="../pomdp/State.html">State</a>)]</span>, <span name="rewards">rewards: Set[(<a name="org.enmas.server.AgentRef" class="extype" href="AgentRef.html">AgentRef</a>, <span name="scala.Float" class="extype">Float</span>)]</span>, <span name="actions">actions: JointAction</span>, <span name="state">state: <a name="org.enmas.pomdp.State" class="extype" href="../pomdp/State.html">State</a></span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Represents one iteration of a POMDP.</p><p>Here, ordinality == n means that this POMDPIteration is the
-nth iteration of the simulation.</p><p>The State member is the state of the simulation at the beginning
-of this iteration step.
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>There are two agents in this scenario.  Each agent represents
+a relay on a network.  The agents receive messages, which are stored
+in a local buffer which holds at most one message at a time.  At each
+time step, each agent can choose to &quot;send&quot; (forward the message)
+or to &quot;wait&quot;.  Both agents are rewarded whenever a message is sent
+successfully.  However!  The agents share a single outbound serial line
+and if BOTH agents a) have a message and b) choose to &quot;send&quot;, a
+collision results and both send attempts fail.  At each time step,
+agents are updated with a reward from the previous step (either 1 or 0)
+and an observation (a Boolean value) indicating whether their sensors
+indicate that a message is waiting in their local buffer.  This value
+is noisy.  10% of the time, the observed sensor value indicates the
+wrong state of the buffer.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
         
 
@@ -49,7 +59,7 @@ of this iteration step.
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.enmas.server.POMDPIteration" class="in"><span>POMDPIteration</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.enmas.examples.Broadcast" class="in"><span>Broadcast</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -57,23 +67,24 @@ of this iteration step.
             </div>
         </div>
 
-        <div class="members" id="constructors">
-              <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.enmas.server.POMDPIteration#this" data-isabs="false">
-      <a id="this:POMDPIteration"></a>
-      <h4 class="signature">
-      <span class="kind">new</span>
-      <span class="symbol"> 
-        <span class="name">POMDPIteration</span>
         
-        <span class="params">(<span name="ordinality">ordinality: <span name="scala.Long" class="extype">Long</span></span>, <span name="observations">observations: Set[(<a name="org.enmas.server.AgentRef" class="extype" href="AgentRef.html">AgentRef</a>, <a name="org.enmas.pomdp.State" class="extype" href="../pomdp/State.html">State</a>)]</span>, <span name="rewards">rewards: Set[(<a name="org.enmas.server.AgentRef" class="extype" href="AgentRef.html">AgentRef</a>, <span name="scala.Float" class="extype">Float</span>)]</span>, <span name="actions">actions: JointAction</span>, <span name="state">state: <a name="org.enmas.pomdp.State" class="extype" href="../pomdp/State.html">State</a></span>)</span>
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.enmas.examples.Broadcast.BroadcastAgent" data-isabs="false">
+      <a id="BroadcastAgent:BroadcastAgent"></a>
+      <h4 class="signature">
+      <span class="kind">class</span>
+      <span class="symbol"> 
+        <a href="Broadcast$$BroadcastAgent.html"><span class="name">BroadcastAgent</span></a>
+        
+        <span class="result"> extends Agent</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">BroadcastAgent is very simple!
+Agent 1: 90% of the time sends and 10% of the time waits.</p>
     </li></ol>
             </div>
-
-        
         
         
 
@@ -134,17 +145,6 @@ of this iteration step.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#actions" data-isabs="false">
-      <a id="actions:JointAction"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">actions</span>
-        
-        <span class="result">: JointAction</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -156,17 +156,17 @@ of this iteration step.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#canEqual" data-isabs="false">
-      <a id="canEqual(Any):Boolean"></a>
+    </li><li visbl="pub" name="org.enmas.examples.Broadcast#broadcastProblem" data-isabs="false">
+      <a id="broadcastProblem:POMDP"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">val</span>
       <span class="symbol"> 
-        <span class="name">canEqual</span>
+        <span class="name">broadcastProblem</span>
         
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+        <span class="result">: <a name="org.enmas.pomdp.POMDP" class="extype" href="../pomdp/POMDP.html">POMDP</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.POMDPIteration" class="extype" href="">POMDPIteration</a> → Equals</dd></dl></div>
+      
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -192,7 +192,7 @@ of this iteration step.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#equals" data-isabs="false">
+    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -202,7 +202,7 @@ of this iteration step.
         <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.POMDPIteration" class="extype" href="">POMDPIteration</a> → Equals → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -228,7 +228,7 @@ of this iteration step.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#hashCode" data-isabs="false">
+    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -238,7 +238,7 @@ of this iteration step.
         <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.POMDPIteration" class="extype" href="">POMDPIteration</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -283,94 +283,6 @@ of this iteration step.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#observations" data-isabs="false">
-      <a id="observations:Set[(AgentRef, State)]"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">observations</span>
-        
-        <span class="result">: Set[(<a name="org.enmas.server.AgentRef" class="extype" href="AgentRef.html">AgentRef</a>, <a name="org.enmas.pomdp.State" class="extype" href="../pomdp/State.html">State</a>)]</span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#ordinality" data-isabs="false">
-      <a id="ordinality:Long"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">ordinality</span>
-        
-        <span class="result">: <span name="scala.Long" class="extype">Long</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#productArity" data-isabs="false">
-      <a id="productArity:Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">productArity</span>
-        
-        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.POMDPIteration" class="extype" href="">POMDPIteration</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#productElement" data-isabs="false">
-      <a id="productElement(Int):Any"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">productElement</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Any" class="extype">Any</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.POMDPIteration" class="extype" href="">POMDPIteration</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
-      <a id="productIterator:Iterator[Any]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">productIterator</span>
-        
-        <span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#productPrefix" data-isabs="false">
-      <a id="productPrefix:String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">productPrefix</span>
-        
-        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.POMDPIteration" class="extype" href="">POMDPIteration</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#rewards" data-isabs="false">
-      <a id="rewards:Set[(AgentRef, Float)]"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">rewards</span>
-        
-        <span class="result">: Set[(<a name="org.enmas.server.AgentRef" class="extype" href="AgentRef.html">AgentRef</a>, <span name="scala.Float" class="extype">Float</span>)]</span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#state" data-isabs="false">
-      <a id="state:State"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">state</span>
-        
-        <span class="result">: <a name="org.enmas.pomdp.State" class="extype" href="../pomdp/State.html">State</a></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -382,17 +294,17 @@ of this iteration step.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.POMDPIteration#toString" data-isabs="false">
+    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">toString</span>
         
-        <span class="params">()</span><span class="result">: String</span>
+        <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.POMDPIteration" class="extype" href="">POMDPIteration</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -435,32 +347,10 @@ of this iteration step.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
-      <a id="productElements:Iterator[Any]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name deprecated">productElements</span>
-        
-        <span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd><dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p>use productIterator instead</p></dd></dl></div>
     </li></ol>
             </div>
 
-        <div name="scala.Serializable" class="parent">
-              <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>
-            </div><div name="java.io.Serializable" class="parent">
-              <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
-            </div><div name="scala.Product" class="parent">
-              <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
-            </div><div name="scala.Equals" class="parent">
-              <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
-            </div><div name="scala.AnyRef" class="parent">
+        <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>

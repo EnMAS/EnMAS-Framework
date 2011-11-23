@@ -10,7 +10,7 @@ package org.enmas {
     *
     * The name is pronounced like "en masse".
     *
-    * ===== The main goals of the project are as follows: =====
+    * ===== The main goals of the project are: =====
     *
     * 1. Rapid prototyping of POMDP problems for research and teaching purposes
     *
@@ -56,6 +56,10 @@ package org.enmas {
     type AgentType = Symbol
     type JointAction = List[AgentAction]
     type Observation = State
+
+    /** This action is taken on an Agent's behalf when it is first
+      * added to a simulation.
+      */
     val NO_ACTION = Symbol("")
   }
 

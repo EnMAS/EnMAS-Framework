@@ -31,7 +31,7 @@
           <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Provides classes for the EnMAS POMDP framework.  EnMAS stands for
 &quot;Environment for Multi Agent Simulation&quot;.</p><h4> About the Project </h4><p>EnMAS is an Environment for Multi-Agent and
 Team-Based Artificial Intelligence Research.  The project is guided
-by current research in MAS, particularly the DEC-POMDP model.</p><p>The name is pronounced like &quot;en masse&quot;.</p><h6> The main goals of the project are as follows: </h6><p>1. Rapid prototyping of POMDP problems for research and teaching purposes</p><p>2. Orthogonality between theoretical models and implementation</p><p>3. Genericity: abstaining from assumptions about the problem domain</p><h4> Acknowledgements </h4><p>This project was created and is maintained by Connor Doyle
+by current research in MAS, particularly the DEC-POMDP model.</p><p>The name is pronounced like &quot;en masse&quot;.</p><h6> The main goals of the project are: </h6><p>1. Rapid prototyping of POMDP problems for research and teaching purposes</p><p>2. Orthogonality between theoretical models and implementation</p><p>3. Genericity: abstaining from assumptions about the problem domain</p><h4> Acknowledgements </h4><p>This project was created and is maintained by Connor Doyle
 &lt;<a href="mailto:connor.p.d@gmail.com">connor.p.d@gmail.com</a>&gt; as part
 of the Master of Software Engineering degree at the University of
 Wisconsin - La Crosse under the advisement of
@@ -88,7 +88,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
         <span class="params">(<span name="agentNumber">agentNumber: Int</span>, <span name="agentType">agentType: AgentType</span>, <span name="action">action: Action</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Represents an action taken by an Agent.</p>
     </li><li visbl="pub" name="org.enmas.pomdp.AgentConstraint" data-isabs="false">
       <a id="AgentConstraint:AgentConstraint"></a>
       <h4 class="signature">
@@ -99,7 +99,8 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
         <span class="params">(<span name="agentType">agentType: AgentType</span>, <span name="min">min: Int</span>, <span name="max">max: Int</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Defines the allowed minimum and maximum cardinalities for an
+AgentType in a POMDP model.</p>
     </li><li visbl="pub" name="org.enmas.pomdp.package#AgentType" data-isabs="false">
       <a id="AgentType:AgentType"></a>
       <h4 class="signature">
@@ -143,7 +144,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
         <span class="params">(<span name="name">name: String</span>, <span name="description">description: String</span>, <span name="agentConstraints">agentConstraints: List[AgentConstraint]</span>, <span name="initialState">initialState: State</span>, <span name="actionsFunction">actionsFunction: (AgentType) ⇒ Set[Action]</span>, <span name="transitionFunction">transitionFunction: (State, JointAction) ⇒ List[(State, Int)]</span>, <span name="rewardFunction">rewardFunction: (State, JointAction, State) ⇒ (AgentType) ⇒ Float</span>, <span name="observationFunction">observationFunction: (State, JointAction, State) ⇒ (Int, AgentType) ⇒ Observation</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      <p class="comment cmt">Represents a decentralized, partially observable Markov Decision Problem.</p>
+      <p class="comment cmt">Represents a Dec-POMDP or POSG.</p>
     </li><li visbl="pub" name="org.enmas.pomdp.State" data-isabs="false">
       <a id="State:State"></a>
       <h4 class="signature">
@@ -154,7 +155,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
         <span class="result"> extends Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Represents the state of a POMDP.</p>
     </li></ol>
             </div>
         
@@ -172,7 +173,10 @@ Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<
         <span class="result">: <span name="scala.Symbol" class="extype">Symbol</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
+      <p class="shortcomment cmt">This action is taken on an Agent's behalf when it is first
+added to a simulation.</p><div class="fullcomment"><div class="comment cmt"><p>This action is taken on an Agent's behalf when it is first
+added to a simulation.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.pomdp.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.pomdp.State" data-isabs="false">
       <a id="State:State"></a>
       <h4 class="signature">

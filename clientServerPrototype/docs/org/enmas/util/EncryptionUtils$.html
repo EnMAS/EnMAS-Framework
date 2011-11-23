@@ -138,8 +138,9 @@
         <span class="params">(<span name="key">key: <span name="java.security.Key" class="extype">Key</span></span>, <span name="message">message: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>)</span><span class="result">: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">@stub
-</p>
+      <p class="shortcomment cmt">Returns the result of asymmetric encryption of message using key.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the result of asymmetric encryption of message using key.
+@stub
+</p></div></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -154,17 +155,6 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.util.EncryptionUtils#createSymKey" data-isabs="false">
-      <a id="createSymKey:SecretKey"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">createSymKey</span>
-        
-        <span class="result">: <span name="javax.crypto.SecretKey" class="extype">SecretKey</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -211,7 +201,18 @@
         <span class="result">: <span name="java.security.KeyPair" class="extype">KeyPair</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Returns a new RSA key.</p>
+    </li><li visbl="pub" name="org.enmas.util.EncryptionUtils#genSymKey" data-isabs="false">
+      <a id="genSymKey:SecretKey"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">genSymKey</span>
+        
+        <span class="result">: <span name="javax.crypto.SecretKey" class="extype">SecretKey</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns a new AES key.</p>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -255,7 +256,8 @@
         <span class="params">(<span name="k">k: <span name="java.security.Key" class="extype">Key</span></span>)</span><span class="result">: String</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
+      <p class="shortcomment cmt">Facilitates implicit conversion of a Key to a String.</p><div class="fullcomment"><div class="comment cmt"><p>Facilitates implicit conversion of a Key to a String.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -289,17 +291,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.util.EncryptionUtils#str2ByteArray" data-isabs="false">
-      <a id="str2ByteArray(String):Array[Byte]"></a>
-      <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">str2ByteArray</span>
-        
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd></dl></div>
     </li><li visbl="pub" name="org.enmas.util.EncryptionUtils#symDecrypt" data-isabs="false">
       <a id="symDecrypt(SecretKey,Array[Byte]):Array[Byte]"></a>
       <h4 class="signature">
@@ -310,8 +301,9 @@
         <span class="params">(<span name="key">key: <span name="javax.crypto.SecretKey" class="extype">SecretKey</span></span>, <span name="message">message: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>)</span><span class="result">: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">@stub
-</p>
+      <p class="shortcomment cmt">Returns the result of symmetric decryption of message using key.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the result of symmetric decryption of message using key.
+@stub
+</p></div></div>
     </li><li visbl="pub" name="org.enmas.util.EncryptionUtils#symEncrypt" data-isabs="false">
       <a id="symEncrypt(SecretKey,Array[Byte]):Array[Byte]"></a>
       <h4 class="signature">
@@ -322,8 +314,9 @@
         <span class="params">(<span name="key">key: <span name="javax.crypto.SecretKey" class="extype">SecretKey</span></span>, <span name="message">message: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>)</span><span class="result">: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">@stub
-</p>
+      <p class="shortcomment cmt">Returns the result of symmetric encryption of message using key.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the result of symmetric encryption of message using key.
+@stub
+</p></div></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">

@@ -28,7 +28,10 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Represents the state of a POMDP.</p><p>This structure is a type-safe wrapper for a totally generic HashMap.
+The State stores type information for mapped objects.  When retrieving
+objects, the proper type must be supplied.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -63,7 +66,7 @@
       <span class="symbol"> 
         <span class="name">State</span>
         
-        <span class="params">(<span name="map">map: <span name="scala.collection.immutable.HashMap" class="extype">HashMap</span>[String, (Manifest[_], <span name="scala.Any" class="extype">Any</span>)]</span>)</span>
+        <span class="params">(<span name="map">map: <span name="scala.collection.immutable.HashMap" class="extype">HashMap</span>[String, (scala.reflect.Manifest[_], <span name="scala.Any" class="extype">Any</span>)]</span>)</span>
       </span>
       </h4>
       
@@ -116,10 +119,10 @@
       <span class="symbol"> 
         <span class="name">+</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="elem">elem: (String, T)</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: Manifest[T]</span>)</span><span class="result">: <a name="org.enmas.pomdp.State" class="extype" href="">State</a></span>
+        <span class="params">(<span name="elem">elem: (String, T)</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <a name="org.enmas.pomdp.State" class="extype" href="">State</a></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt"></p>
     </li><li visbl="pub" name="org.enmas.pomdp.State#-" data-isabs="false">
       <a id="-(String):State"></a>
       <h4 class="signature">
@@ -130,7 +133,7 @@
         <span class="params">(<span name="key">key: String</span>)</span><span class="result">: <a name="org.enmas.pomdp.State" class="extype" href="">State</a></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt"></p>
     </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -215,16 +218,40 @@
               
         </dd></dl></div>
     </li><li visbl="pub" name="org.enmas.pomdp.State#getAs" data-isabs="false">
+      <a id="getAs[T&lt;:AnyRef](String,T):T"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">getAs</span>
+        <span class="tparams">[<span name="T">T &lt;: AnyRef</span>]</span>
+        <span class="params">(<span name="key">key: String</span>, <span name="prototypeObject">prototypeObject: T</span>)</span><span class="result">: T</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">This version of the getAs method should not be called from Scala code.</p><div class="fullcomment"><div class="comment cmt"><h4> Java API Method </h4><p>This version of the getAs method should not be called from Scala code.
+This version is less safe: it throws exceptions and does not take
+advantage of Scala's Option monad.  This overloaded method definition
+is provided solely for compatibility with Java client code.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span name="classOf[java.util.NoSuchElementException]" class="defval">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.pomdp.State#getAs" data-isabs="false">
       <a id="getAs[T](String)(Manifest[T]):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">getAs</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="key">key: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: Manifest[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="params">(<span name="key">key: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Returns a Some[T] object iff key is mapped and the mapped object
+conforms to the supplied type T.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a Some[T] object iff key is mapped and the mapped object
+conforms to the supplied type T.  Returns None otherwise.
+</p></div></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -268,7 +295,8 @@
         <span class="result">: <span name="scala.collection.immutable.Set" class="extype">Set</span>[String]</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Returns the set of Strings that map to some object in this State
+</p>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">

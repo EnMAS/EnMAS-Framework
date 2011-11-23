@@ -3,6 +3,20 @@ package org.enmas.examples
 import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._,
        scala.util._
 
+/** There are two agents in this scenario.  Each agent represents
+  * a relay on a network.  The agents receive messages, which are stored
+  * in a local buffer which holds at most one message at a time.  At each
+  * time step, each agent can choose to "send" (forward the message) 
+  * or to "wait".  Both agents are rewarded whenever a message is sent
+  * successfully.  However!  The agents share a single outbound serial line
+  * and if BOTH agents a) have a message and b) choose to "send", a
+  * collision results and both send attempts fail.  At each time step,
+  * agents are updated with a reward from the previous step (either 1 or 0)
+  * and an observation (a Boolean value) indicating whether their sensors
+  * indicate that a message is waiting in their local buffer.  This value
+  * is noisy.  10% of the time, the observed sensor value indicates the
+  * wrong state of the buffer.
+  */
 object Broadcast {
   val broadcastProblem = POMDP (
     name = "Broadcast Problem",
@@ -22,10 +36,14 @@ is noisy.  10% of the time, the observed sensor value indicates the
 wrong state of the buffer.
 """,
 
+    // accomodates exactly 2 agents of type 'A1
     agentConstraints = List(AgentConstraint('A1, 2, 2)),
 
+    // state consists of two (Int, Boolean) mappings, representing
+    // the internal buffers of agent 1 and agent 2
     initialState = State.empty + ("1"  → false) + ("2"  → false),
 
+    // each agent has the same set of actions
     actionsFunction = (agentType)  ⇒ Set('send, 'wait),
 
     transitionFunction = (state, actions)  ⇒ {
@@ -79,53 +97,48 @@ wrong state of the buffer.
       }      
     },
 
+    // 1 if exactly one agent with a message chooses 'send and 0 otherwise
     rewardFunction = (s, actions, sPrime)  ⇒ (agentType)  ⇒ {
-      val sendActions = actions filter {_.action == 'send}
-      sendActions.size match {
-        case 1  ⇒ {
-          val a = sendActions.head
-          s.getAs[Boolean](a.agentNumber.toString) match {
-            case Some(true)  ⇒ 1
-            case _  ⇒ 0
-          }
-        }
-        case 2  ⇒ {
-          val test = actions filter { a: AgentAction  ⇒ {
-            s.getAs[Boolean](a.agentNumber.toString) getOrElse false
-          }}
-          if (test.size == 1) 1 else 0
-        }
+      actions.filter{ a  ⇒ { a.action == 'send &&
+        s.getAs[Boolean](a.agentNumber.toString).getOrElse(false)
+      }}.size match {
+        case 1  ⇒ 1
         case _  ⇒ 0
       }
     },
 
+    // lies to the agent 10% of the time
     observationFunction = (s, actions, sPrime)  ⇒ (aNum, aType)  ⇒ {
       val hasMessage = s.getAs[Boolean](aNum.toString) getOrElse false
-      if (((new Random) nextInt 10) < 1) State.empty + ("queue", !hasMessage)
+      if ((new Random nextInt 10) < 1) State.empty + ("queue", !hasMessage)
       else State.empty + ("queue", hasMessage)
     }
   )
 
-  /** simpleAgent lives up to its name!
-    *
-    * 90% of the time it sends and 10% of the time it waits
-    * without regard for observations or rewards
+  /** BroadcastAgent is very simple!
+    * Agent 1: 90% of the time sends and 10% of the time waits.
+    * Agent 2: 10% of the time sends and 90% of the time waits.
     */
-  class simpleAgent extends Agent {
-    def policy = { case u: UpdateAgent  ⇒ {
-      print("I think my queue is ")
-      println(u.observation.getAs[Boolean]("queue").getOrElse(false) match {
+  class BroadcastAgent extends Agent {
+    
+    def handleError(error: Throwable) {}
+    
+    def handleUpdate(observation: Observation, reward: Float): Action = {
+      print("I am agent "+agentNumber+"\nI think my queue is ")
+      println(observation.getAs[Boolean]("queue").getOrElse(false) match {
         case true  ⇒ "full"
         case _  ⇒ "empty"
       })
-      println("I received "+u.reward+" as a reward\n")
+      println("I received "+reward+" as a reward\n")
+      var decision: Action = NO_ACTION
       if (agentNumber == 1)
-        if (((new Random) nextInt 10) < 1) takeAction('wait)
-        else takeAction('send)
+        if ((new Random nextInt 10) < 1) decision = 'wait else decision = 'send
 
       if (agentNumber == 2)
-        if (((new Random) nextInt 10) < 1) takeAction('send)
-        else takeAction('wait)
-    }}
+        if ((new Random nextInt 10) < 1) decision = 'send else decision = 'wait
+        
+      decision
+    }
   }
+
 }

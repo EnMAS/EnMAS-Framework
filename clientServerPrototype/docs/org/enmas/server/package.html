@@ -57,7 +57,8 @@
         <span class="params">(<span name="clientManagerID">clientManagerID: Int</span>, <span name="agentNumber">agentNumber: Int</span>, <span name="agentType">agentType: AgentType</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Represents a reference to a remote Agent from the point
+of view of a Server.</p>
     </li><li visbl="pub" name="org.enmas.server.ClientManagerRef" data-isabs="false">
       <a id="ClientManagerRef:ClientManagerRef"></a>
       <h4 class="signature">
@@ -68,7 +69,8 @@
         <span class="params">(<span name="id">id: Int</span>, <span name="channel">channel: ActorRef</span>, <span name="publicKey">publicKey: PublicKey</span>, <span name="symmetricKey">symmetricKey: Key</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Represents a reference to a ClientManager from the point
+of view of a Server.</p>
     </li><li visbl="pub" name="org.enmas.server.Host" data-isabs="false">
       <a id="Host:Host"></a>
       <h4 class="signature">
@@ -91,17 +93,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.server.package" class="extype" href="package$.html">package</a></dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.Logger" data-isabs="true">
-      <a id="Logger:Logger"></a>
-      <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="Logger.html"><span class="name">Logger</span></a>
-        
-        <span class="result"> extends AnyRef</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
     </li><li visbl="pub" name="org.enmas.server.POMDPIteration" data-isabs="false">
       <a id="POMDPIteration:POMDPIteration"></a>
       <h4 class="signature">
@@ -109,10 +100,10 @@
       <span class="symbol"> 
         <a href="POMDPIteration.html"><span class="name">POMDPIteration</span></a>
         
-        <span class="params">(<span name="observations">observations: Set[(AgentRef, State)]</span>, <span name="rewards">rewards: Set[(AgentRef, Float)]</span>, <span name="actions">actions: Set[(AgentRef, Action)]</span>, <span name="state">state: State</span>)</span><span class="result"> extends Product with Serializable</span>
+        <span class="params">(<span name="ordinality">ordinality: Long</span>, <span name="observations">observations: Set[(AgentRef, State)]</span>, <span name="rewards">rewards: Set[(AgentRef, Float)]</span>, <span name="actions">actions: JointAction</span>, <span name="state">state: State</span>)</span><span class="result"> extends Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Represents one iteration of a POMDP.</p>
     </li><li visbl="pub" name="org.enmas.server.Server" data-isabs="false">
       <a id="Server:Server"></a>
       <h4 class="signature">
@@ -121,17 +112,6 @@
         <a href="Server.html"><span class="name">Server</span></a>
         
         <span class="result"> extends Actor</span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.enmas.server.ServerManager" data-isabs="false">
-      <a id="ServerManager:ServerManager"></a>
-      <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="ServerManager.html"><span class="name">ServerManager</span></a>
-        
-        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
@@ -150,17 +130,6 @@
         <a href="ServerManager$.html"><span class="name">ServerManager</span></a>
         
         <span class="result"> extends App</span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.enmas.server.logging" data-isabs="false">
-      <a id="logging:logging"></a>
-      <h4 class="signature">
-      <span class="kind">package</span>
-      <span class="symbol"> 
-        <a href="logging/package.html"><span class="name">logging</span></a>
-        
-        
       </span>
       </h4>
       

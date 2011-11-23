@@ -2,9 +2,9 @@ package org.enmas.examples
 
 import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._
 
-object Simple {  
+object Simple {
 
-  val myModel = POMDP (
+  val simpleModel = POMDP (
 
     name = "Example POMDP Model",
 
@@ -31,11 +31,12 @@ object Simple {
     observationFunction = (state, _, _)  ⇒ (_, _)  ⇒ state
   )
 
-  class myAgent extends Agent {
-    def policy = { case u: UpdateAgent  ⇒ {
-      u.observation.getAs[Int]("time") map { t  ⇒ if (t % 1000 == 0) { println(t.toString) }}
-      takeAction( 'win )
-    }}
+  class simpleAgent extends Agent {
+    def handleError(error: Throwable) {}
+    def handleUpdate(observation: Observation, reward: Float): Action = {
+      observation.getAs[Int]("time") map { t  ⇒ if (t % 1000 == 0) { println(t.toString) }}
+      'win
+    }
   }
 
 }

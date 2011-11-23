@@ -4,12 +4,13 @@ import org.enmas.pomdp._, org.enmas.messaging._,
        akka.actor._
 
 abstract class Agent() extends Client {
-
   private var replyChannel: UntypedChannel = null
-
   private var aNumber: Int = 0
   private var aType: AgentType = Symbol("")
   private var actionSet = Set[Action]()
+
+  /** For Java API */
+  val NO_ACTION = Symbol("")
 
   /** Returns the unique (per-server instance) identifier for this agent.
     */
@@ -46,7 +47,6 @@ abstract class Agent() extends Client {
     * {{{
     * val myAgent = actorOf(new MyAgent repliesTo self)
     * }}}
-    * 
     */
   final def repliesTo(chan: UntypedChannel): Agent = { replyChannel = chan; this }
 
@@ -56,13 +56,29 @@ abstract class Agent() extends Client {
     *
     * {{{
     * def policy = { case UpdateAgent(_, observation, reward)  ⇒ {
-    *   // learn
-    *   // decide
+    *   // learn, decide
     *   takeAction(decision)
     * }}
     * }}}
     */
-  def policy: PartialFunction[Any, Unit]
+  def policy: PartialFunction[Any, Unit] = {
+    case t: Throwable  ⇒ handleError(t)
+    case UpdateAgent(_, observation, reward)  ⇒ {
+      try {
+        takeAction(handleUpdate(observation, reward))
+      }
+      catch {
+        case t: Throwable  ⇒ {
+          self ! t
+          replyChannel ! ClientError(t)
+        }
+      }
+    }
+  }
+
+  def handleUpdate(observation: Observation, reward: Float): Action
+
+  def handleError(error: Throwable): Unit
 
   /** Initially defaultMessageHandler.
     */
@@ -74,6 +90,7 @@ abstract class Agent() extends Client {
     */
   private final def defaultMessageHandler: PartialFunction[Any, Unit] = {
     case ConfirmAgentRegistration(n, t, a)  ⇒ {
+      println("Agent Initialized!")
       aNumber = n
       aType = t
       actionSet = a

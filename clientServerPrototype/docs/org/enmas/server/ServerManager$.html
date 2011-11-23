@@ -14,9 +14,9 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a title="Go to companion" href="ServerManager.html"><img src="../../../lib/object_to_class_big.png" /></a>
+        <img src="../../../lib/object_big.png" />
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.enmas" class="extype" href="../package.html">enmas</a>.<a name="org.enmas.server" class="extype" href="package.html">server</a></p>
-        <h1><a title="Go to companion" href="ServerManager.html">ServerManager</a></h1>
+        <h1>ServerManager</h1>
       </div>
 
       <h4 class="signature" id="signature">
@@ -117,6 +117,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.server.ServerManager#approveHost" data-isabs="false">
+      <a id="approveHost(Host):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">approveHost</span>
+        
+        <span class="params">(<span name="host">host: <a name="org.enmas.server.Host" class="extype" href="Host.html">Host</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Adds host to the list of known approved hosts.</p>
     </li><li visbl="prt" name="scala.App#args" data-isabs="false">
       <a id="args:Array[String]"></a>
       <h4 class="signature">
@@ -153,6 +164,19 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.server.ServerManager#createServer" data-isabs="false">
+      <a id="createServer(POMDP,Int):ActorRef"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">createServer</span>
+        
+        <span class="params">(<span name="model">model: <a name="org.enmas.pomdp.POMDP" class="extype" href="../pomdp/POMDP.html">POMDP</a></span>, <span name="port">port: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Returns an akka.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an akka.actor.ActorRef corresponding to a new Server
+simulating the specified model and listening on the specified port.
+</p></div></div>
     </li><li visbl="pub" name="scala.App#delayedInit" data-isabs="false">
       <a id="delayedInit(⇒ Unit):Unit"></a>
       <h4 class="signature">
@@ -233,17 +257,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.ServerManager#in" data-isabs="false">
-      <a id="in:Scanner"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">in</span>
-        
-        <span class="result">: <span name="java.util.Scanner" class="extype">Scanner</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -255,6 +268,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.server.ServerManager#localhost" data-isabs="false">
+      <a id="localhost:String"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">localhost</span>
+        
+        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.App#main" data-isabs="false">
       <a id="main(Array[String]):Unit"></a>
       <h4 class="signature">
@@ -266,17 +290,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.server.ServerManager#manager" data-isabs="false">
-      <a id="manager:ServerManager"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">manager</span>
-        
-        <span class="result">: <a name="org.enmas.server.ServerManager" class="extype" href="ServerManager.html">ServerManager</a></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -288,6 +301,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.server.ServerManager#nextServerPort" data-isabs="false">
+      <a id="nextServerPort(Int):Option[Int]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">nextServerPort</span>
+        
+        <span class="params">(<span name="p">p: <span name="scala.Int" class="extype">Int</span> = <span class="symbol">36627</span></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="scala.Int" class="extype">Int</span>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
       <a id="notify():Unit"></a>
       <h4 class="signature">
@@ -310,6 +334,50 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.server.ServerManager#removeHost" data-isabs="false">
+      <a id="removeHost(String):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">removeHost</span>
+        
+        <span class="params">(<span name="publicKey">publicKey: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">De-authorizes the host identified by the supplied public key.</p>
+    </li><li visbl="pub" name="org.enmas.server.ServerManager#server" data-isabs="false">
+      <a id="server:Any"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">server</span>
+        
+        <span class="result">: <span name="scala.Any" class="extype">Any</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.enmas.server.ServerManager#servers" data-isabs="false">
+      <a id="servers:List[ActorRef]"></a>
+      <h4 class="signature">
+      <span class="kind">var</span>
+      <span class="symbol"> 
+        <span class="name">servers</span>
+        
+        <span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<span name="akka.actor.ActorRef" class="extype">ActorRef</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.enmas.server.ServerManager#stopServer" data-isabs="false">
+      <a id="stopServer(ActorRef):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">stopServer</span>
+        
+        <span class="params">(<span name="server">server: <span name="akka.actor.ActorRef" class="extype">ActorRef</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Destroys the specified server.</p>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">

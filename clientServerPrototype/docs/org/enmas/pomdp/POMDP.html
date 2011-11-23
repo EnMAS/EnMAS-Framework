@@ -28,7 +28,17 @@
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Represents a decentralized, partially observable Markov Decision Problem.
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Represents a Dec-POMDP or POSG.</p><p>The set of agents allowed to connect to a server simulating this model
+is defined by the agentConstraints member.  See the docs for AgentConstraint
+for more information.</p><p>An &quot;Agent Type&quot; shares:
+1) a set of available actions
+2) the reward conferred at each iteration</p><p>The observation function, as visible from the signature, is allowed to
+take into account the agent number for individual observations.</p><p>The transition function returns a List of (State, Int) tuples, which
+is interpreted as a normalized probability distribution.  The probability
+of each State component is the corresponding Int component divided by
+the sum of all Int components.  States with non-positive Int components
+are ignored as impossible transitions.  In the event that the transition
+function returns the empty list, the next state is equal to the current.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
@@ -142,9 +152,10 @@
         <span class="params">(<span name="agents">agents: List[AgentType]</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Checks that all supplied types are allowed and cardinalities do not
-exceed limits.</p><div class="fullcomment"><div class="comment cmt"><p>Checks that all supplied types are allowed and cardinalities do not
-exceed limits.
+      <p class="shortcomment cmt">Checks that all supplied agent types are allowed and that
+cardinalities do not exceed limits.</p><div class="fullcomment"><div class="comment cmt"><p>Checks that all supplied agent types are allowed and that
+cardinalities do not exceed limits.</p><p>This function is called by the server to determine whether
+a new agent should be allowed to connect.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd></dl></div>
     </li><li visbl="pub" name="org.enmas.pomdp.POMDP#actionsFunction" data-isabs="false">
       <a id="actionsFunction:(AgentType) ⇒ Set[Action]"></a>
@@ -307,7 +318,8 @@ exceed limits.
       </h4>
       <p class="shortcomment cmt">Checks that this model accomodates the agent set and that
 the agent set satisfies the minimum cardinalities.</p><div class="fullcomment"><div class="comment cmt"><p>Checks that this model accomodates the agent set and that
-the agent set satisfies the minimum cardinalities.</p><p>This is a more stringent test than the accomodatesAgents method.
+the agent set satisfies the minimum cardinalities.</p><p>This is a more stringent test than the accomodatesAgents method.</p><p>This function is called by the server to determine whether
+the current agent set is sufficient to iterating the simulation.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd></dl></div>
     </li><li visbl="pub" name="org.enmas.pomdp.POMDP#name" data-isabs="false">
       <a id="name:String"></a>

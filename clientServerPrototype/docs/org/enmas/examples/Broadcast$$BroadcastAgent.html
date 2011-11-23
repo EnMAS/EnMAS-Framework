@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.enmas.examples.Simple.myAgent</title>
+          <title>org.enmas.examples.Broadcast.BroadcastAgent</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -15,20 +15,23 @@
         <body class="type">
       <div id="definition">
         <img src="../../../lib/class_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.enmas" class="extype" href="../package.html">enmas</a>.<a name="org.enmas.examples" class="extype" href="package.html">examples</a>.<a name="org.enmas.examples.Simple" class="extype" href="Simple$.html">Simple</a></p>
-        <h1>myAgent</h1>
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.enmas" class="extype" href="../package.html">enmas</a>.<a name="org.enmas.examples" class="extype" href="package.html">examples</a>.<a name="org.enmas.examples.Broadcast" class="extype" href="Broadcast$.html">Broadcast</a></p>
+        <h1>BroadcastAgent</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">class</span>
       <span class="symbol"> 
-        <span class="name">myAgent</span>
+        <span class="name">BroadcastAgent</span>
         
         <span class="result"> extends <a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>BroadcastAgent is very simple!
+Agent 1: 90% of the time sends and 10% of the time waits.
+Agent 2: 10% of the time sends and 90% of the time waits.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a>, <a name="org.enmas.client.Client" class="extype" href="../client/Client.html">Client</a>, <span name="akka.actor.Actor" class="extype">Actor</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -46,7 +49,7 @@
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall out"><span>Hide All</span></li>
                 <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.enmas.examples.Simple.myAgent" class="in"><span>myAgent</span></li><li name="org.enmas.client.Agent" class="in"><span>Agent</span></li><li name="org.enmas.client.Client" class="in"><span>Client</span></li><li name="akka.actor.Actor" class="in"><span>Actor</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+                <ol id="linearization"><li name="org.enmas.examples.Broadcast.BroadcastAgent" class="in"><span>BroadcastAgent</span></li><li name="org.enmas.client.Agent" class="in"><span>Agent</span></li><li name="org.enmas.client.Client" class="in"><span>Client</span></li><li name="akka.actor.Actor" class="in"><span>Actor</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
               </div>
           <div id="visbl">
               <span class="filtertype">Visibility</span>
@@ -56,12 +59,12 @@
 
         <div class="members" id="constructors">
               <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.enmas.examples.Simple.myAgent#this" data-isabs="false">
-      <a id="this:myAgent"></a>
+              <ol><li visbl="pub" name="org.enmas.examples.Broadcast.BroadcastAgent#this" data-isabs="false">
+      <a id="this:BroadcastAgent"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol"> 
-        <span class="name">myAgent</span>
+        <span class="name">BroadcastAgent</span>
         
         <span class="params">()</span>
       </span>
@@ -145,6 +148,17 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.client.Agent#NO_ACTION" data-isabs="false">
+      <a id="NO_ACTION:Symbol"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol"> 
+        <span class="name">NO_ACTION</span>
+        
+        <span class="result">: <span name="scala.Symbol" class="extype">Symbol</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">For Java API</p><div class="fullcomment"><div class="comment cmt"><p>For Java API</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#actions" data-isabs="false">
       <a id="actions:Set[Action]"></a>
       <h4 class="signature">
@@ -278,6 +292,28 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.examples.Broadcast.BroadcastAgent#handleError" data-isabs="false">
+      <a id="handleError(Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">handleError</span>
+        
+        <span class="params">(<span name="error">error: Throwable</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.examples.Broadcast.BroadcastAgent" class="extype" href="">BroadcastAgent</a> → <a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
+    </li><li visbl="pub" name="org.enmas.examples.Broadcast.BroadcastAgent#handleUpdate" data-isabs="false">
+      <a id="handleUpdate(Observation,Float):Action"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">handleUpdate</span>
+        
+        <span class="params">(<span name="observation">observation: Observation</span>, <span name="reward">reward: <span name="scala.Float" class="extype">Float</span></span>)</span><span class="result">: Action</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.examples.Broadcast.BroadcastAgent" class="extype" href="">BroadcastAgent</a> → <a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -355,7 +391,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Actor</dd></dl></div>
-    </li><li visbl="pub" name="org.enmas.examples.Simple.myAgent#policy" data-isabs="false">
+    </li><li visbl="pub" name="org.enmas.client.Agent#policy" data-isabs="false">
       <a id="policy:PartialFunction[Any, Unit]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -369,11 +405,10 @@
 that user code must implement.  To make sense, the policy should handle
 UpdateAgent messages and call takeAction like so:</p><pre>
 def policy = { case UpdateAgent(_, observation, reward)  ⇒ {
-  // learn
-  // decide
+  // learn, decide
   takeAction(decision)
 }}
-</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.examples.Simple.myAgent" class="extype" href="">myAgent</a> → <a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
+</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.client.Agent" class="extype" href="../client/Agent.html">Agent</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.Agent#postRestart" data-isabs="false">
       <a id="postRestart(Throwable):Unit"></a>
       <h4 class="signature">
