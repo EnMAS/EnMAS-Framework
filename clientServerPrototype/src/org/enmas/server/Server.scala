@@ -14,7 +14,7 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
   private var agents = Set[AgentRef]()
   private var messageQueue = Map[ClientManagerRef, List[AgentMessage]]()
   private var pendingActions = List[AgentAction]()
-  
+
   private var iterating = false
 
   /** Creates a new ClientManagerRef object for the new host and stores it in
@@ -166,6 +166,6 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
       cm  ⇒ self.channel ! registerAgent(cm.id, reg.agentType)
     }
     case TakeAction(agentNumber, action)  ⇒ takeAction(agentNumber, action)
-    case _  ⇒ ()
+    case _  ⇒ println("Server received a surprise!  Ignoring that...")
   }
 }

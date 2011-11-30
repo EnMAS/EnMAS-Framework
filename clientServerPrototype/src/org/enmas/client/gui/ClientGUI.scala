@@ -36,46 +36,38 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
 
   lazy val connectionTab = new TabbedPane.Page("Connection", new BorderPanel {
     val serverHostField = new TextField(ClientManager.clientHost, 16)
-    val serverPortField = new TextField("36627", 5)
-    layout(new FlowPanel(new Label("Server Host: "), serverHostField,
-      new Label("Server Port: "), serverPortField)) = North
+    layout(new FlowPanel(new Label("Server Host: "), serverHostField)) = North
     val serverTableCols = Array("Model Name", "Host", "Port", "Iterating")
     val serverTable = new Table(Array[Array[Any]](), serverTableCols) {
       selection.intervalMode = Table.IntervalMode.Single
       selection.elementMode = Table.ElementMode.Row
     }
-    var previousRowSelection = serverTable.selection.rows
+    def previousRowSelection = serverTable.selection.rows
+    def selectedServerHost = serverTable.model.getValueAt(serverTable.selection.rows.head, 1).toString
+    def selectedServerPort = serverTable.model.getValueAt(serverTable.selection.rows.head, 2).asInstanceOf[Int]
 
     listenTo(serverTable.selection)
     layout(new ScrollPane(serverTable)) = Center
     val connectButton = new Button { action = Action("Connect to Selected") {
       (clientManager ? ClientManager.Init(
         ClientManager.clientPort,
-        serverHostField.text.trim,
-        serverPortField.text.toInt
+        selectedServerHost,
+        selectedServerPort
       )).get match { case true  ⇒ StatusBar.connected }
     }}
+    connectButton.enabled = false
 
-    val scanButton = new Button {action = Action("Scan Host") {
-      (clientManager ? ClientManager.ScanHost(
-          serverHostField.text.trim,
-          serverPortField.text.toInt
-      )).get match {
+    val scanButton = new Button { action = Action("Scan Host") {
+      (clientManager ? ClientManager.ScanHost(serverHostField.text.trim)).get match {
         case result: ClientManager.ScanResult  ⇒ {
+          println("\ngot "+result.replies.length+" replies\n")
           serverTable.model = new MyTableModel(
             result.replies.map {
-              reply: DiscoveryReply  ⇒ List(
-                reply.modelName,
-                reply.host,
-                reply.port,
-                reply.iterating
-              ).toArray
+              r: DiscoveryReply  ⇒ List(r.modelName, r.host, r.port, r.iterating).toArray
             }.toArray,
             serverTableCols
           )
-          println("\n** REPLIES: **\n"+result.replies+"\n")
         }
-        case obj: Any  ⇒ println("No result, got this thing instead:\n" + obj)
       }
     }}
     layout(new FlowPanel(connectButton, scanButton)) = South
@@ -84,19 +76,29 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
       case TableRowsSelected(serverTable, range, false)  ⇒ {
         if (serverTable.selection.rows != previousRowSelection)
           serverTable.selection.rows --= previousRowSelection
-        println("Selected row " + serverTable.selection.rows.head)
+        connectButton.enabled = true
       }
     }
   })
 
-  lazy val agentsTab = new TabbedPane.Page("Agent Clients", new BorderPanel {})
+  lazy val agentsTab = new TabbedPane.Page("Agent Clients", new BorderPanel {
+    layout(
+      new FlowPanel(new Button { action = Action("Launch Client") {
+        clientManager ? ClientManager.LaunchAgent('A1, "") // 2nd param is garbage for the time being
+      }}
+    )) = North
+  })
+
   lazy val graphicsTab = new TabbedPane.Page("Graphics Clients", new BorderPanel {})
   lazy val loggersTab = new TabbedPane.Page("Logger Clients", new BorderPanel {})
 
-  def getPane() {}
-  def getFrame(width: Int, height: Int) {}
-  def getJFrame(width: Int, height: Int) {}
+  // these methods are called by the client manager
   def update(iteration: POMDPIteration) {}
   def loadPlugin(plugin: GraphicsPlugin) {}
   def unloadPlugin(plugin: GraphicsPlugin) {}
+
+  // these methods are called by plugins
+  def getPane() {}
+  def getFrame(width: Int, height: Int) {}
+  def getJFrame(width: Int, height: Int) {}
 }

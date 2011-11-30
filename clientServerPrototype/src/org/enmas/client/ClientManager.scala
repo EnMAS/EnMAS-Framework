@@ -19,24 +19,33 @@ class ClientManager extends Actor {
   private var agents = Map[Int, ActorRef]()
 
   private def scanHost(serverHost: String, serverPort: Int) =
-    (remote.actorFor("EnMAS-service", serverHost, serverPort) ? Discovery).get
+    (remote.actorFor("EnMAS-service"+serverPort, serverHost, serverPort) ? Discovery).get
 
       private def scanHost(serverHost: String) = {
         val initialPort = 36627
         val portsToScan = (initialPort until initialPort + 32).toList
         val tries = portsToScan map {
-          port  ⇒ remote.actorFor("EnMAS-service", serverHost, port) ? Discovery
+          port  ⇒ {
+            val remoteActor = remote.actorFor("EnMAS-service"+port, serverHost, port)
+            (remoteActor, remoteActor ? Discovery)
+          }
         }
-        val replies = tries filter { future  ⇒ {
-          try { 
-            future.get match {
+
+        val replies = tries filter { t  ⇒ t match {
+          case (remoteActor, future)  ⇒ {
+            try { future.get match {
               case reply: DiscoveryReply  ⇒ true
               case _  ⇒ false
-            }
+            }}
+            catch { case _  ⇒ {
+              try { remoteActor.stop } catch { case _  ⇒ () }
+              false
+            }}
           }
-          catch { case _  ⇒ false }
+          case _  ⇒ false
         }}
-        ClientManager.ScanResult(replies map {_.get.asInstanceOf[DiscoveryReply]})
+
+        ClientManager.ScanResult(replies map {_._2.get.asInstanceOf[DiscoveryReply]})
       }
 
   /** Returns true iff registering this host with the specified
@@ -48,7 +57,7 @@ class ClientManager extends Actor {
     * or some other exceptional condition.
     */
   private def registerHost(clientPort: Int, serverHost: String, serverPort: Int): Boolean = {
-    server = remote.actorFor("EnMAS-service", serverHost, serverPort)
+    server = remote.actorFor("EnMAS-service"+serverPort, serverHost, serverPort)
     (server ? RegisterHost("EnMAS-client", ClientManager.clientHost, clientPort, keyPair.getPublic)).onException {
       case t: Throwable  ⇒ println(t.getClass.getName)
     }.as[Message].get match {
@@ -91,17 +100,20 @@ class ClientManager extends Actor {
   }
 
   def receive = {
-    case ClientManager.ScanHost(serverHost, serverPort)  ⇒ self.channel ! scanHost(serverHost)
+    case ClientManager.ScanHost(serverHost)  ⇒ self.channel ! scanHost(serverHost)
+
     case e: ServerError  ⇒ {
       println(e.cause.getMessage)
       e.cause.printStackTrace
       self ! Kill
     }
+
     case e: ClientError  ⇒ {
       println(e.cause.getMessage)
       e.cause.printStackTrace
       self ! Kill
     }
+
     case m: ClientManager.Init  ⇒
       self.channel ! registerHost(m.clientPort, m.serverHost, m.serverPort)
 
@@ -122,7 +134,7 @@ class ClientManager extends Actor {
 object ClientManager extends App {
   import java.util.Scanner
 
-  sealed case class ScanHost(serverHost: String, serverPort: Int)
+  sealed case class ScanHost(serverHost: String)
   sealed case class ScanResult(replies: List[DiscoveryReply])
   sealed case class Init(clientPort: Int, serverHost: String, serverPort: Int)
   sealed case class LaunchAgent(agentType: AgentType, className: String)
@@ -134,8 +146,4 @@ object ClientManager extends App {
   println("Listening on port "+clientPort)
 
   val gui = new ClientGUI(manager)
-//  manager ? Init(clientPort, serverHost, serverPort)
-//  val actorType = "A1"
-//  val className = "BroadcastAgent"
-//  val success = manager ? LaunchAgent(Symbol(actorType), className)
 }

@@ -2,13 +2,28 @@ package org.enmas.server
 
 import org.enmas.pomdp._,
        akka.actor._, akka.actor.Actor._,
-       java.net.{ServerSocket, InetAddress}, java.io.IOException
+       java.net.{ServerSocket, DatagramSocket, InetAddress}, java.io.IOException
 
 object ServerManager extends App {
   import org.enmas.examples.Broadcast._ // for testing only
 
   val localhost = InetAddress.getLocalHost.getHostAddress
   var servers = List[ActorRef]()
+  val initialPort = 36627
+  val portPool = (initialPort until initialPort + 32).toList
+
+  availablePort match {
+    case Some(freePort)  ⇒ {
+      try {
+        servers ::= createServer(broadcastProblem, freePort)
+        println("Server up and listening on port "+freePort)
+      } catch { case cause: Throwable  ⇒ {
+          println("Error: failed to launch server")
+          cause.printStackTrace
+      }}
+    }
+    case None  ⇒ println("Error: No free ports available")
+  }
 
   /** Adds host to the list of known approved hosts.
     */
@@ -22,11 +37,9 @@ object ServerManager extends App {
     * simulating the specified model and listening on the specified port.
     */
   def createServer(model: POMDP, port: Int): ActorRef = {
-    val service = "EnMAS-service"
+    val service = "EnMAS-service"+port
     val newServer = actorOf(new Server(model, localhost, port, service))
     remote.start(localhost, port).register(service, newServer)
-    servers ::= newServer
-    println("Server up and listening on port "+port)
     newServer
   }
 
@@ -34,20 +47,35 @@ object ServerManager extends App {
     */
   def stopServer(server: ActorRef): Unit = if (servers contains server) server.stop else ()
 
-  def nextServerPort(p: Int = 36627): Option[Int] = {
-    if (p < 36659) {
-      try {
-        (new ServerSocket(p)).close
-        Some(p)
-      }
-      catch { case _  ⇒ nextServerPort(p + 1) }
-    }
-    else None
-  }
+  /** Returns an instance of Some[Int] containing a free port from the
+    * port pool.  Returns None if no free port can be found.
+    */
+  private def availablePort: Option[Int] = {
 
-  val server = nextServerPort() match {
-    case Some(port)  ⇒ createServer(broadcastProblem, port)
-    case None  ⇒ println("Error: Failed to launch server.")
+    def isPortAvailable(port: Int): Boolean = {
+      var result = false
+      try {
+        import java.nio.channels.ServerSocketChannel, java.net.InetSocketAddress
+        val tempSock = ServerSocketChannel.open.socket
+        tempSock.bind(new InetSocketAddress(port))
+        result = true
+      }
+      catch { case _  ⇒ { 
+        result = false
+      }}
+      result
+    }
+
+    def availablePortAux(port: Int = initialPort): Option[Int] = {
+      if (portPool contains port) {
+        println("testing port #"+port)
+        if (isPortAvailable(port)) Some(port)
+        else availablePortAux(port + 1)
+      }
+      else None
+    }
+
+    availablePortAux()
   }
 
 }
