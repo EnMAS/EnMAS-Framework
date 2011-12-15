@@ -40,17 +40,16 @@ X document:
 _ use case document
 	X diagrams
 	_ narratives
-
 _ architectural design document
-
 _ detailed design document
-	- include all design diagrams
-
+	X diagrams
+	- pseudocode / details
 _ update functional requirements document
 
 _ write a simple agent in Java
-	- problems! all related to the definition of State and the fact
+	X problems! all related to the definition of State and the fact
 	  that the Java agent needs to call methods of it
+	X consider the JCF object conversions
 
 _ look at GNUPlot project (open source graphing framework)
 
@@ -78,7 +77,26 @@ _ custom logging
 		- write these errors to a log file relative to the client manager, or the EnMAS jar
 
 _ investigate & implement dynamic compilation and class loading
-	- for agents
+
+	- FOR AGENTS
+		X  JAR bundler (in Bundler)
+			X select directory
+			X run scalac
+			X show errors & warnings
+			X make a JAR
+				X name it directory.getName.replaceAll("\s", "")
+		X  class loader (in ClientGUI)
+			X select JAR file
+			X iterate over all files in the JAR, adding each .class URL
+			  to getClassLoader().
+				X if the class is a concrete subclass of Agent, add to List
+			X return the List of Agent implementations
+			X display List<Agent> in a ListView
+		3. class launcher (in ClientGUI)
+			- select Agent in ListView
+			- click "Launch" button
+			- send ClientManager.RegisterAgent msg to CM
+
 	- for loggers and GUI clients
 	- for models -- with help from clientManager:
 		- clientManager attempts compilation of the scala source file
@@ -100,7 +118,8 @@ _ expose ServerManager with Lift web framework
 
 _ testing
 	- behavioral and unit tests with scalatest
-	- check out the scala.testing.Benchmark trait.  Supposedly just implement run() and get perf data
+	- check out the scala.testing.Benchmark trait.
+	  Supposedly just implement run() and get perf data
 
 _ security issues
 	X RSA key generation

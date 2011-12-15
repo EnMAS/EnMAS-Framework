@@ -31,7 +31,7 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
     val cmID = clientManagers.size + 1
     val symKey = genSymKey
     clientManagers += ClientManagerRef(cmID, actorRef, clientPublicKey, symKey)
-    ConfirmHostRegistration(cmID, keyPair.getPublic, symKey.getEncoded)  // TODO: check for approval, encrypt!
+    ConfirmHostRegistration(cmID, keyPair.getPublic, symKey.getEncoded)
   }
 
   /** Creates a new AgentRef for the new Agent.  Replies with a
@@ -166,6 +166,6 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
       cm  ⇒ self.channel ! registerAgent(cm.id, reg.agentType)
     }
     case TakeAction(agentNumber, action)  ⇒ takeAction(agentNumber, action)
-    case _  ⇒ println("Server received a surprise!  Ignoring that...")
+    case _  ⇒ ()
   }
 }

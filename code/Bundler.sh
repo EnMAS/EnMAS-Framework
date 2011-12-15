@@ -3,4 +3,4 @@ export CLASSPATH=$CLASSPATH:lib/akka/netty-3.2.5.Final.jar:lib/akka/protobuf-jav
 export CLASSPATH=$CLASSPATH:lib/akka/commons-io-2.0.1.jar
 export CLASSPATH=$CLASSPATH:dist/EnMAS.jar
 
-scala -cp $CLASSPATH org.enmas.server.ServerManager
+scala -cp $CLASSPATH org.enmas.bundler.Bundler

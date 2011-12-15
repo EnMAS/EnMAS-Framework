@@ -73,9 +73,9 @@
 	</target>
 
 	<target name="dist" depends="compile" description="generate the distribution">
-		<mkdir dir="${dist.dir}/lib" />
+		<mkdir dir="${dist.dir}" />
 		<!-- Put everything in ${build} into the EnMAS.jar file -->
-		<jar jarfile="${dist.dir}/lib/EnMAS.jar" basedir="${build.dir}"/>
+		<jar jarfile="${dist.dir}/EnMAS.jar" basedir="${build.dir}"/>
 	</target>
 
 	<target name="doc" depends="init" description="generate the documentation">

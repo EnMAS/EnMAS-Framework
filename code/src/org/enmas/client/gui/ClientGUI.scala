@@ -1,9 +1,9 @@
 package org.enmas.client.gui
-import org.enmas.client.ClientManager, org.enmas.messaging._,
+import org.enmas.client.ClientManager, org.enmas.messaging._, org.enmas.client.Agent,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
        javax.swing.table._,
        akka.actor._,
-       java.net.InetAddress
+       java.net.InetAddress, java.io._
 
 class ClientGUI(clientManager: ActorRef) extends MainFrame {
   title = "EnMAS: Client Manager"
@@ -72,21 +72,55 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
     }}
     layout(new FlowPanel(connectButton, scanButton)) = South
 
-    reactions += {
-      case TableRowsSelected(serverTable, range, false)  ⇒ {
-        if (serverTable.selection.rows != previousRowSelection)
-          serverTable.selection.rows --= previousRowSelection
-        connectButton.enabled = true
-      }
-    }
+    reactions += { case TableRowsSelected(serverTable, range, false)  ⇒ {
+      if (serverTable.selection.rows != previousRowSelection)
+        serverTable.selection.rows --= previousRowSelection
+      connectButton.enabled = true
+    }}
   })
 
   lazy val agentsTab = new TabbedPane.Page("Agent Clients", new BorderPanel {
-    layout(
-      new FlowPanel(new Button { action = Action("Launch Client") {
-        clientManager ? ClientManager.LaunchAgent('A1, "") // 2nd param is garbage for the time being
-      }}
-    )) = North
+    val jarChooser = new FileChooser {
+      title = "Choose jar file"
+      fileSelectionMode = FileChooser.SelectionMode.FilesOnly
+      multiSelectionEnabled = false
+      fileHidingEnabled = true
+      peer.setAcceptAllFileFilterUsed(false)
+      fileFilter = new javax.swing.filechooser.FileFilter {
+        def accept(f: File) = f.getName.endsWith(".jar") || f.getName.endsWith(".JAR")
+        def getDescription = "JAR files"
+      }
+    }
+
+    val classListView = new ListView[Class[_ <: Agent]] {
+      selection.intervalMode = ListView.IntervalMode.Single
+    }
+    listenTo(classListView.selection)
+
+    val chooseJarButton = new Button { action = Action("Choose JAR file") {
+      val result = jarChooser.showDialog(this, "Choose JAR file")
+      if (result == FileChooser.Result.Approve && jarChooser.selectedFile.exists) {
+        import org.enmas.util.ClassLoaderUtils._
+        classListView.listData = findSubclasses[Agent](jarChooser.selectedFile)
+      }
+    }}
+    val launchButton = new Button { action = Action("Launch Client") {
+      classListView.selection.items.headOption match {
+        case Some(clazz)  ⇒ {
+          clientManager ? ClientManager.LaunchAgent('A1, clazz)
+        }
+        case None  ⇒ enabled = false
+      }
+    }}
+    launchButton.enabled = false
+
+    reactions += { case event: ListSelectionChanged[_]  ⇒ {
+      launchButton.enabled = true
+    }}
+
+    layout(chooseJarButton) = North
+    layout(classListView) = Center
+    layout(launchButton) = South
   })
 
   lazy val graphicsTab = new TabbedPane.Page("Graphics Clients", new BorderPanel {})
