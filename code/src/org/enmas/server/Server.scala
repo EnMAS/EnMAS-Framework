@@ -2,44 +2,36 @@ package org.enmas.server
 
 import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.EncryptionUtils._,
        akka.actor._, akka.actor.Actor._,
-       scala.util._, scala.collection.immutable._,
-       java.security._
+       scala.util._, scala.collection.immutable._
 
-class Server(model: POMDP, localhost: String, port: Int, service: String) extends Actor {
+class Server(model: POMDP) extends Actor {
   private val keyPair = genKeyPair
   private var state = model.initialState
   private var iterationOrdinality = 0L
-  private var clientManagers = Set[ClientManagerRef]()
-  private var iterationSubscribers = Set[ClientManagerRef]()
-  private var agents = Set[AgentRef]()
-  private var messageQueue = Map[ClientManagerRef, List[AgentMessage]]()
+  private var clientManagers = Set[ClientManagerSpec]()
+  private var iterationSubscribers = Set[ClientManagerSpec]()
+  private var agents = Set[AgentSpec]()
+  private var messageQueue = Map[ClientManagerSpec, List[AgentMessage]]()
   private var pendingActions = List[AgentAction]()
 
   private var iterating = false
 
-  /** Creates a new ClientManagerRef object for the new host and stores it in
-    * the local list of client managers.  The ClientManagerRef contains a
-    * unique id for this host, as well as a newly generated symmetric key.
+  /** Creates a new ClientManagerSpec object for the new host and stores it in
+    * the local list of client managers.  The ClientManagerSpec contains a
+    * unique id for this host.
     */
-  private def registerHost(
-      service: String,
-      hostname: String,
-      port: Int,
-      clientPublicKey: PublicKey
-  ): Message = {
-    val actorRef = remote.actorFor(service, hostname, port)
-    val cmID = clientManagers.size + 1
-    val symKey = genSymKey
-    clientManagers += ClientManagerRef(cmID, actorRef, clientPublicKey, symKey)
-    ConfirmHostRegistration(cmID, keyPair.getPublic, symKey.getEncoded)
+  private def registerHost(ref: ActorRef): Message = {
+    val id = clientManagers.size + 1
+    clientManagers += ClientManagerSpec(id, ref)
+    ConfirmHostRegistration(id)
   }
 
-  /** Creates a new AgentRef for the new Agent.  Replies with a
+  /** Creates a new AgentSpec for the new Agent.  Replies with a
     * ConfirmAgentRegistration message if the POMDP model accomodates the new
     * Agent, and with a DenyAgentRegistration message otherwise.
     */
   private def registerAgent(clientManagerID: Int, agentType: AgentType): Message = {
-    val a = AgentRef(clientManagerID, agents.size+1, agentType)
+    val a = AgentSpec(clientManagerID, agents.size+1, agentType)
     var newAgentSet = agents + a
     if (model accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
       agents = newAgentSet
@@ -57,7 +49,7 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
     * iterate method.
     */
   private def takeAction(agentNumber: Int, action: Action) {
-    if ((pendingActions filter { _.agentNumber == agentNumber }).isEmpty ) {
+    if ((pendingActions filter { _.agentNumber == agentNumber }).isEmpty) {
       getAgent(agentNumber) map {
         a  ⇒ pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
       }
@@ -80,8 +72,8 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
       val statePrime = selectState(model.transitionFunction(state, actions))
       val reward = model.rewardFunction(state, actions, statePrime)
       val observation = model.observationFunction(state, actions, statePrime)
-      var observations = Set[(AgentRef, Observation)]()
-      var rewards = Set[(AgentRef, Float)]()
+      var observations = Set[(AgentSpec, Observation)]()
+      var rewards = Set[(AgentSpec, Float)]()
 
       clientManagers map { cm  ⇒ {
         val theseAgents = agents.toList.filter(_.clientManagerID == cm.id)
@@ -104,7 +96,7 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
       statePrime
     }
     catch {
-      case t: Throwable  ⇒ clientManagers map { cm  ⇒ cm.channel ! t }
+      case t: Throwable  ⇒ clientManagers map { cm  ⇒ cm.ref ! t }
       state
     }
   }
@@ -125,23 +117,20 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
     else state
   }
 
-
   /** Sends a MessageBundle object to each ClientManager in the list of hosts.
     * The MessageBundle objects are culled from the outbound message queue.
     * This method also resets the outbound message queue.
     */
   private def dispatchMessages: Unit = {
-    clientManagers map { cm  ⇒ { messageQueue.get(cm) map { cm.channel ! MessageBundle(_) }}}
+    clientManagers map { cm  ⇒ { messageQueue.get(cm) map { cm.ref ! MessageBundle(_) }}}
     messageQueue = messageQueue.empty
   }
 
-
-  /** Returns either Some[AgentRef] containing an AgentRef with the
+  /** Returns either Some[AgentSpec] containing an AgentSpec with the
     * supplied agentNumber, or None if no such object exists in the local
     * list of connected agents.
     */
   private def getAgent(agentNumber: Int) = agents.find( _.agentNumber == agentNumber )
-
 
   /** Returns either Some[ClientManager] containing a ClientManager with the
     * supplied id, or None if no such object exists in the local
@@ -149,21 +138,13 @@ class Server(model: POMDP, localhost: String, port: Int, service: String) extend
     */
   private def getClientManager(id: Int) = clientManagers.find( _.id == id )
 
-
   /** Handles RegisterHost, RegisterAgent, and TakeAction messages by delegating to
     * the appropriate handler method.
     */
   def receive = {
-    case Discovery  ⇒ {
-      self.channel ! DiscoveryReply(localhost, service, port, model.name, iterating)
-    }
-    case reg: RegisterHost  ⇒ {
-      self.channel ! registerHost(
-        reg.service, reg.hostname, reg.port, reg.clientPublicKey
-      )
-    }
+    case reg: RegisterHost  ⇒ sender ! registerHost(reg.ref)
     case reg: RegisterAgent  ⇒ getClientManager(reg.clientManagerID) map {
-      cm  ⇒ self.channel ! registerAgent(cm.id, reg.agentType)
+      cm  ⇒ sender ! registerAgent(cm.id, reg.agentType)
     }
     case TakeAction(agentNumber, action)  ⇒ takeAction(agentNumber, action)
     case _  ⇒ ()

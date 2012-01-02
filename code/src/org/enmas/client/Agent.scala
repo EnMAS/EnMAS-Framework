@@ -4,7 +4,7 @@ import org.enmas.pomdp._, org.enmas.messaging._,
        akka.actor._
 
 abstract class Agent() extends Client {
-  private var replyChannel: UntypedChannel = null
+  private var replyChannel: ActorRef = null
   private var aNumber: Int = 0
   private var aType: AgentType = Symbol("")
   private var actionSet = Set[Action]()
@@ -48,7 +48,7 @@ abstract class Agent() extends Client {
     * val myAgent = actorOf(new MyAgent repliesTo self)
     * }}}
     */
-  final def repliesTo(chan: UntypedChannel): Agent = { replyChannel = chan; this }
+  final def repliesTo(chan: ActorRef): Agent = { replyChannel = chan; this }
 
   /** Defines this agent's behavior.  This abstract method is the only one
     * that user code must implement.  To make sense, the policy should handle
@@ -94,7 +94,7 @@ abstract class Agent() extends Client {
       aNumber = n
       aType = t
       actionSet = a
-      become {policy orElse { case _  ⇒ () }}  // partial function chaining ftw...
+      context.become {policy orElse { case _  ⇒ () }}  // partial function chaining ftw...
     }
   }
 

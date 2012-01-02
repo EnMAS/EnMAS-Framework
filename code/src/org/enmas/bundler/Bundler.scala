@@ -51,7 +51,6 @@ class Bundler extends MainFrame {
 
     val results = new TextArea
     results.editable = false
-    results.wordWrap = true
 
     val compileSourceButton = new Button {
       action = Action("Compile scala source files...") {
@@ -107,12 +106,11 @@ class Bundler extends MainFrame {
       val jar = new JarOutputStream(new FileOutputStream(jarFile), manifest)
       val classFiles = sourceDir.listFiles.toList.filter(_.toString.endsWith(".class"))
       results.text += classFiles.length + " class files found\n"
-      for (file <- classFiles) {
-        results.text += "Bundling class file: " + file + "\n"
-        jar putNextEntry { new JarEntry(
-          file.getPath.replace("\\", "/").slice(file.getPath.lastIndexOf("/")+1, file.getPath.length)
-        ) }
-        val fin = new FileInputStream(file)
+      for (f <- classFiles) {
+        val className = f.getPath.replace("\\", "/").slice(f.getPath.lastIndexOf("/")+1, f.getPath.length)
+        results.text += "Bundling class file: " + className + "\n"
+        jar putNextEntry { new JarEntry(className) }
+        val fin = new FileInputStream(f)
         org.enmas.util.IOUtils.copy(fin, jar)
         fin.close
       }

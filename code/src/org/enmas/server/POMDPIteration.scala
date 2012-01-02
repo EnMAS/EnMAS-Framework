@@ -12,8 +12,8 @@ import org.enmas.pomdp._
   */
 case class POMDPIteration(
   ordinality: Long,
-  observations: Set[(AgentRef, State)],
-  rewards: Set[(AgentRef, Float)],
+  observations: Set[(AgentSpec, State)],
+  rewards: Set[(AgentSpec, Float)],
   actions: JointAction,
   state: State
 )

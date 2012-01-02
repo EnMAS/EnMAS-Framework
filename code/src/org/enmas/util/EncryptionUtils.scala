@@ -1,8 +1,7 @@
 package org.enmas.util
 
 import java.security._, java.security.interfaces._,
-       javax.crypto._,
-       org.enmas.util.SerializationUtils._
+       javax.crypto._
 
 object EncryptionUtils {
 

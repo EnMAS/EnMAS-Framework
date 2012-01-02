@@ -12,7 +12,7 @@ import org.enmas.pomdp._,
   * so this takes advantage of that to reduce unnecessay
   * network overhead and send/receive events.
   */
-case class MessageBundle( content: List[AgentMessage] )
+case class MessageBundle(content: List[AgentMessage])
 
 sealed trait Message
 
@@ -20,29 +20,21 @@ sealed trait AgentMessage extends Message { val agentNumber: Int }
 
 /** Sent from a ClientManger to a Server
   */
-case class RegisterHost(
-  service: String,
-  hostname: String,
-  port: Int,
-  clientPublicKey: PublicKey
-) extends Message
+case class RegisterHost(ref: ActorRef) extends Message
 
 /** Sent from a Server to a ClientManager
   */
-case class ConfirmHostRegistration(
-  id: Int,
-  serverPublicKey: PublicKey,
-  encryptedSharedKey: Array[Byte]
-) extends Message
+case class ConfirmHostRegistration(id: Int) extends Message
 
+/** Sent from a ClientManager to a ServerManager
+  */
 case object Discovery extends Message
 
+/** Sent from a ServerManager to ClientManager in
+  * response to Discovery
+  */
 case class DiscoveryReply(
-  host: String,
-  service: String,
-  port: Int,
-  modelName: String,
-  iterating: Boolean
+  servers: List[ServerSpec]
 ) extends Message
 
 /** Sent from a Server to a ClientManager
@@ -51,7 +43,10 @@ case object DenyHostRegistration extends Message
 
 /** Sent from a ClientManger to a Server
   */
-case class RegisterAgent(clientManagerID: Int, agentType: AgentType) extends Message
+case class RegisterAgent(
+  clientManagerID: Int,
+  agentType: AgentType
+) extends Message
 
 /** Sent from a Server to a ClientManager
   */

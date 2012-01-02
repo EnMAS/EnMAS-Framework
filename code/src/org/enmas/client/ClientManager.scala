@@ -1,49 +1,29 @@
 package org.enmas.client
 
 import org.enmas.pomdp._, org.enmas.messaging._,
-       org.enmas.util.EncryptionUtils._,
-       org.enmas.client.gui._,
+       org.enmas.server.ServerSpec, org.enmas.client.gui._,
        scala.collection.immutable._,
-       akka.actor._, akka.actor.Actor._,
-       java.security._, java.security.interfaces._,
-       javax.crypto._,
-       java.net.{InetAddress, ServerSocket},
-       org.enmas.examples.Broadcast._, org.enmas.examples.JavaBroadcastAgent // for testing only
+       akka.actor._, akka.actor.Actor._, akka.dispatch._,
+       akka.util.Timeout, akka.util.duration._,
+       com.typesafe.config.ConfigFactory,
+       java.net.{InetAddress, ServerSocket}
 
 class ClientManager extends Actor {
-  private var uniqueID = 0
-  private val keyPair = genKeyPair
+  import ClientManager._, context._
+
+  private var uniqueID = -1
   private var server: ActorRef = null
-  private var serverPubKey: PublicKey = null
-  private var sharedKey: Array[Byte] = null
-  private var agents = Map[Int, ActorRef]()
+  private var agents = Map[Int, (AgentType, ActorRef)]()
 
-  private def scanHost(serverHost: String, serverPort: Int) =
-    (remote.actorFor("EnMAS-service"+serverPort, serverHost, serverPort) ? Discovery).get
-
-  private def scanHost(serverHost: String): ClientManager.ScanResult = {
-    val initialPort = 36627
-    val portsToScan = (initialPort until initialPort + 32).toList
-    val tries = portsToScan map {
-      port  ⇒ {
-        val remoteActor = remote.actorFor("EnMAS-service"+port, serverHost, port)
-        (remoteActor, remoteActor ? Discovery)
-      }
-    }
-    val replies = tries filter { t  ⇒ t match {
-      case (remoteActor, future)  ⇒ {
-        try { future.get match {
-          case reply: DiscoveryReply  ⇒ true
-          case _  ⇒ false
-        }}
-        catch { case _  ⇒ {
-          try { remoteActor.stop } catch { case _  ⇒ () }
-          false
-        }}
-      }
-      case _  ⇒ false
+  private def scanHost(address: String): ScanResult = {
+    val host = actorFor("akka://enmasServer@"+address+":"+serverPort+"/user/serverManager")
+    var serverList = List[ServerSpec]()
+    try { serverList = Await.result(host ? Discovery, waitingPeriod) match {
+      case DiscoveryReply(servers)  ⇒ servers
+      case _  ⇒ List[ServerSpec]()
     }}
-    ClientManager.ScanResult(replies map {_._2.get.asInstanceOf[DiscoveryReply]})
+    catch { case t: Throwable  ⇒ { t.printStackTrace }}
+    ScanResult(serverList)
   }
 
   /** Returns true iff registering this host with the specified
@@ -54,21 +34,19 @@ class ClientManager extends Actor {
     * server is unreachable, server is not running, request denied,
     * or some other exceptional condition.
     */
-  private def registerHost(clientPort: Int, serverHost: String, serverPort: Int): Boolean = {
-    server = remote.actorFor("EnMAS-service"+serverPort, serverHost, serverPort)
-    (server ? RegisterHost(
-      "EnMAS-client", ClientManager.clientHost, clientPort, keyPair.getPublic)
-    ).onException {
-      case t: Throwable  ⇒ println(t.getClass.getName)
-    }.as[Message].get match {
-      case confirmation: ConfirmHostRegistration  ⇒ {
-        uniqueID = confirmation.id
-        serverPubKey = confirmation.serverPublicKey
-        sharedKey = confirmation.encryptedSharedKey
+  private def registerHost(serverRef: ActorRef): Boolean = {
+    try { Await.result(serverRef ? RegisterHost(self), waitingPeriod) match {
+      case c: ConfirmHostRegistration  ⇒ {
+        uniqueID = c.id
+        server = serverRef
       }
-      case _  ⇒ self ! Kill
-    }
-    serverPubKey != null && sharedKey != null
+      case _  ⇒ println("Registration denied by server!")
+    }}
+    catch { case t: Throwable  ⇒ {
+      println("An error occurred during registration:")
+      t.printStackTrace
+    }}
+    uniqueID >= 0
   }
 
   /** Returns true iff the server confirms the agent registration
@@ -79,63 +57,60 @@ class ClientManager extends Actor {
     * information for initialization and then become()s its user-defined
     * policy function.
     */
-  private def registerAgent(agentType: AgentType, clazz: java.lang.Class[_ <: Agent]): Boolean = {
-    try {
-      (server ? RegisterAgent(uniqueID, agentType)).onException {
-        case t: Throwable  ⇒ println(t.getClass.getName)
-      }.as[Message].get match {
-        case confirmation: ConfirmAgentRegistration  ⇒ {
-          val client = actorOf(clazz.newInstance repliesTo self)
-          client setId confirmation.agentNumber.toString
-          agents += (confirmation.agentNumber  → client)
-          self link client
-          client.start forward confirmation
-          true
-        }
-        case _  ⇒ false
+  private def registerAgent(
+    agentType: AgentType, 
+    clazz: java.lang.Class[_ <: Agent]
+  ): Boolean = {
+    var result = false
+    try { Await.result(
+      server ? RegisterAgent(uniqueID, agentType), waitingPeriod
+    ) match {
+      case confirmation: ConfirmAgentRegistration  ⇒ {
+        val client = actorOf(Props(clazz.newInstance repliesTo self))
+        agents += (confirmation.agentNumber  → (agentType, client))
+        client forward confirmation
+        result = true
       }
-    }
-    catch { case t: Throwable  ⇒ false }
+      case _  ⇒ ()
+    }}
+    catch { case _  ⇒ () }
+    result
   }
 
   def receive = {
-    case ClientManager.ScanHost(serverHost)  ⇒ self.channel ! scanHost(serverHost)
-    case e: ServerError  ⇒ {
+    case ScanHost(serverHost)  ⇒ sender ! scanHost(serverHost)
+    case e: Error  ⇒ {
       println(e.cause.getMessage)
       e.cause.printStackTrace
       self ! Kill
     }
-    case e: ClientError  ⇒ {
-      println(e.cause.getMessage)
-      e.cause.printStackTrace
-      self ! Kill
-    }
-    case m: ClientManager.Init  ⇒
-      self.channel ! registerHost(m.clientPort, m.serverHost, m.serverPort)
-    case m: ClientManager.LaunchAgent  ⇒ self.channel ! registerAgent(m.agentType, m.clazz)
+    case m: Init  ⇒ sender ! registerHost(m.server)
+    case m: LaunchAgent  ⇒ sender ! registerAgent(m.agentType, m.clazz)
     case MessageBundle(content)  ⇒ content map { c  ⇒
-        agents.find(_._2.getId == c.agentNumber.toString) map { a  ⇒ a._2.forward(c) }}
+      agents.find(_._1 == c.agentNumber) map { a  ⇒ a._2._2.forward(c) }}
     case t: TakeAction  ⇒ {
-      if (! (agents contains t.agentNumber)) self.channel ! Kill
-      agents.get(t.agentNumber) map { a  ⇒
-        self.sender map { s  ⇒ if (s == a) server forward t else s ! Kill }}}
+      if (! (agents contains t.agentNumber)) sender ! Kill
+      agents.get(t.agentNumber) map { tuple  ⇒
+        if (sender == tuple._2) server forward t else sender ! Kill
+      }
+    }
     case a: AnyRef  ⇒ println(a.getClass.getName + " \n" + a)
+    case _  ⇒ ()
   }
 }
 
 object ClientManager extends App {
-  import java.util.Scanner
-
+  // CM specific messages
   sealed case class ScanHost(serverHost: String)
-  sealed case class ScanResult(replies: List[DiscoveryReply])
-  sealed case class Init(clientPort: Int, serverHost: String, serverPort: Int)
+  sealed case class ScanResult(servers: List[ServerSpec])
+  sealed case class Init(server: ActorRef)
   sealed case class LaunchAgent(agentType: AgentType, clazz: java.lang.Class[_ <: Agent])
 
-  val clientHost = InetAddress.getLocalHost.getHostAddress
-  val manager = actorOf[ClientManager]
-  val clientPort = (new ServerSocket(0)).getLocalPort
-  remote.start(clientHost, clientPort).register("EnMAS-client", manager)
-  println("Listening on port "+clientPort)
+  val system = ActorSystem("enmasClient", ConfigFactory.load.getConfig("enmasClient"))
+  val waitingPeriod = 3 seconds
+  implicit val timeout: Timeout = Timeout(waitingPeriod)
 
+  val manager = system.actorOf(Props[ClientManager], "clientManager")
+  val serverPort = 36627 // ENMAS
   val gui = new ClientGUI(manager)
 }
