@@ -1,3 +1,7 @@
-export CLASSPATH=$CLASSPATH:lib/akka-2_0-M1/akka-actor-2.0-M1.jar:lib/akka-2_0-M1/akka-remote-2.0-M1.jar
-export CLASSPATH=$CLASSPATH:resources/akka-pingpong
+export CLASSPATH=$CLASSPATH:lib/akka-2.0-M2/akka-actor-2.0-M2.jar:lib/akka-2.0-M2/akka-remote-2.0-M2.jar
+export CLASSPATH=$CLASSPATH:lib/akka-2.0-M2/netty-3.2.6.Final.jar:lib/akka-2.0-M2/protobuf-java-2.4.1.jar
+export CLASSPATH=$CLASSPATH:lib/akka/commons-io-2.0.1.jar
+
+export CLASSPATH=$CLASSPATH:experimental/akka-pingpong
+
 scala -cp $CLASSPATH PingPong

@@ -4,39 +4,38 @@ import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.EncryptionUtils.
        akka.actor._, akka.actor.Actor._,
        scala.util._, scala.collection.immutable._
 
-class Server(model: POMDP) extends Actor {
+class Server(pomdp: POMDP) extends Actor {
   private val keyPair = genKeyPair
-  private var state = model.initialState
+  private var state = pomdp.initialState
   private var iterationOrdinality = 0L
-  private var clientManagers = Set[ClientManagerSpec]()
-  private var iterationSubscribers = Set[ClientManagerSpec]()
+  private var sessions = Set[SessionSpec]()
+  private var iterationSubscribers = Set[SessionSpec]()
   private var agents = Set[AgentSpec]()
-  private var messageQueue = Map[ClientManagerSpec, List[AgentMessage]]()
+  private var messageQueue = Map[SessionSpec, List[AgentMessage]]()
   private var pendingActions = List[AgentAction]()
 
-  private var iterating = false
-
-  /** Creates a new ClientManagerSpec object for the new host and stores it in
-    * the local list of client managers.  The ClientManagerSpec contains a
+  /** Creates a new SessionSpec object for the host and stores it in
+    * the local list of sessions.  The SessionSpec contains a
     * unique id for this host.
     */
   private def registerHost(ref: ActorRef): Message = {
-    val id = clientManagers.size + 1
-    clientManagers += ClientManagerSpec(id, ref)
+    val id = sessions.size + 1
+    context watch ref
+    sessions += SessionSpec(id, ref)
     ConfirmHostRegistration(id)
   }
 
   /** Creates a new AgentSpec for the new Agent.  Replies with a
-    * ConfirmAgentRegistration message if the POMDP model accomodates the new
+    * ConfirmAgentRegistration message if the POMDP accomodates the new
     * Agent, and with a DenyAgentRegistration message otherwise.
     */
-  private def registerAgent(clientManagerID: Int, agentType: AgentType): Message = {
-    val a = AgentSpec(clientManagerID, agents.size+1, agentType)
+  private def registerAgent(sessionID: Int, agentType: AgentType): Message = {
+    val a = AgentSpec(sessionID, agents.size+1, agentType)
     var newAgentSet = agents + a
-    if (model accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
+    if (pomdp accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
       agents = newAgentSet
       self ! TakeAction(a.agentNumber, NO_ACTION)
-      ConfirmAgentRegistration(a.agentNumber, a.agentType, model.actionsFunction(agentType))
+      ConfirmAgentRegistration(a.agentNumber, a.agentType, pomdp.actionsFunction(agentType))
     }
     else DenyAgentRegistration
   }
@@ -44,7 +43,7 @@ class Server(model: POMDP) extends Actor {
   /** Places a new AgentAction into the local collection of pending actions,
     * unless it already contains an action for the supplied agent number.
     *
-    * Furthermore, if the current agents set satisfies the POMDP model and all
+    * Furthermore, if the current agents set satisfies the POMDP and all
     * agents have a pending action, iterates the simulation by calling the
     * iterate method.
     */
@@ -54,9 +53,11 @@ class Server(model: POMDP) extends Actor {
         a  ⇒ pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
       }
       if (
-        model.isSatisfiedByAgents(agents.toList map {_.agentType}) &&
+        pomdp.isSatisfiedByAgents(agents.toList map {_.agentType}) &&
         pendingActions.length == agents.size
-      ) { state = iterate(state, pendingActions) }
+      ) { 
+        state = iterate(state, pendingActions)
+      }
     }
   }
 
@@ -64,19 +65,18 @@ class Server(model: POMDP) extends Actor {
     *
     * 1) Passes the supplied state and actions to the POMDP transitionFunction
     * 2) Uses the resulting probability distribution to select the next state
-    * 3) Dispatches UpdateAgent messages to client managers
+    * 3) Dispatches UpdateAgent messages
     */
   private def iterate(state: State, actions: JointAction): State = {
-    iterating = true
     try {
-      val statePrime = selectState(model.transitionFunction(state, actions))
-      val reward = model.rewardFunction(state, actions, statePrime)
-      val observation = model.observationFunction(state, actions, statePrime)
+      val statePrime = selectState(pomdp.transitionFunction(state, actions))
+      val reward = pomdp.rewardFunction(state, actions, statePrime)
+      val observation = pomdp.observationFunction(state, actions, statePrime)
       var observations = Set[(AgentSpec, Observation)]()
       var rewards = Set[(AgentSpec, Float)]()
 
-      clientManagers map { cm  ⇒ {
-        val theseAgents = agents.toList.filter(_.clientManagerID == cm.id)
+      sessions map { cm  ⇒ {
+        val theseAgents = agents.toList.filter(_.sessionID == cm.id)
         for (a  ← theseAgents) {
           observations += (a  → observation(a.agentNumber, a.agentType))
           rewards += (a  → reward(a.agentType))
@@ -89,14 +89,14 @@ class Server(model: POMDP) extends Actor {
       }}
 
       pendingActions = pendingActions take 0 // clears pending actions
-      dispatchMessages // sends bundled agent updates to client managers
+      dispatchMessages // sends bundled agent updates
       val iteration = POMDPIteration(iterationOrdinality, observations, rewards, actions, state)
       // TODO: send iteration to POMDPIteration subscribers
       iterationOrdinality += 1;
       statePrime
     }
     catch {
-      case t: Throwable  ⇒ clientManagers map { cm  ⇒ cm.ref ! t }
+      case t: Throwable  ⇒ sessions map { cm  ⇒ cm.ref ! t }
       state
     }
   }
@@ -117,12 +117,12 @@ class Server(model: POMDP) extends Actor {
     else state
   }
 
-  /** Sends a MessageBundle object to each ClientManager in the list of hosts.
+  /** Sends a MessageBundle object to each Session in the list of hosts.
     * The MessageBundle objects are culled from the outbound message queue.
     * This method also resets the outbound message queue.
     */
   private def dispatchMessages: Unit = {
-    clientManagers map { cm  ⇒ { messageQueue.get(cm) map { cm.ref ! MessageBundle(_) }}}
+    sessions map { cm  ⇒ { messageQueue.get(cm) map { cm.ref ! MessageBundle(_) }}}
     messageQueue = messageQueue.empty
   }
 
@@ -132,21 +132,38 @@ class Server(model: POMDP) extends Actor {
     */
   private def getAgent(agentNumber: Int) = agents.find( _.agentNumber == agentNumber )
 
-  /** Returns either Some[ClientManager] containing a ClientManager with the
+  /** Returns either Some[Session] containing a Session with the
     * supplied id, or None if no such object exists in the local
-    * list of connected client managers.
+    * list of active sessions.
     */
-  private def getClientManager(id: Int) = clientManagers.find( _.id == id )
+  private def getSession(id: Int) = sessions.find( _.id == id )
 
   /** Handles RegisterHost, RegisterAgent, and TakeAction messages by delegating to
     * the appropriate handler method.
     */
   def receive = {
     case reg: RegisterHost  ⇒ sender ! registerHost(reg.ref)
-    case reg: RegisterAgent  ⇒ getClientManager(reg.clientManagerID) map {
-      cm  ⇒ sender ! registerAgent(cm.id, reg.agentType)
+
+    case reg: RegisterAgent  ⇒ getSession(reg.sessionID) map {
+      session  ⇒ sender ! registerAgent(session.id, reg.agentType)
     }
+
     case TakeAction(agentNumber, action)  ⇒ takeAction(agentNumber, action)
+
+    case AgentDied(id)  ⇒ {
+      agents = agents filterNot { _.agentNumber == id }
+      sessions filterNot { _.ref == sender } map { _.ref ! AgentDied(id) }
+    }
+    
+    case Terminated(deceasedActor)  ⇒ {
+      sessions.find(_.ref == deceasedActor) match { case Some(dead)  ⇒ {
+          println("A session died! Darn the luck...")
+          sessions = sessions filterNot { _ == dead }
+        }
+        case None  ⇒ ()
+      }
+    }
+
     case _  ⇒ ()
   }
 }

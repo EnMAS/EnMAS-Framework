@@ -53,7 +53,7 @@ case class POMDP (
     * This is a more stringent test than the accomodatesAgents method.
     *
     * This function is called by the server to determine whether
-    * the current agent set is sufficient to iterating the simulation.
+    * the current agent set is sufficient to iterate the simulation.
     */
   final def isSatisfiedByAgents(agents: List[AgentType]) : Boolean = {
     accomodatesAgents(agents) && { agentConstraints.foldLeft(true){ (a,b)  ⇒ {

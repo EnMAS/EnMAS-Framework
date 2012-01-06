@@ -1,17 +1,18 @@
 package org.enmas.client.gui
+
 import org.enmas.client.ClientManager, org.enmas.messaging._,
        org.enmas.client.Agent, org.enmas.server.ServerSpec,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
        javax.swing.table._,
-       akka.actor._,
+       akka.actor._, akka.dispatch._, akka.util.duration._,
        java.net.InetAddress, java.io._
 
 class ClientGUI(clientManager: ActorRef) extends MainFrame {
-  import ClientManager.timeout
+  import ClientManager._
 
   title = "EnMAS: Client Manager"
   contents = ui
-  minimumSize = new Dimension(650, 400)
+  minimumSize = new Dimension(700, 800)
   centerOnScreen
   visible = true
 
@@ -49,7 +50,7 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
     val connectButton = new Button { action = Action("Connect to Selected") {
       serverListView.selection.items.headOption match {
         case Some(server: ServerSpec)  ⇒ {
-          (clientManager ? ClientManager.Init(server.ref)).onSuccess {
+          (clientManager ? CreateSession(server.ref)).onSuccess {
             case true  ⇒ StatusBar.connected
         }}
         case None  ⇒ println("Connection to server failed!")
@@ -58,8 +59,8 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
     connectButton.enabled = false
 
     val scanButton = new Button { action = Action("Scan Host") {
-      (clientManager ? ClientManager.ScanHost(serverHostField.text.trim)).onSuccess {
-        case result: ClientManager.ScanResult  ⇒ {
+      (clientManager ? ScanHost(serverHostField.text.trim)).onSuccess {
+        case result: ScanResult  ⇒ {
           println("\ngot "+result.servers.length+" replies\n")
           serverListView.listData = result.servers
         }
@@ -97,23 +98,32 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
         classListView.listData = findSubclasses[Agent](jarChooser.selectedFile)
       }
     }}
+
+    val agentTypeField = new TextField("", 16)
+
     val launchButton = new Button { action = Action("Launch Client") {
       classListView.selection.items.headOption match {
         case Some(clazz)  ⇒ {
-          clientManager ? ClientManager.LaunchAgent('A1, clazz)
+          val agentType = Symbol(agentTypeField.text)
+          (clientManager ? LaunchAgent(agentType, clazz)) onSuccess {
+            case true  ⇒ println("Launched agent of type "+agentType)
+            case _  ⇒ println("Launch agent of type"+agentType+" failed!")
+          } onFailure { case _  ⇒ println("Launch failed for an unknown reason!") }
         }
         case None  ⇒ enabled = false
       }
     }}
     launchButton.enabled = false
-
     reactions += { case event: ListSelectionChanged[_]  ⇒ {
       launchButton.enabled = true
     }}
-
     layout(chooseJarButton) = North
     layout(classListView) = Center
-    layout(launchButton) = South
+    layout(new FlowPanel(
+      new Label("Agent Type"),
+      agentTypeField,
+      launchButton)
+    ) = South
   })
 
   lazy val graphicsTab = new TabbedPane.Page("Graphics Clients", new BorderPanel {})

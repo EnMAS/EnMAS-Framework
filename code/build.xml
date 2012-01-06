@@ -53,6 +53,16 @@
 		><include name="**/*.scala" /></scalac>
 	</target>
 
+	<target name="compilePingPong" depends="init">
+		<scalac failonerror="true"
+			srcdir="experimental/akka-pingpong"
+			destdir="experimental/akka-pingpong"
+			classpathref="build.classpath"
+			unchecked="on"
+			deprecation="on"
+		><include name="*.scala" /></scalac>
+	</target>
+
 	<target name="dist" depends="compile" description="generate the distribution">
 		<mkdir dir="${dist.dir}" />
 		<!-- Put everything in ${build} into the EnMAS.jar file -->

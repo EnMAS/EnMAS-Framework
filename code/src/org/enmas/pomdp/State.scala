@@ -31,8 +31,8 @@ class State(
     */
   def getAs[T](key: String)(implicit m : Manifest[T]): Option[T] = {
     map.get(key) match {
-      case Some((om: Manifest[_], o: Any))  ⇒
-        if (om <:< m) Some(o.asInstanceOf[T]) else None
+      case Some((om: Manifest[_], obj: Any))  ⇒
+        if (om <:< m) Some(obj.asInstanceOf[T]) else None
       case _  ⇒ None
     }
   }
@@ -48,11 +48,23 @@ class State(
   def getAs[T <: AnyRef](key: String, prototypeObject: T): T = {
     val clazz = prototypeObject.getClass.asInstanceOf[java.lang.Class[T]]
     getAs(key)(Manifest.classType(clazz)) match {
-      case Some(o)  ⇒ o.asInstanceOf[T]
+      case Some(obj)  ⇒ obj.asInstanceOf[T]
       case _  ⇒ throw new java.util.NoSuchElementException
     }
   }
 
+  /** == Java API Method == */
+  def getBoolean(key: String): Option[Boolean] = getAs[Boolean](key)
+  /** == Java API Method == */
+  def getDouble(key: String): Option[Double] = getAs[Double](key)
+  /** == Java API Method == */
+  def getFloat(key: String): Option[Float] = getAs[Float](key)
+  /** == Java API Method == */
+  def getInt(key: String): Option[Int] = getAs[Int](key)
+  /** == Java API Method == */
+  def getLong(key: String): Option[Long] = getAs[Long](key)
+  /** == Java API Method == */
+  def getNumber(key: String): Option[Number] = getAs[Number](key)
 }
 
 object State {

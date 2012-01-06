@@ -1,62 +1,29 @@
-X modify transition function to return a List[(State, Int)]
+_ Documentation Updates
+  _ use case document
+  	X diagrams
+  	_ narratives
+  _ architectural design document
+  _ detailed design document
+  	X diagrams
+  	- pseudocode / details / spec (Object-Z?)
+  _ update functional requirements document
 
-X guard against 3rd actor hijacking the reply channel for agents
-	X set replyChannel explicitly
+_ link client to server, server to client
+  - handle Terminated messages and behave appropriately
+    - if server dies
+    - if clientManager dies
 
-X write more interesting example problem using our POMDP specification format
+_ implement supervision routines for agents
+  - may be that the default akka behavior is OK (transparent restart)
 
-X update design diagrams to reflect prototyped code
-	X Client Subsystem
-	X Messaging Utils
-	X POMDP Subsystem
-	X Server Subsystem
-	X Encryption Utils
-	X Serialization Utils
-	X Architectural View
-	X Client-Server Interaction (Sequence Diagram)
+_ rethink GUI in terms of workflow
+  - i.e., should not even see agent launcher before connected to a server
+  - perhaps a "wizard" style is better than tabs
 
-X document:
-	X Agent
-	X Client
-	X ClientManager
-	X ClientGUI
-	X GraphicsPlugin
-	X gui package object
-	X simple example
-	X messages.scala
-	X AgentAction
-	X pomdp package object
-	X POMDP
-	X State
-	X AgentRef
-	X ClientManagerRef
-	X Host
-	X POMDPIteration
-	X Server
-	X ServerManager
-	X EncryptionUtils
-	X SerializationUtils
-
-_ use case document
-	X diagrams
-	_ narratives
-_ architectural design document
-_ detailed design document
-	X diagrams
-	- pseudocode / details
-_ update functional requirements document
-
-_ write a simple agent in Java
-	X problems! all related to the definition of State and the fact
-	  that the Java agent needs to call methods of it
-	X consider the JCF object conversions
-
-_ look at GNUPlot project (open source graphing framework)
-
-X wrap all calls to user-written code in try blocks to prevent runtime exceptions
-  from crashing the server
-	X forward any Throwable object to all clientManagers
-	X handle Throwable in receive, do something reasonable
+_ dynamic compilation for Java agents
+_ dynamic class loading
+	- for loggers and GUI clients
+	- for POMDP models
 
 _ allow clientManagers to subscribe to POMDPIteration messages from the Server
 	X Server keeps a iterationSubscribers: Set[ClientManagerRef] that is a subset of clientManagers
@@ -66,7 +33,6 @@ _ allow clientManagers to subscribe to POMDPIteration messages from the Server
 		- i.e. forward to Logger and GUI clients
 
 _ custom logging
-	X ditch exhaustive "playable" logs -- too messy, probably not useful
 	- allow definition of logging clients (extends Client) attached to client manager
 		- causes client manager to subscribe to POMDPIteration messages; these are forwarded
 		  to logging clients and GUI clients when received
@@ -75,37 +41,6 @@ _ custom logging
 		- receive & log ServerError(t: Throwable) and ClientError(t: Throwable)
 		  at the ClientManager
 		- write these errors to a log file relative to the client manager, or the EnMAS jar
-
-_ investigate & implement dynamic compilation and class loading
-
-	- FOR AGENTS
-		X  JAR bundler (in Bundler)
-			X select directory
-			X run scalac
-			X show errors & warnings
-			X make a JAR
-				X name it directory.getName.replaceAll("\s", "")
-		X  class loader (in ClientGUI)
-			X select JAR file
-			X iterate over all files in the JAR, adding each .class URL
-			  to getClassLoader().
-				X if the class is a concrete subclass of Agent, add to List
-			X return the List of Agent implementations
-			X display List<Agent> in a ListView
-		X  class launcher (in ClientGUI)
-			X select Agent in ListView
-			X click "Launch" button
-			X send ClientManager.RegisterAgent msg to CM
-
-	- for loggers and GUI clients
-	- for models
-		- clientManager attempts compilation of the scala source file
-		- if errors, report them
-		- else upload the file to the server, compile and load it there
-
-_ make sure remote actors are run in untrusted (safe) mode
-	- i.e. no "lifecycle" messages allowed
-	- this is a configuration issue (akka.conf)
 
 _ expose ServerManager with Lift web framework
 	_ server status, uptime
@@ -117,9 +52,9 @@ _ expose ServerManager with Lift web framework
 		- download log snapshot
 
 _ testing
-	- behavioral and unit tests with scalatest
-	- check out the scala.testing.Benchmark trait.
-	  Supposedly just implement run() and get perf data
+	- behavioral tests with scalatest
+	- check out the scala.testing.Benchmark trait,
+	  supposedly just implement run() and get perf data
 
 _ security issues
 	X RSA key generation

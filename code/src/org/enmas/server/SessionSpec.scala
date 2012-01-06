@@ -2,10 +2,10 @@ package org.enmas.server
 
 import akka.actor._
 
-/** Represents a reference to a ClientManager from the point
+/** Represents a reference to a Session from the point
  * of view of a Server.
  */
-case class ClientManagerSpec(
+case class SessionSpec(
   val id: Int,
   val ref: ActorRef
 )

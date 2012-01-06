@@ -44,11 +44,11 @@ case object DenyHostRegistration extends Message
 /** Sent from a ClientManger to a Server
   */
 case class RegisterAgent(
-  clientManagerID: Int,
+  sessionID: Int,
   agentType: AgentType
 ) extends Message
 
-/** Sent from a Server to a ClientManager
+/** Sent from a Server to a ClientManager session
   */
 case class ConfirmAgentRegistration(
   agentNumber: Int,
@@ -56,17 +56,17 @@ case class ConfirmAgentRegistration(
   actions: Set[Action]
 ) extends AgentMessage
 
-/** Sent from a Server to a ClientManager
+/** Sent from a Server to a ClientManager session
   */
 case object DenyAgentRegistration extends Message
 
-/** Sent from an Agent to a ClientManager, then
-  * forwarded from that ClientManager to a Server
+/** Sent from an Agent to a ClientManager session, then
+  * forwarded from that ClientManager session to a Server
   */
 case class TakeAction(agentNumber: Int, action: Action ) extends Message
 
-/** Sent from a Server to a ClientManager, then
-  * forwarded from that ClientManager to an Agent
+/** Sent from a Server to a ClientManager session, then
+  * forwarded from that ClientManager session to an Agent
   */
 case class UpdateAgent(
   agentNumber: Int,
@@ -74,6 +74,10 @@ case class UpdateAgent(
   reward: Float
 ) extends AgentMessage
 
-sealed trait Error { val cause: Throwable }
+/** Sent from a ClientManager session to a Server
+*/
+case class AgentDied(id: Int)
+
+sealed trait Error extends Message { val cause: Throwable }
 case class ClientError(cause: Throwable) extends Error
 case class ServerError(cause: Throwable) extends Error

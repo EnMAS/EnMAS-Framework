@@ -7,7 +7,7 @@ import org.enmas.pomdp._,
   * of view of a Server.
   */
 case class AgentSpec(
-  clientManagerID: Int,
+  sessionID: Int,
   agentNumber: Int,
   agentType: AgentType
 )

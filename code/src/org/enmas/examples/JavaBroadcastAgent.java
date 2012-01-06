@@ -18,7 +18,7 @@ class JavaBroadcastAgent extends Agent {
 	public Symbol handleUpdate(State observation, float reward) {
 	    System.out.println("I am agent "+agentNumber()+"\nI think my queue is ");
 		try {
-			Boolean observedMessage = observation.getAs("queue", (new Boolean(true)));
+			Boolean observedMessage = observation.getBoolean("queue"));
 			if (observedMessage) System.out.println("full");
 			else System.out.println("empty");
 		}

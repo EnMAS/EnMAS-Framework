@@ -8,5 +8,5 @@ import org.enmas.pomdp._,
   */
 case class ServerSpec(
   ref: ActorRef,
-  model: POMDP
+  pomdp: POMDP
 )

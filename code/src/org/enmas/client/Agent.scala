@@ -24,22 +24,6 @@ abstract class Agent() extends Client {
     */
   final def actions = actionSet
 
-  /** This method is overridden and made final to sandbox user code.
-    */
-  final override def preStart = ()
-
-  /** This method is overridden and made final to sandbox user code.
-    */
-  final override def preRestart(t: Throwable, o: Option[Any]) = ()
-
-  /** This method is overridden and made final to sandbox user code.
-    */
-  final override def postRestart(t: Throwable) = ()
-
-  /** This method is overridden and made final to sandbox user code.
-    */
-  final override def postStop = ()
-
   /** Returns this instance, after setting the reply channel.  The
     * return value is to promote method chaining at the call site,
     * as in:
@@ -90,7 +74,6 @@ abstract class Agent() extends Client {
     */
   private final def defaultMessageHandler: PartialFunction[Any, Unit] = {
     case ConfirmAgentRegistration(n, t, a)  ⇒ {
-      println("Agent Initialized!")
       aNumber = n
       aType = t
       actionSet = a
