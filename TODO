@@ -1,74 +1,46 @@
-_ Documentation Updates
-  _ use case document
-  	X diagrams
-  	_ narratives
-  _ architectural design document
-  _ detailed design document
-  	X diagrams
-  	- pseudocode / details / spec (Object-Z?)
-  _ update functional requirements document
-
-_ link client to server, server to client
-  - handle Terminated messages and behave appropriately
-    - if server dies
-    - if clientManager dies
-
-_ implement supervision routines for agents
-  - may be that the default akka behavior is OK (transparent restart)
-
-_ rethink GUI in terms of workflow
-  - i.e., should not even see agent launcher before connected to a server
-  - perhaps a "wizard" style is better than tabs
-
-_ dynamic compilation for Java agents
-_ dynamic class loading
-	- for loggers and GUI clients
-	- for POMDP models
-
+_ clean architectural diagram to Marty
+_ class loading for POMDP models
+_ refactor GUI to match Session
+_ handle Terminated(server) in Session
+_ internationalization of GUI
 _ allow clientManagers to subscribe to POMDPIteration messages from the Server
 	X Server keeps a iterationSubscribers: Set[ClientManagerRef] that is a subset of clientManagers
 	- define messages to subscribe / unsubscribe, handle in Server
 	- just send the POMDPIteration as is -- case class makes a fine message already
 	- handle POMDPIteration messages in ClientManager
 		- i.e. forward to Logger and GUI clients
-
 _ custom logging
-	- allow definition of logging clients (extends Client) attached to client manager
-		- causes client manager to subscribe to POMDPIteration messages; these are forwarded
+	- allow definition of logging clients (extends Client) attached to session
+		- causes session to subscribe to POMDPIteration messages, forwarded
 		  to logging clients and GUI clients when received
 	_ log Throwables on the client side
 		X catch & forward Throwables at the Server
 		- receive & log ServerError(t: Throwable) and ClientError(t: Throwable)
 		  at the ClientManager
-		- write these errors to a log file relative to the client manager, or the EnMAS jar
-
-_ expose ServerManager with Lift web framework
-	_ server status, uptime
-	_ approve/deny/remove hosts
-	_ active POMDP server instances
-		- status, uptime
-		- hosts, agents
-		- start/pause/stop server
-		- download log snapshot
-
-_ testing
-	- behavioral tests with scalatest
-	- check out the scala.testing.Benchmark trait,
-	  supposedly just implement run() and get perf data
+    _ debug-level (errors) logging as a default Logger?
+_ use case document update
+_ Documentation Updates
+  _ use case document
+  	_ diagrams update
+  	_ narratives
+  _ functional requirements document update
+  _ architectural design document
+  _ detailed design document
+  	_ diagram updates
+  	- pseudocode / details / spec (Object-Z)
+  	- class invariants
+_ behavioral / unit tests w/ scalatest
+_ dynamic compilation for Java agents
 
 _ security issues
-	X RSA key generation
-	- key exchange
-	- symmetric key encrypt / decrypt
-	- host registration & persistent storage
+  - investigate secure cookie via Akka
 	X guard against agent spoofing
 		X keep a map agents: of (agentID  → ActorRef)
 		X verify: for each TakeAction t, (t.id  → self.sender) elem agents
-		X kill agents that violate the above invariant
-	- show that the protocol ensures authenticity and integrity:
+		X stop agents that violate the above invariant
+	- show that the protocol guarantees authenticity and integrity:
 		- from server to clientManager
 		- from clientManager to server
 		- from clientManager to agent
 		X from agent to clientManager
-	- protect against replay attacks from spoofed client managers
-		- sequence or n-once value?
+	- protect against replay attacks from spoofed client managers? (perhaps overkill)

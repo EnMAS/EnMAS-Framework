@@ -12,15 +12,13 @@ class ClientManager extends Actor {
 
   private var sessions = List[ActorRef]()
 
-  private def scanHost(address: String): ScanResult = {
+  private def scanHost(address: String) {
     val host = actorFor("akka://enmasServer@"+address+":"+serverPort+"/user/serverManager")
-    var serverList = List[ServerSpec]()
-    try { serverList = Await.result(host ? Discovery, timeout.duration) match {
-      case DiscoveryReply(servers)  ⇒ servers
-      case _  ⇒ List[ServerSpec]()
+    try { Await.result(host ? Discovery, timeout.duration) match {
+      case DiscoveryReply(servers)  ⇒ sender ! ScanResult(servers)
+      case _  ⇒ sender ! new Exception("Got a bogus reply")
     }}
-    catch { case t: Throwable  ⇒ { t.printStackTrace }}
-    ScanResult(serverList)
+    catch { case t: Throwable  ⇒ sender ! t }
   }
 
   private def createSession(server: ActorRef): Boolean = {
@@ -38,7 +36,7 @@ class ClientManager extends Actor {
   }
 
   def receive = {
-    case ScanHost(serverHost)  ⇒ sender ! scanHost(serverHost)
+    case ScanHost(serverHost)  ⇒ scanHost(serverHost)
 
     case e: Error  ⇒ {
       println(e.cause.getMessage)

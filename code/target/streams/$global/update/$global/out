@@ -1,0 +1,339 @@
+[0m[[0minfo[0m] [0mUpdating {file:/Users/connor/projects/uwl/mse/EnMAS/code/}default-91e456...[0m
+[0m[[0mdebug[0m] [0mpost 1.3 ivy file: using exact as default matcher[0m
+[0m[[0mdebug[0m] [0m:: resolving dependencies :: default#enmas_2.9.1;0.5[0m
+[0m[[0mdebug[0m] [0m	confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom][0m
+[0m[[0mdebug[0m] [0m	validate = true[0m
+[0m[[0mdebug[0m] [0m	refresh = false[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'compile'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [compile][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=compile[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=compile[0m
+[0m[[0mdebug[0m] [0m	using sbt-chain to resolve org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.scala-lang#scala-library;2.9.1 {compile=[default(compile)]}[0m
+[0m[[0mdebug[0m] [0msbt-chain: no namespace defined: using system[0m
+[0m[[0mdebug[0m] [0mNo entry is found in the ModuleDescriptorCache : /Users/connor/.ivy2/cache/org.scala-lang/scala-library/ivy-2.9.1.xml[0m
+[0m[[0mdebug[0m] [0mpost 1.3 ivy file: using exact as default matcher[0m
+[0m[[0mdebug[0m] [0m	found ivy file in cache for org.scala-lang#scala-library;2.9.1 (resolved by sbt-chain): /Users/connor/.ivy2/cache/org.scala-lang/scala-library/ivy-2.9.1.xml[0m
+[0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0msbt-chain: no latest strategy defined: using default[0m
+[0m[[0mdebug[0m] [0mlocal: no namespace defined: using system[0m
+[0m[[0mdebug[0m] [0mEntry is found in the ModuleDescriptorCache : /Users/connor/.ivy2/cache/org.scala-lang/scala-library/ivy-2.9.1.xml[0m
+[0m[[0mdebug[0m] [0m	found ivy file in cache for org.scala-lang#scala-library;2.9.1 (resolved by sbt-chain): /Users/connor/.ivy2/cache/org.scala-lang/scala-library/ivy-2.9.1.xml[0m
+[0m[[0mdebug[0m] [0m	local: revision in cache: org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0m	checking org.scala-lang#scala-library;2.9.1 from sbt-chain against [none][0m
+[0m[[0mdebug[0m] [0m	module revision kept as first found: org.scala-lang#scala-library;2.9.1 from sbt-chain[0m
+[0m[[0mdebug[0m] [0m	found org.scala-lang#scala-library;2.9.1 in sbt-chain[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->runtime][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=compile[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->compile][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=compile[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->master][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=compile[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->com.typesafe.akka#akka-actor;2.0-M2 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of com.typesafe.akka#akka-actor;2.0-M2 of rootConf=compile[0m
+[0m[[0mdebug[0m] [0m	using sbt-chain to resolve com.typesafe.akka#akka-actor;2.0-M2[0m
+[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: com.typesafe.akka#akka-actor;2.0-M2 {compile=[default(compile)]}[0m
+[0m[[0mdebug[0m] [0m	no ivy file in cache for com.typesafe.akka#akka-actor;2.0-M2: tried /Users/connor/.ivy2/cache/com.typesafe.akka/akka-actor/ivy-2.0-M2.xml[0m
+[0m[[0mdebug[0m] [0m	no ivy file in cache for com.typesafe.akka#akka-actor;2.0-M2: tried /Users/connor/.ivy2/cache/com.typesafe.akka/akka-actor/ivy-2.0-M2.xml[0m
+[0m[[0mdebug[0m] [0m	 trying /Users/connor/.ivy2/local/com.typesafe.akka/akka-actor/2.0-M2/ivys/ivy.xml[0m
+[0m[[0mdebug[0m] [0m		tried /Users/connor/.ivy2/local/com.typesafe.akka/akka-actor/2.0-M2/ivys/ivy.xml[0m
+[0m[[0mdebug[0m] [0m	local: resource not reachable for com.typesafe.akka#akka-actor;2.0-M2: res=/Users/connor/.ivy2/local/com.typesafe.akka/akka-actor/2.0-M2/ivys/ivy.xml[0m
+[0m[[0mdebug[0m] [0m	local: no ivy file found for com.typesafe.akka#akka-actor;2.0-M2[0m
+[0m[[0mdebug[0m] [0mpublic: no namespace defined: using system[0m
+[0m[[0mdebug[0m] [0m	no ivy file in cache for com.typesafe.akka#akka-actor;2.0-M2: tried /Users/connor/.ivy2/cache/com.typesafe.akka/akka-actor/ivy-2.0-M2.xml[0m
+[0m[[0mdebug[0m] [0m	 trying http://repo1.maven.org/maven2/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0m		tried http://repo1.maven.org/maven2/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0mHTTP response status: 404 url=http://repo1.maven.org/maven2/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0mCLIENT ERROR: Not Found url=http://repo1.maven.org/maven2/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0m	public: resource not reachable for com/typesafe/akka#akka-actor;2.0-M2: res=http://repo1.maven.org/maven2/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0m	public: no ivy file found for com.typesafe.akka#akka-actor;2.0-M2[0m
+[0m[[0mdebug[0m] [0mScala-Tools Maven2 Repository: no namespace defined: using system[0m
+[0m[[0mdebug[0m] [0m	no ivy file in cache for com.typesafe.akka#akka-actor;2.0-M2: tried /Users/connor/.ivy2/cache/com.typesafe.akka/akka-actor/ivy-2.0-M2.xml[0m
+[0m[[0mdebug[0m] [0m	 trying http://scala-tools.org/repo-releases/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0m		tried http://scala-tools.org/repo-releases/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0mHTTP response status: 404 url=http://scala-tools.org/repo-releases/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0mCLIENT ERROR: Not Found url=http://scala-tools.org/repo-releases/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0m	Scala-Tools Maven2 Repository: resource not reachable for com/typesafe/akka#akka-actor;2.0-M2: res=http://scala-tools.org/repo-releases/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0m	Scala-Tools Maven2 Repository: no ivy file found for com.typesafe.akka#akka-actor;2.0-M2[0m
+[0m[[33mwarn[0m] [0m	module not found: com.typesafe.akka#akka-actor;2.0-M2[0m
+[0m[[33mwarn[0m] [0m==== local: tried[0m
+[0m[[33mwarn[0m] [0m  /Users/connor/.ivy2/local/com.typesafe.akka/akka-actor/2.0-M2/ivys/ivy.xml[0m
+[0m[[33mwarn[0m] [0m==== public: tried[0m
+[0m[[33mwarn[0m] [0m  http://repo1.maven.org/maven2/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[33mwarn[0m] [0m==== Scala-Tools Maven2 Repository: tried[0m
+[0m[[33mwarn[0m] [0m  http://scala-tools.org/repo-releases/com/typesafe/akka/akka-actor/2.0-M2/akka-actor-2.0-M2.pom[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'runtime'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [runtime][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=runtime[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [compile][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=runtime[0m
+[0m[[0mdebug[0m] [0mruntime is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=runtime[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->runtime][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=runtime[0m
+[0m[[0mdebug[0m] [0mruntime is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->compile][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=runtime[0m
+[0m[[0mdebug[0m] [0mruntime is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->master][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=runtime[0m
+[0m[[0mdebug[0m] [0mruntime is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->com.typesafe.akka#akka-actor;2.0-M2 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of com.typesafe.akka#akka-actor;2.0-M2 of rootConf=runtime[0m
+[0m[[0mdebug[0m] [0mNode has problem.  Skip loading[0m
+[0m[[0mdebug[0m] [0mproblem : not found[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'test'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [test][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [runtime][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test[0m
+[0m[[0mdebug[0m] [0mtest is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [compile][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test[0m
+[0m[[0mdebug[0m] [0mtest is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=test[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->runtime][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=test[0m
+[0m[[0mdebug[0m] [0mtest is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->compile][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=test[0m
+[0m[[0mdebug[0m] [0mtest is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->master][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=test[0m
+[0m[[0mdebug[0m] [0mtest is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->com.typesafe.akka#akka-actor;2.0-M2 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of com.typesafe.akka#akka-actor;2.0-M2 of rootConf=test[0m
+[0m[[0mdebug[0m] [0mNode has problem.  Skip loading[0m
+[0m[[0mdebug[0m] [0mproblem : not found[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'provided'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [provided][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=provided[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'optional'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [optional][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=optional[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'compile-internal'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [compile-internal][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [compile][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0mcompile-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->runtime][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0mcompile-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->compile][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0mcompile-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->master][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0mcompile-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->com.typesafe.akka#akka-actor;2.0-M2 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of com.typesafe.akka#akka-actor;2.0-M2 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0mNode has problem.  Skip loading[0m
+[0m[[0mdebug[0m] [0mproblem : not found[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [optional][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0mcompile-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [provided][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=compile-internal[0m
+[0m[[0mdebug[0m] [0mcompile-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'runtime-internal'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [runtime-internal][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [runtime][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0mruntime-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [compile][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0mruntime-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->runtime][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0mruntime-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->compile][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0mruntime-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->master][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0mruntime-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->com.typesafe.akka#akka-actor;2.0-M2 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of com.typesafe.akka#akka-actor;2.0-M2 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0mNode has problem.  Skip loading[0m
+[0m[[0mdebug[0m] [0mproblem : not found[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [optional][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=runtime-internal[0m
+[0m[[0mdebug[0m] [0mruntime-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'test-internal'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [test-internal][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [test][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mtest-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [runtime][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mtest-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [compile][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mtest-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->runtime][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mtest-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->compile][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mtest-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->org.scala-lang#scala-library;2.9.1 [compile->master][0m
+[0m[[0mdebug[0m] [0mloadData of org.scala-lang#scala-library;2.9.1 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mtest-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies default#enmas_2.9.1;0.5->com.typesafe.akka#akka-actor;2.0-M2 [compile->default(compile)][0m
+[0m[[0mdebug[0m] [0mloadData of com.typesafe.akka#akka-actor;2.0-M2 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mNode has problem.  Skip loading[0m
+[0m[[0mdebug[0m] [0mproblem : not found[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [optional][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mtest-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [provided][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=test-internal[0m
+[0m[[0mdebug[0m] [0mtest-internal is loaded and no conf to load.  Skip loading[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'plugin'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [plugin][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=plugin[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'sources'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [sources][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=sources[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'docs'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [docs][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=docs[0m
+[0m[[0mdebug[0m] [0mresolving dependencies for configuration 'pom'[0m
+[0m[[0mdebug[0m] [0m== resolving dependencies for default#enmas_2.9.1;0.5 [pom][0m
+[0m[[0mdebug[0m] [0mloadData of default#enmas_2.9.1;0.5 of rootConf=pom[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 1[0m
+[0m[[0mdebug[0m] [0mSort dependencies of : org.scala-lang#scala-library;2.9.1 / Number of dependencies = 0[0m
+[0m[[0mdebug[0m] [0mSort done for : org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in test-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in test: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in compile: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in runtime: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in runtime-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in compile-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	resolved ivy file produced in /Users/connor/.ivy2/cache/resolved-default-enmas_2.9.1-0.5.xml[0m
+[0m[[0mdebug[0m] [0m:: downloading artifacts ::[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in test-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in test: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in compile: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in runtime: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in runtime-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in compile-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in test-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in test: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in compile: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in runtime: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in runtime-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0morg.scala-lang#scala-library;2.9.1 in compile-internal: excluding org.scala-lang#scala-library;2.9.1!scala-library.jar[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 614ms :: artifacts dl 5ms[0m
+[0m[[33mwarn[0m] [0m	::::::::::::::::::::::::::::::::::::::::::::::[0m
+[0m[[33mwarn[0m] [0m	::          UNRESOLVED DEPENDENCIES         ::[0m
+[0m[[33mwarn[0m] [0m	::::::::::::::::::::::::::::::::::::::::::::::[0m
+[0m[[33mwarn[0m] [0m	:: com.typesafe.akka#akka-actor;2.0-M2: not found[0m
+[0m[[33mwarn[0m] [0m	::::::::::::::::::::::::::::::::::::::::::::::[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 1[0m
+[0m[[0mdebug[0m] [0mSort dependencies of : org.scala-lang#scala-library;2.9.1 / Number of dependencies = 0[0m
+[0m[[0mdebug[0m] [0mSort done for : org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 compile produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-compile.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 1[0m
+[0m[[0mdebug[0m] [0mSort dependencies of : org.scala-lang#scala-library;2.9.1 / Number of dependencies = 0[0m
+[0m[[0mdebug[0m] [0mSort done for : org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 runtime produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-runtime.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 1[0m
+[0m[[0mdebug[0m] [0mSort dependencies of : org.scala-lang#scala-library;2.9.1 / Number of dependencies = 0[0m
+[0m[[0mdebug[0m] [0mSort done for : org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 test produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-test.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 0[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 provided produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-provided.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 0[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 optional produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-optional.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 1[0m
+[0m[[0mdebug[0m] [0mSort dependencies of : org.scala-lang#scala-library;2.9.1 / Number of dependencies = 0[0m
+[0m[[0mdebug[0m] [0mSort done for : org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 compile-internal produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-compile-internal.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 1[0m
+[0m[[0mdebug[0m] [0mSort dependencies of : org.scala-lang#scala-library;2.9.1 / Number of dependencies = 0[0m
+[0m[[0mdebug[0m] [0mSort done for : org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 runtime-internal produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-runtime-internal.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 1[0m
+[0m[[0mdebug[0m] [0mSort dependencies of : org.scala-lang#scala-library;2.9.1 / Number of dependencies = 0[0m
+[0m[[0mdebug[0m] [0mSort done for : org.scala-lang#scala-library;2.9.1[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 test-internal produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-test-internal.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 0[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 plugin produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-plugin.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 0[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 sources produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-sources.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 0[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 docs produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-docs.xml[0m
+[0m[[0mdebug[0m] [0mNbr of module to sort : 0[0m
+[0m[[0mdebug[0m] [0m	report for default#enmas_2.9.1;0.5 pom produced in /Users/connor/.ivy2/cache/default-enmas_2.9.1-pom.xml[0m
+[0m[[0mdebug[0m] [0m	resolve done (614ms resolve - 5ms download)[0m
+sbt.ResolveException: unresolved dependency: com.typesafe.akka#akka-actor;2.0-M2: not found
+	at sbt.IvyActions$.sbt$IvyActions$$resolve(IvyActions.scala:213)
+	at sbt.IvyActions$$anonfun$update$1.apply(IvyActions.scala:124)
+	at sbt.IvyActions$$anonfun$update$1.apply(IvyActions.scala:123)
+	at sbt.IvySbt$Module$$anonfun$withModule$1.apply(Ivy.scala:110)
+	at sbt.IvySbt$Module$$anonfun$withModule$1.apply(Ivy.scala:110)
+	at sbt.IvySbt$$anonfun$withIvy$1.apply(Ivy.scala:98)
+	at sbt.IvySbt.liftedTree1$1(Ivy.scala:47)
+	at sbt.IvySbt.action$1(Ivy.scala:47)
+	at sbt.IvySbt$$anon$3.call(Ivy.scala:56)
+	at xsbt.boot.Locks$GlobalLock.withChannel$1(Locks.scala:75)
+	at xsbt.boot.Locks$GlobalLock.withChannelRetries$1(Locks.scala:58)
+	at xsbt.boot.Locks$GlobalLock$$anonfun$withFileLock$1.apply(Locks.scala:79)
+	at xsbt.boot.Using$.withResource(Using.scala:11)
+	at xsbt.boot.Using$.apply(Using.scala:10)
+	at xsbt.boot.Locks$GlobalLock.liftedTree1$1(Locks.scala:51)
+	at xsbt.boot.Locks$GlobalLock.withLock(Locks.scala:51)
+	at xsbt.boot.Locks$.apply0(Locks.scala:30)
+	at xsbt.boot.Locks$.apply(Locks.scala:27)
+	at sbt.IvySbt.withDefaultLogger(Ivy.scala:56)
+	at sbt.IvySbt.withIvy(Ivy.scala:95)
+	at sbt.IvySbt.withIvy(Ivy.scala:91)
+	at sbt.IvySbt$Module.withModule(Ivy.scala:110)
+	at sbt.IvyActions$.update(IvyActions.scala:123)
+	at sbt.Classpaths$$anonfun$work$1$1.apply(Defaults.scala:816)
+	at sbt.Classpaths$$anonfun$work$1$1.apply(Defaults.scala:814)
+	at sbt.Classpaths$$anonfun$44$$anonfun$45.apply(Defaults.scala:830)
+	at sbt.Classpaths$$anonfun$44$$anonfun$45.apply(Defaults.scala:828)
+	at sbt.Tracked$$anonfun$lastOutput$1.apply(Tracked.scala:35)
+	at sbt.Classpaths$$anonfun$44.apply(Defaults.scala:832)
+	at sbt.Classpaths$$anonfun$44.apply(Defaults.scala:827)
+	at sbt.Tracked$$anonfun$inputChanged$1.apply(Tracked.scala:45)
+	at sbt.Classpaths$.cachedUpdate(Defaults.scala:834)
+	at sbt.Classpaths$$anonfun$36.apply(Defaults.scala:734)
+	at sbt.Classpaths$$anonfun$36.apply(Defaults.scala:732)
+	at sbt.Scoped$$anonfun$hf7$1.apply(Structure.scala:478)
+	at sbt.Scoped$$anonfun$hf7$1.apply(Structure.scala:478)
+	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:41)
+	at sbt.Scoped$Reduced$$anonfun$combine$1$$anonfun$apply$11.apply(Structure.scala:295)
+	at sbt.Scoped$Reduced$$anonfun$combine$1$$anonfun$apply$11.apply(Structure.scala:295)
+	at sbt.$tilde$greater$$anonfun$$u2219$1.apply(TypeFunctions.scala:40)
+	at sbt.std.Transform$$anon$5.work(System.scala:67)
+	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:221)
+	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:221)
+	at sbt.ErrorHandling$.wideConvert(ErrorHandling.scala:18)
+	at sbt.Execute.work(Execute.scala:227)
+	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:221)
+	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:221)
+	at sbt.CompletionService$$anon$1$$anon$2.call(CompletionService.scala:26)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:441)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+	at java.lang.Thread.run(Thread.java:680)
+[0m[[31merror[0m] [0m{file:/Users/connor/projects/uwl/mse/EnMAS/code/}default-91e456/*:[31mupdate[0m: sbt.ResolveException: unresolved dependency: com.typesafe.akka#akka-actor;2.0-M2: not found[0m

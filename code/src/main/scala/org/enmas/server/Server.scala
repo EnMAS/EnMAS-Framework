@@ -19,7 +19,10 @@ class Server(pomdp: POMDP) extends Actor {
     * unique id for this host.
     */
   private def registerHost(ref: ActorRef): Message = {
-    val id = sessions.size + 1
+
+    def nextSessionId = sessions.foldLeft(0){ _ max _.id } + 1
+
+    val id = nextSessionId
     context watch ref
     sessions += SessionSpec(id, ref)
     ConfirmHostRegistration(id)
@@ -30,7 +33,10 @@ class Server(pomdp: POMDP) extends Actor {
     * Agent, and with a DenyAgentRegistration message otherwise.
     */
   private def registerAgent(sessionID: Int, agentType: AgentType): Message = {
-    val a = AgentSpec(sessionID, agents.size+1, agentType)
+
+    def nextAgentId = agents.foldLeft(0){ _ max _.agentNumber } + 1
+
+    val a = AgentSpec(sessionID, nextAgentId, agentType)
     var newAgentSet = agents + a
     if (pomdp accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
       agents = newAgentSet
@@ -154,11 +160,16 @@ class Server(pomdp: POMDP) extends Actor {
       agents = agents filterNot { _.agentNumber == id }
       sessions filterNot { _.ref == sender } map { _.ref ! AgentDied(id) }
     }
-    
+
     case Terminated(deceasedActor)  ⇒ {
       sessions.find(_.ref == deceasedActor) match { case Some(dead)  ⇒ {
-          println("A session died! Darn the luck...")
+          sessions find { _ == dead } match {
+            case Some(deadSession)  ⇒ 
+              agents = agents filterNot { _.sessionID == deadSession.id }
+            case None  ⇒ ()
+          }
           sessions = sessions filterNot { _ == dead }
+          println("A session died! "+sessions.size+" sessions active.")
         }
         case None  ⇒ ()
       }

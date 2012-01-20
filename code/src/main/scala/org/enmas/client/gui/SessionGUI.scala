@@ -3,22 +3,30 @@ package org.enmas.client.gui
 import org.enmas.client.ClientManager, org.enmas.messaging._,
        org.enmas.client.Agent, org.enmas.server.ServerSpec,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
-       javax.swing.table._,
        akka.actor._, akka.dispatch._, akka.util.duration._,
-       java.net.InetAddress, java.io._
+       java.io._
 
-class ClientGUI(clientManager: ActorRef) extends MainFrame {
+class SessionGUI(session: ActorRef) extends Frame {
   import ClientManager._
 
-  title = "EnMAS: Client Manager"
+  title = "EnMAS: Session Manager"
   contents = ui
   minimumSize = new Dimension(700, 800)
-  centerOnScreen
   visible = true
+
+  override def closeOperation = session ! Kill
+
+  lazy val ui = {
+    new BorderPanel {
+      layout(new TabbedPane {
+        pages ++= List(agentsTab, graphicsTab, loggersTab)
+      }) = Center
+    }
+  }
 
   object StatusBar extends Label {
     opaque = true
-    disconnected
+    connected
     def disconnected = {
       text = "Server Status: Not Connected"
       background = new Color(255, 239, 0)
@@ -28,50 +36,6 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
       background = new Color(32, 255, 32)
     }
   }
-
-  lazy val ui = {
-    new BorderPanel {
-      layout(new TabbedPane {
-        pages ++= List(connectionTab, agentsTab, graphicsTab, loggersTab)
-      }) = Center
-      layout(StatusBar) = South
-    }
-  }
-
-  lazy val connectionTab = new TabbedPane.Page("Connection", new BorderPanel {
-    val serverHostField = new TextField(InetAddress.getLocalHost.getHostAddress, 16)
-    layout(new FlowPanel(new Label("Server Host: "), serverHostField)) = North
-    val serverListView = new ListView[ServerSpec] {
-      selection.intervalMode = ListView.IntervalMode.Single
-    }
-    listenTo(serverListView.selection)
-    layout(new ScrollPane(serverListView)) = Center
-
-    val connectButton = new Button { action = Action("Connect to Selected") {
-      serverListView.selection.items.headOption match {
-        case Some(server: ServerSpec)  ⇒ {
-          (clientManager ? CreateSession(server.ref)).onSuccess {
-            case true  ⇒ StatusBar.connected
-        }}
-        case None  ⇒ println("Connection to server failed!")
-      }
-    }}
-    connectButton.enabled = false
-
-    val scanButton = new Button { action = Action("Scan Host") {
-      (clientManager ? ScanHost(serverHostField.text.trim)).onSuccess {
-        case result: ScanResult  ⇒ {
-          println("\ngot "+result.servers.length+" replies\n")
-          serverListView.listData = result.servers
-        }
-      }
-    }}
-    layout(new FlowPanel(connectButton, scanButton)) = South
-
-    reactions += { case event: ListSelectionChanged[_]  ⇒ {
-      connectButton.enabled = true
-    }}
-  })
 
   lazy val agentsTab = new TabbedPane.Page("Agent Clients", new BorderPanel {
     val jarChooser = new FileChooser {
@@ -105,7 +69,7 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
       classListView.selection.items.headOption match {
         case Some(clazz)  ⇒ {
           val agentType = Symbol(agentTypeField.text)
-          (clientManager ? LaunchAgent(agentType, clazz)) onSuccess {
+          (session ? LaunchAgent(agentType, clazz)) onSuccess {
             case true  ⇒ println("Launched agent of type "+agentType)
             case _  ⇒ println("Launch agent of type"+agentType+" failed!")
           } onFailure { case _  ⇒ println("Launch failed for an unknown reason!") }
@@ -119,23 +83,17 @@ class ClientGUI(clientManager: ActorRef) extends MainFrame {
     }}
     layout(chooseJarButton) = North
     layout(classListView) = Center
-    layout(new FlowPanel(
-      new Label("Agent Type"),
-      agentTypeField,
-      launchButton)
-    ) = South
+    layout(new BorderPanel {
+      layout(new FlowPanel(
+        new Label("Agent Type"),
+        agentTypeField,
+        launchButton
+      )) = Center
+      layout(StatusBar) = South
+    }) = South
   })
 
   lazy val graphicsTab = new TabbedPane.Page("Graphics Clients", new BorderPanel {})
   lazy val loggersTab = new TabbedPane.Page("Logger Clients", new BorderPanel {})
-
-  // these methods are called by the client manager
-  def update(iteration: POMDPIteration) {}
-  def loadPlugin(plugin: GraphicsPlugin) {}
-  def unloadPlugin(plugin: GraphicsPlugin) {}
-
-  // these methods are called by plugins
-  def getPane() {}
-  def getFrame(width: Int, height: Int) {}
-  def getJFrame(width: Int, height: Int) {}
+  
 }

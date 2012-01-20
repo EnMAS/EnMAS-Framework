@@ -11,6 +11,7 @@ class Session(server: ActorRef) extends Actor {
 
   private var uniqueID = -1
   private var agents = Map[Int, (AgentType, ActorRef)]()
+  private val gui = new SessionGUI(self)
 
   /** Returns true iff registering this clientManager session
     * with the specified server succeeds.
@@ -81,7 +82,7 @@ class Session(server: ActorRef) extends Actor {
     }
 
     case Terminated(deceasedActor)  ⇒ {
-      if (deceasedActor == `server`) {
+      if (deceasedActor == server) {
         println("The server died! Shutting down the session...")
         agents map { a  ⇒ { unwatch(a._2._2); stop(a._2._2) }}
         stop(self)
@@ -91,7 +92,7 @@ class Session(server: ActorRef) extends Actor {
           server ! AgentDied(deadAgent._1)
           agents = agents filterNot { _ == deadAgent }
         }
-        case None  ⇒ ()
+        case None  ⇒ println("Something died but I couldn't figure out what it was!")
       }}
     }
 
