@@ -1,0 +1,23 @@
+[0m[[0minfo[0m] [0mRunning org.enmas.server.ServerManager [0m
+[0m[[0mdebug[0m] [0mStarting sandboxed run...[0m
+[0m[[0mdebug[0m] [0mWaiting for threads to exit or System.exit to be called.[0m
+[0m[[0mdebug[0m] [0m  Classpath:[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/target/scala-2.9.1/classes[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/akka-actor-2.0-M2.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/akka-remote-2.0-M2.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/commons-io-2.0.1.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/netty-3.2.6.Final.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/protobuf-java-2.4.1.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/scala-compiler.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/scala-swing.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/scalap.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/config[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/.sbt/boot/scala-2.9.1/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0mWaiting for thread run-main to exit[0m
+[0m[[0mdebug[0m] [0m	Thread run-main exited.[0m
+[0m[[0mdebug[0m] [0mWaiting for thread default-dispatcher15 to exit[0m
+[0m[[0mdebug[0m] [0m	Thread default-dispatcher15 exited.[0m
+[0m[[0mdebug[0m] [0mWaiting for thread default-dispatcher6 to exit[0m
+[0m[[0mdebug[0m] [0m	Thread default-dispatcher6 exited.[0m
+[0m[[0mdebug[0m] [0mWaiting for thread DefaultScheduler1 to exit[0m
