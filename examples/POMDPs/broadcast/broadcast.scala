@@ -20,7 +20,7 @@ wrong state of the buffer.
 """,
 
   // accomodates exactly 2 agents of type 'RelayAgent
-  agentConstraints = List(AgentConstraint('A1, 2, 2)),
+  agentConstraints = List(AgentConstraint('RelayAgent, 2, 2)),
 
   // state consists of two (Int, Boolean) mappings, representing
   // the internal buffers of agent 1 and agent 2
