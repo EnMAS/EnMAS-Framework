@@ -1,1 +1,2 @@
-**/*.class
+# Ignore the build directory #
+build/
