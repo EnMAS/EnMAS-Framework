@@ -3,21 +3,23 @@
 [0m[[0mdebug[0m] [0mWaiting for threads to exit or System.exit to be called.[0m
 [0m[[0mdebug[0m] [0m  Classpath:[0m
 [0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/target/scala-2.9.1/classes[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/akka-actor-2.0-M2.jar[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/akka-remote-2.0-M2.jar[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/commons-io-2.0.1.jar[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/netty-3.2.6.Final.jar[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/protobuf-java-2.4.1.jar[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/scala-compiler.jar[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/scala-library.jar[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/scala-swing.jar[0m
-[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib/scalap.jar[0m
 [0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/config[0m
 [0m[[0mdebug[0m] [0m	/Users/connor/.sbt/boot/scala-2.9.1/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/com.typesafe.akka/akka-actor/akka-actor-2.0-M3.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/com.typesafe.akka/akka-remote/akka-remote-2.0-M3.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/bundles/io.netty/netty/netty-3.3.0.Final.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/com.google.protobuf/protobuf-java/protobuf-java-2.4.1.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/net.debasishg/sjson_2.9.1/sjson_2.9.1-0.15.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/net.databinder/dispatch-json_2.9.1/dispatch-json_2.9.1-0.8.5.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/org.apache.httpcomponents/httpclient/httpclient-4.1.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/org.apache.httpcomponents/httpcore/httpcore-4.1.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/commons-logging/commons-logging/commons-logging-1.1.1.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/commons-codec/commons-codec/commons-codec-1.4.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/org.objenesis/objenesis/objenesis-1.2.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/commons-io/commons-io/commons-io-1.4.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/voldemort.store.compress/h2-lzf/h2-lzf-1.0.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/mse/EnMAS/project/lib_managed/jars/org.scala-lang/scala-swing/scala-swing-2.9.1.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/.sbt/boot/scala-2.9.1/lib/scala-compiler.jar[0m
 [0m[[0mdebug[0m] [0mWaiting for thread run-main to exit[0m
 [0m[[0mdebug[0m] [0m	Thread run-main exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread default-dispatcher15 to exit[0m
-[0m[[0mdebug[0m] [0m	Thread default-dispatcher15 exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread default-dispatcher6 to exit[0m
-[0m[[0mdebug[0m] [0m	Thread default-dispatcher6 exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread DefaultScheduler1 to exit[0m
+[0m[[0mdebug[0m] [0mWaiting for thread enmasServer-akka.actor.default-dispatcher11 to exit[0m

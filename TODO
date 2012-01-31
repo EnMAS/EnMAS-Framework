@@ -1,4 +1,3 @@
-_ clean architectural diagram to Marty
 _ class loading for POMDP models
 _ refactor GUI to match Session
 _ handle Terminated(server) in Session
@@ -9,6 +8,9 @@ _ allow clientManagers to subscribe to POMDPIteration messages from the Server
 	- just send the POMDPIteration as is -- case class makes a fine message already
 	- handle POMDPIteration messages in ClientManager
 		- i.e. forward to Logger and GUI clients
+_ combine interfaces for GUI & logging
+  - really the same thing!
+  - code up a single tab in the session GUI to launch 'em
 _ custom logging
 	- allow definition of logging clients (extends Client) attached to session
 		- causes session to subscribe to POMDPIteration messages, forwarded

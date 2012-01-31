@@ -1,6 +1,6 @@
 package org.enmas.server
 
-import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.ServerSpec,
+import org.enmas.pomdp._, org.enmas.messaging._,
        akka.actor._, akka.actor.Actor._,
        com.typesafe.config.ConfigFactory
 

@@ -83,14 +83,14 @@ class Bundler extends MainFrame {
       }
       else {
         results.text += "completed without errors.\n\n"
-        try { 
+        try {
           makeJar(sourceDir)
           StatusBar.success
           results.text += "\nDone!"
         }
         catch { case t: Throwable  ⇒ 
           StatusBar.failure
-          results.text += "\n" + t.getStackTrace.toString
+          results.text += "\n%s:\n%s".format(t.getClass.getName, t.getMessage)
         }
       }
     }
@@ -107,7 +107,7 @@ class Bundler extends MainFrame {
       val classFiles = sourceDir.listFiles.toList.filter(_.toString.endsWith(".class"))
       results.text += classFiles.length + " class files found\n"
       for (f <- classFiles) {
-        val className = f.getPath.replace("\\", "/").slice(f.getPath.lastIndexOf("/")+1, f.getPath.length)
+        val className = f.getPath.replace("\\", "/").substring(f.getPath.lastIndexOf("/")+1, f.getPath.length)
         results.text += "Bundling class file: " + className + "\n"
         jar putNextEntry { new JarEntry(className) }
         val fin = new FileInputStream(f)

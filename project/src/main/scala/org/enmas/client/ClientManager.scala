@@ -1,9 +1,9 @@
 package org.enmas.client
 
 import org.enmas.pomdp._, org.enmas.messaging._,
-       org.enmas.util.ServerSpec, org.enmas.client.gui._,
+       org.enmas.client.gui._,
        scala.collection.immutable._,
-       akka.actor._, akka.actor.Actor._, akka.dispatch._,
+       akka.actor._, akka.actor.Actor._, akka.dispatch._, akka.pattern.ask,
        akka.util.Timeout, akka.util.duration._,
        com.typesafe.config.ConfigFactory
 
@@ -24,7 +24,6 @@ class ClientManager extends Actor {
   }
 
   private def createServer(address: String, pomdp: POMDP) {
-    println("ClientManager.createServer")
     val host = actorFor(
       "akka://enmasServer@"+address+":"+serverPort+"/user/serverManager"
     )
@@ -76,7 +75,6 @@ object ClientManager extends App {
   sealed case class ScanHost(serverHost: String)
   sealed case class CreateSession(server: ServerSpec)
   sealed case class CreateServer(serverHost: String, pomdp: POMDP)
-  sealed case class LaunchAgent(agentType: AgentType, clazz: java.lang.Class[_ <: Agent])
 
   val system = ActorSystem("enmasClient", ConfigFactory.load.getConfig("enmasClient"))
 

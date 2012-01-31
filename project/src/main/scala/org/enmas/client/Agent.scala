@@ -60,6 +60,8 @@ abstract class Agent() extends Client {
     }
   }
 
+  def name() : String
+
   def handleUpdate(observation: Observation, reward: Float): Action
 
   def handleError(error: Throwable): Unit

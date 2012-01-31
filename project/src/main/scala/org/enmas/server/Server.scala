@@ -1,7 +1,7 @@
 package org.enmas.server
 
 import org.enmas.pomdp._, org.enmas.messaging._, 
-       org.enmas.util.EncryptionUtils._, org.enmas.util.ServerSpec,      
+       org.enmas.util.EncryptionUtils._,     
        akka.actor._, akka.actor.Actor._,
        scala.util._, scala.collection.immutable._
 
@@ -99,7 +99,8 @@ class Server(pomdp: POMDP) extends Actor {
       pendingActions = pendingActions take 0 // clears pending actions
       dispatchMessages // sends bundled agent updates
       val iteration = POMDPIteration(iterationOrdinality, observations, rewards, actions, state)
-      // TODO: send iteration to POMDPIteration subscribers
+      // send iteration to POMDPIteration subscribers
+      iterationSubscribers map { _.ref ! iteration }
       iterationOrdinality += 1;
       statePrime
     }
@@ -158,9 +159,20 @@ class Server(pomdp: POMDP) extends Actor {
 
     case TakeAction(agentNumber, action)  ⇒ takeAction(agentNumber, action)
 
+    case Subscribe  ⇒ sessions.find(_.ref == sender) match {
+      case Some(subscriber)  ⇒ iterationSubscribers += subscriber
+      case None  ⇒ ()
+    }
+
+    case Unsubscribe  ⇒ {
+      iterationSubscribers = iterationSubscribers filterNot { _.ref == sender }
+    }
+
     case AgentDied(id)  ⇒ {
       agents = agents filterNot { _.agentNumber == id }
+      pendingActions = pendingActions filterNot { _.agentNumber == id }
       sessions filterNot { _.ref == sender } map { _.ref ! AgentDied(id) }
+      println("Received notice of an agent's death!  I have [%s] agent(s) left" format agents.size)
     }
 
     case Terminated(deceasedActor)  ⇒ {
@@ -171,6 +183,7 @@ class Server(pomdp: POMDP) extends Actor {
             case None  ⇒ ()
           }
           sessions = sessions filterNot { _ == dead }
+          iterationSubscribers = iterationSubscribers filterNot { _ == dead }
           println("A session died! "+sessions.size+" sessions active.")
         }
         case None  ⇒ ()

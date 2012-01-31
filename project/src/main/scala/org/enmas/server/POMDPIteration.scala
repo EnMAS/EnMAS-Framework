@@ -1,6 +1,6 @@
 package org.enmas.server
 
-import org.enmas.pomdp._
+import org.enmas.pomdp._, org.enmas.messaging.AgentSpec
 
 /** Represents one iteration of a POMDP.
   *

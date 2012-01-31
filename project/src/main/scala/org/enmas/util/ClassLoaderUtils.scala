@@ -23,6 +23,24 @@ object ClassLoaderUtils {
     subclasses
   }
 
+  def findClasses[T](file: File)(implicit m: scala.reflect.Manifest[T]) = {
+    val jarFile = new JarFile(file)
+    val jarEntries = jarFile.entries
+    var classes = List[java.lang.Class[T]]()
+    while (jarEntries.hasMoreElements) {
+      val entry = jarEntries.nextElement
+      if (entry.getName.endsWith(".class")) {
+        val name = entry.getName.replace(".class", "")
+        try {
+          val clazz = getClass(file, name)
+          classes :+= clazz.asInstanceOf[java.lang.Class[T]]
+        }
+        catch { case _  ⇒ () }
+      }
+    }
+    classes
+  }
+
   private def getClass(file: File, name: String): java.lang.Class[_] = {
     addURL(file.toURI.toURL)
     getClass().getClassLoader.asInstanceOf[URLClassLoader].loadClass(name)

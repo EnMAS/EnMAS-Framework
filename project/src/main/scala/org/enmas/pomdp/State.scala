@@ -56,19 +56,19 @@ class State(
   /** == Java API Method == */
   def getBoolean(key: String): Boolean = getAs(key, true)
   /** == Java API Method == */
-  def getDouble(key: String): Option[Double] = getAs[Double](key)
+  def getDouble(key: String): Double = getAs(key, 0d)
   /** == Java API Method == */
-  def getFloat(key: String): Option[Float] = getAs[Float](key)
+  def getFloat(key: String): Float = getAs(key, 0f)
   /** == Java API Method == */
-  def getInt(key: String): Option[Int] = getAs[Int](key)
+  def getInt(key: String): Int = getAs(key, 0)
   /** == Java API Method == */
-  def getLong(key: String): Option[Long] = getAs[Long](key)
-  /** == Java API Method == */
-  def getNumber(key: String): Option[Number] = getAs[Number](key)
+  def getLong(key: String): Long = getAs(key, 0l)
 }
 
 object State {
-  def apply() = new State
+  def apply(): State = new State
+  def apply[T <: Any](mapping: (String, T))(implicit manifest: Manifest[T]): State = 
+    State().+(mapping)(manifest)
   private def apply(map: HashMap[String, (Manifest[_], Any)]) = new State(map)
   def empty = State()
 }

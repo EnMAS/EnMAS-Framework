@@ -1,10 +1,8 @@
 package org.enmas.messaging
 
 import org.enmas.pomdp._,
-       org.enmas.util.ServerSpec,
        org.enmas.server._,
        org.enmas.client._,
-       java.security._, java.security.interfaces._,
        akka.actor._
 
 /** Wraps a series of Messages destined for agents 
@@ -19,6 +17,38 @@ sealed trait Message
 
 sealed trait AgentMessage extends Message { val agentNumber: Int }
 
+/** Represents a reference to a remote Agent from the point
+  * of view of a Server.
+  */
+case class AgentSpec(
+  sessionID: Int,
+  agentNumber: Int,
+  agentType: AgentType
+) {
+  final override def toString() =
+    "Number: [%s], Type: [%s]".format(agentNumber, agentType)
+}
+
+/** Represents a reference to a Server from the point of
+  * view of a ServerManager or ClientManager
+  */
+case class ServerSpec(
+  ref: ActorRef,
+  pomdp: POMDP
+) {
+  final override def toString() = pomdp.name
+}
+
+/** Represents a reference to a Session from the point
+ * of view of a Server.
+ */
+case class SessionSpec(
+  val id: Int,
+  val ref: ActorRef
+)
+
+/** Sent from a ClientManager to a ServerManager
+  */
 case class CreateServerFor(pomdp: POMDP)
 
 /** Sent from a ClientManger to a Server
@@ -51,25 +81,36 @@ case class RegisterAgent(
   agentType: AgentType
 ) extends Message
 
-/** Sent from a Server to a ClientManager session
+/** Sent from a Server to a Session
   */
 case class ConfirmAgentRegistration(
   agentNumber: Int,
   agentType: AgentType,
   actions: Set[Action]
-) extends AgentMessage
+) extends AgentMessage {
+  final override def toString() = "Number: [%s], Type: [%s]".format(agentNumber, agentType)
+}
 
-/** Sent from a Server to a ClientManager session
+/** Used within Session
+  */
+case class ConfirmClientRegistration(
+  clientNumber: Int,
+  clientType: String
+) {
+  final override def toString() = "Number: [%s], Type: [%s]".format(clientNumber, clientType)
+}
+
+/** Sent from a Server to a Session
   */
 case object DenyAgentRegistration extends Message
 
-/** Sent from an Agent to a ClientManager session, then
-  * forwarded from that ClientManager session to a Server
+/** Sent from an Agent to a Session, then
+  * forwarded from that Session to a Server
   */
 case class TakeAction(agentNumber: Int, action: Action ) extends Message
 
-/** Sent from a Server to a ClientManager session, then
-  * forwarded from that ClientManager session to an Agent
+/** Sent from a Server to a Session, then
+  * forwarded from that Session to an Agent
   */
 case class UpdateAgent(
   agentNumber: Int,
@@ -77,9 +118,17 @@ case class UpdateAgent(
   reward: Float
 ) extends AgentMessage
 
-/** Sent from a ClientManager session to a Server
+/** Sent from a Session to a Server
 */
 case class AgentDied(id: Int)
+
+/** For lightweight subscription / publisher support
+  */
+case object Subscribe
+
+/** For lightweight subscription / publisher support
+  */
+case object Unsubscribe
 
 sealed trait Error extends Message { val cause: Throwable }
 case class ClientError(cause: Throwable) extends Error
