@@ -1,7 +1,7 @@
 package org.enmas.server
 
 import org.enmas.pomdp._, org.enmas.messaging._, 
-       org.enmas.util.EncryptionUtils._,     
+       org.enmas.util.EncryptionUtils._, org.enmas.util.FileUtils._,
        akka.actor._, akka.actor.Actor._,
        scala.util._, scala.collection.immutable._
 
@@ -151,6 +151,7 @@ class Server(pomdp: POMDP) extends Actor {
     * the appropriate handler method.
     */
   def receive = {
+
     case reg: RegisterHost  ⇒ sender ! registerHost(reg.ref)
 
     case reg: RegisterAgent  ⇒ getSession(reg.sessionID) map {

@@ -3,6 +3,7 @@ package org.enmas.messaging
 import org.enmas.pomdp._,
        org.enmas.server._,
        org.enmas.client._,
+       org.enmas.util.FileUtils._,
        akka.actor._
 
 /** Wraps a series of Messages destined for agents 
@@ -34,9 +35,11 @@ case class AgentSpec(
   */
 case class ServerSpec(
   ref: ActorRef,
-  pomdp: POMDP
+  pomdpClassName: String,
+  pomdpName: String,
+  pomdpDescription: String
 ) {
-  final override def toString() = pomdp.name
+  final override def toString() = pomdpName
 }
 
 /** Represents a reference to a Session from the point
@@ -49,7 +52,15 @@ case class SessionSpec(
 
 /** Sent from a ClientManager to a ServerManager
   */
-case class CreateServerFor(pomdp: POMDP)
+case object RequestProvisions
+
+/** Sent from a ClientManager to a ServerManager
+  */
+case class Provision(fileData: FileData)
+
+/** Sent from a ClientManager to a ServerManager
+  */
+case class CreateServerFor(className: String)
 
 /** Sent from a ClientManger to a Server
   */

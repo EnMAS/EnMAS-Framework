@@ -34,37 +34,11 @@ abstract class Agent() extends Client {
     */
   final def repliesTo(chan: ActorRef): Agent = { replyChannel = chan; this }
 
-  /** Defines this agent's behavior.  This abstract method is the only one
-    * that user code must implement.  To make sense, the policy should handle
-    * UpdateAgent messages and call takeAction like so:
-    *
-    * {{{
-    * def policy = { case UpdateAgent(_, observation, reward)  ⇒ {
-    *   // learn, decide
-    *   takeAction(decision)
-    * }}
-    * }}}
-    */
-  def policy: PartialFunction[Any, Unit] = {
-    case t: Throwable  ⇒ handleError(t)
-    case UpdateAgent(_, observation, reward)  ⇒ {
-      try {
-        takeAction(handleUpdate(observation, reward))
-      }
-      catch {
-        case t: Throwable  ⇒ {
-          self ! t
-          replyChannel ! ClientError(t)
-        }
-      }
-    }
-  }
+  def name: String
 
-  def name() : String
+  def policy(observation: Observation, reward: Float): Action
 
-  def handleUpdate(observation: Observation, reward: Float): Action
-
-  def handleError(error: Throwable): Unit
+  def handleError(error: Throwable): Unit = {}
 
   /** Initially defaultMessageHandler.
     */
@@ -79,7 +53,12 @@ abstract class Agent() extends Client {
       aNumber = n
       aType = t
       actionSet = a
-      context.become {policy orElse { case _  ⇒ () }}  // partial function chaining ftw...
+      context.become {
+        case t: Throwable  ⇒ handleError(t)
+        case UpdateAgent(_, observation, reward)  ⇒
+          takeAction(policy(observation, reward))
+        case _  ⇒ ()
+      }
     }
   }
 

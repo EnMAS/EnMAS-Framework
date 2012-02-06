@@ -1,13 +1,10 @@
 package org.enmas.client.gui
 
 import org.enmas.pomdp._, org.enmas.client.ClientManager, org.enmas.messaging._,
-       org.enmas.client.Agent, org.enmas.util.ClassLoaderUtils._,
+       org.enmas.client.Agent, org.enmas.util.voodoo.ClassLoaderUtils._,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
        akka.actor._, akka.dispatch._, akka.util.duration._, akka.pattern.ask,
        java.net.InetAddress
-
-       // for testing only:
-       import org.enmas.examples.Simple._
 
 class ClientGUI(application: ActorRef) extends MainFrame {
   import ClientManager._, Modal._
@@ -17,6 +14,12 @@ class ClientGUI(application: ActorRef) extends MainFrame {
   minimumSize = new Dimension(600, 550)
   centerOnScreen
   visible = true
+
+  def updateServerList(reply: DiscoveryReply) {
+    if (reply.servers.isEmpty)
+      popup("Scan Result", "The host is up but has no active servers.")
+    else  ui.rightPanel.serverListView.listData = reply.servers
+  }
 
   private val jarChooser = new FileChooser {
     title = "Choose JAR file"
@@ -40,26 +43,29 @@ class ClientGUI(application: ActorRef) extends MainFrame {
       val chooseJarButton = new Button { action = Action("Choose JAR file") {
         val result = jarChooser.showDialog(this, "Choose JAR file")
         if (result == FileChooser.Result.Approve && jarChooser.selectedFile.exists) {         
-//        pomdpListView.listData = findClasses[POMDP](jarChooser.selectedFile) filterNot {
-//          _.getName.contains("$") } map { clazz  ⇒ clazz.newInstance }
-          
-          // TODO: populate POMDP list from JAR, do code provisioning
-          println("TODO: populate POMDP list from JAR, do code provisioning")
-
+          pomdpListView.listData = findClasses[POMDP](jarChooser.selectedFile) filterNot {
+            _.getName.contains("$") } map { clazz  ⇒ clazz.newInstance }
         }
       }}
 
       val pomdpListView = new ListView[POMDP] {
         selection.intervalMode = ListView.IntervalMode.Single
       }
-      pomdpListView.listData = Seq(simpleModel)
 
       listenTo(pomdpListView.selection)
       val pomdpDetails = new TextArea { editable = false; lineWrap = true; wordWrap = true; }
       val launchServerButton = new Button { action = Action("Request new server with selected") {
         pomdpListView.selection.items.headOption match {
           case Some(pomdp: POMDP)  ⇒ {
-            application ! CreateServer(rightPanel.serverHostField.text, pomdp)
+            import org.enmas.util.FileUtils._
+            readFile(jarChooser.selectedFile) match {
+              case Some(fileData)  ⇒
+                application ! CreateServer(rightPanel.serverHostField.text, pomdp, fileData)
+              case None  ⇒ popup(
+                "Server Launch Error",
+                "There was a problem reading the JAR file."
+              )
+            }
             rightPanel.scanButton.doClick
           }
           case None  ⇒ popup("Server Launch Error", "No POMDP selected!")
@@ -101,14 +107,7 @@ class ClientGUI(application: ActorRef) extends MainFrame {
         serverListView.listData = List[ServerSpec]()
         serverDetails.text = ""
         connectButton.enabled = false
-        (application ? ScanHost(serverHostField.text.trim)).onSuccess {
-          case result: DiscoveryReply  ⇒ {
-            if (result.servers.isEmpty)
-              popup("Scan Result", "The host is up but has no active servers.")
-            else  serverListView.listData = result.servers
-          }
-          case t: Throwable  ⇒ popup("Connection Error", "Unable to reach the specified host.")
-        } onFailure { case _  ⇒ popup("Connection Error", "Unable to reach the specified host.") }
+        application ! ScanHost(serverHostField.text.trim)
       }}
 
       val serverListView = new ListView[ServerSpec] {
@@ -130,7 +129,7 @@ class ClientGUI(application: ActorRef) extends MainFrame {
       reactions += { case event: ListSelectionChanged[_]  ⇒ {
         serverListView.selection.items.headOption match {
           case Some(server: ServerSpec)  ⇒ {
-            serverDetails.text = server.pomdp.description.replaceAll("\\r|\\n", " ").trim
+            serverDetails.text = server.pomdpDescription.replaceAll("\\r|\\n", " ").trim
             serverDetails.caret.position = 0
           }
           case None  ⇒ ()

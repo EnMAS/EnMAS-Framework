@@ -13,11 +13,11 @@ import java.util.NoSuchElementException;
   */
 class JavaBroadcastAgent extends Agent {
 
+	Random random = new Random();
+
     public String name() { return "Javandre Broadcasterson"; }
 
-	public void handleError(Throwable error) {}
-
-	public Symbol handleUpdate(State observation, float reward) {
+	public Symbol policy(State observation, float reward) {
 	    System.out.println("I am agent "+agentNumber()+"\nI think my queue is ");
 		try {
 			Boolean observedMessage = observation.getBoolean("queue");
@@ -30,7 +30,7 @@ class JavaBroadcastAgent extends Agent {
 	    System.out.println("I received "+reward+" as a reward\n");
 
 		Symbol decision = NO_ACTION();
-		int rand = (new Random()).nextInt(10);
+		int rand = random.nextInt(10);
 		if (agentNumber() == 1) {
 			if (rand < 1) decision = new Symbol("wait");
 			else decision = new Symbol("send");

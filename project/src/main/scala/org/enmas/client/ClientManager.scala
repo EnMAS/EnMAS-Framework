@@ -1,53 +1,65 @@
 package org.enmas.client
 
-import org.enmas.pomdp._, org.enmas.messaging._,
-       org.enmas.client.gui._,
+import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.client.gui._,
+       org.enmas.util.FileUtils._, org.enmas.util.voodoo.ClassLoaderUtils._,
        scala.collection.immutable._,
        akka.actor._, akka.actor.Actor._, akka.dispatch._, akka.pattern.ask,
        akka.util.Timeout, akka.util.duration._,
        com.typesafe.config.ConfigFactory
 
-class ClientManager extends Actor {
+class ClientManager extends Actor with Provisionable {
   import ClientManager._, context._
 
   private var sessions = List[ActorRef]()
+  private var POMDPs = Set[POMDP]()
 
   private def scanHost(address: String) {
     val host = actorFor(
       "akka://enmasServer@"+address+":"+serverPort+"/user/serverManager"
     )
-    try { Await.result(host ? Discovery, timeout.duration) match {
-      case reply: DiscoveryReply  ⇒ sender ! reply
-      case _  ⇒ sender ! new Exception("Bogus reply from remote host.")
-    }}
-    catch { case t: Throwable  ⇒ sender ! t }
+    host ! RequestProvisions
+    (host ? Discovery) onSuccess {
+      case reply: DiscoveryReply  ⇒ gui updateServerList reply
+    }
   }
 
-  private def createServer(address: String, pomdp: POMDP) {
+  private def createServer(address: String, pomdp: POMDP, fileData: FileData) {
     val host = actorFor(
       "akka://enmasServer@"+address+":"+serverPort+"/user/serverManager"
     )
-    host ! CreateServerFor(pomdp)
+    host ! Provision(fileData)
+    host ! CreateServerFor(pomdp.getClass.getName)
   }
 
   private def createSession(server: ServerSpec): Boolean = {
     var result = false
-    val session = actorOf(Props(new Session(server)))
-    try { Await.result(session ? 'Init, timeout.duration) match {
-      case b: Boolean  ⇒ result = b
-      case _  ⇒ ()
-    }}
-    catch { case t: Throwable  ⇒ {
-      println("An error occurred while attempting to create a session:")
-      t.printStackTrace
-    }}
+    POMDPs.find( _.getClass.getName == server.pomdpClassName) match {
+      case Some(pomdp)  ⇒ {
+        val session = actorOf(Props(new Session(server.ref, pomdp)))
+        try { Await.result(session ? 'Init, timeout.duration) match {
+          case b: Boolean  ⇒ result = b
+          case _  ⇒ ()
+        }}
+        catch { case t: Throwable  ⇒ {
+          println("An error occurred while attempting to create a session:")
+        }}
+      }
+      case None  ⇒ ()
+    }
     result
   }
 
   def receive = {
+
+    case Provision(fd: FileData)  ⇒ {
+      val (_, pomdps) = provision[POMDP](fd)
+      POMDPs ++= pomdps
+    }
+
     case ScanHost(serverHost)  ⇒ scanHost(serverHost)
 
-    case CreateServer(serverHost, pomdp)  ⇒ createServer(serverHost, pomdp)
+    case CreateServer(serverHost, pomdp, fileData)  ⇒ 
+      createServer(serverHost, pomdp, fileData)
 
     case e: Error  ⇒ {
       println(e.cause.getMessage)
@@ -58,7 +70,6 @@ class ClientManager extends Actor {
 
     case Terminated(deceasedActor)  ⇒ {
       sessions.find(_ == deceasedActor) match { case Some(deadSession)  ⇒ {
-          println("A session died! Nuts...")
           sessions = sessions filterNot { _ == deadSession }
           unwatch(deadSession)
         }
@@ -74,7 +85,7 @@ object ClientManager extends App {
   // CM specific messages
   sealed case class ScanHost(serverHost: String)
   sealed case class CreateSession(server: ServerSpec)
-  sealed case class CreateServer(serverHost: String, pomdp: POMDP)
+  sealed case class CreateServer(serverHost: String, pomdp: POMDP, fileData: FileData)
 
   val system = ActorSystem("enmasClient", ConfigFactory.load.getConfig("enmasClient"))
 

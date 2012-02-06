@@ -5,11 +5,11 @@ object Simple {
     name = "Example POMDP Model",
     description = "Just for illustration",
     agentConstraints = List ( AgentConstraint('A1, 1, 1), AgentConstraint('A2, 1, 1)),
-    initialState = State.empty + ("time"  → 0),
+    initialState = State("time"  → 0),
     actionsFunction = (_)  ⇒ Set('win, 'lose),
     transitionFunction = (state, _)  ⇒ {
       state.getAs[Int]("time") match {
-        case Some(t)  ⇒ List((state + ("time"  → (t+1)), 1))
+        case Some(t)  ⇒ List((State("time"  → (t+1)), 1))
         case _  ⇒ List((state, 1))
       }
     },

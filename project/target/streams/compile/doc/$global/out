@@ -1,0 +1,35 @@
+[0m[[0minfo[0m] [0mGenerating API documentation for main sources...[0m
+[0m[[0mdebug[0m] [0mCalling Scaladoc with arguments:[0m
+[0m[[0mdebug[0m] [0m	-d[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/target/scala-2.9.1/api[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsfd.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Frameworks/JavaRuntimeSupport.framework/Resources/Java/JavaRuntimeSupport.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/ui.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/laf.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/sunrsasign.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsse.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/charsets.jar:/Users/connor/.sbt/boot/scala-2.9.1/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/com.typesafe.akka/akka-actor/akka-actor-2.0-M3.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/com.typesafe.akka/akka-remote/akka-remote-2.0-M3.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/bundles/io.netty/netty/netty-3.3.0.Final.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/com.google.protobuf/protobuf-java/protobuf-java-2.4.1.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/net.debasishg/sjson_2.9.1/sjson_2.9.1-0.15.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/net.databinder/dispatch-json_2.9.1/dispatch-json_2.9.1-0.8.5.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/org.apache.httpcomponents/httpclient/httpclient-4.1.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/org.apache.httpcomponents/httpcore/httpcore-4.1.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/commons-logging/commons-logging/commons-logging-1.1.1.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/commons-codec/commons-codec/commons-codec-1.4.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/org.objenesis/objenesis/objenesis-1.2.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/commons-io/commons-io/commons-io-1.4.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/voldemort.store.compress/h2-lzf/h2-lzf-1.0.jar:/Users/connor/projects/uwl/EnMAS/project/lib_managed/jars/org.scala-lang/scala-swing/scala-swing-2.9.1.jar:/Users/connor/.sbt/boot/scala-2.9.1/lib/scala-compiler.jar[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/bundler/Bundler.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/Agent.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/Client.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/ClientManager.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/IterationClient.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/Session.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/gui/ClientGUI.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/gui/Modal.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/gui/SessionGUI.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/client/gui/package.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/messaging/messages.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/pomdp/AgentAction.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/pomdp/AgentConstraint.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/pomdp/POMDP.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/pomdp/PomdpDefinition.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/pomdp/State.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/pomdp/package.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/server/Host.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/server/POMDPIteration.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/server/Server.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/server/ServerManager.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/server/package.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/util/EncryptionUtils.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/util/FileUtils.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/util/IOUtils.scala[0m
+[0m[[0mdebug[0m] [0m	/Users/connor/projects/uwl/EnMAS/project/src/main/scala/org/enmas/util/voodoo/ClassLoaderUtils.scala[0m
+[0m[[0minfo[0m] [0mAPI documentation generation successful.[0m

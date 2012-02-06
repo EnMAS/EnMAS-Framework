@@ -6,10 +6,10 @@ import org.enmas.pomdp._, org.enmas.messaging._,
        akka.actor._, akka.actor.Actor._, akka.dispatch._, akka.pattern.ask,
        akka.util.Timeout, akka.util.duration._
 
-class Session(server: ServerSpec) extends Actor {
+class Session(server: ActorRef, pomdp: POMDP) extends Actor {
   import ClientManager._, Session._, context._
 
-  watch(server.ref) // subscribe to Terminated(server.ref)
+  watch(server) // subscribe to Terminated(server.ref)
 
   private var uniqueID = -1
   private var agents = Map[Int, (AgentType, ActorRef)]()
@@ -19,7 +19,7 @@ class Session(server: ServerSpec) extends Actor {
 //  private var graphicsClients = Map[Int, GraphicsClient]
 //  private var graphicsClients = Map[Int, ]
 
-  private val gui = new SessionGUI(self, server)
+  private val gui = new SessionGUI(self, pomdp)
 
   /** Returns true iff registering this clientManager session
     * with the specified server succeeds.
@@ -30,7 +30,7 @@ class Session(server: ServerSpec) extends Actor {
     */
   private def registerHost(): Boolean = {
     var result = false
-    try { Await.result(server.ref ? RegisterHost(self), timeout.duration) match {
+    try { Await.result(server ? RegisterHost(self), timeout.duration) match {
       case c: ConfirmHostRegistration  ⇒ {
         uniqueID = c.id
         result = true
@@ -58,7 +58,7 @@ class Session(server: ServerSpec) extends Actor {
     clazz: java.lang.Class[_ <: Agent]
   ) {
     try { Await.result(
-      server.ref ? RegisterAgent(uniqueID, agentType), timeout.duration
+      server ? RegisterAgent(uniqueID, agentType), timeout.duration
     ) match {
       case confirmation: ConfirmAgentRegistration  ⇒ {
         val agent = actorOf(Props(clazz.newInstance repliesTo self))
@@ -84,7 +84,7 @@ class Session(server: ServerSpec) extends Actor {
       val clientId = nextClientId
       clients += clientId  → client      
       // subscribe to POMDPIterations from the Server on this client's behalf
-      server.ref ! Subscribe
+      server ! Subscribe
       sender ! ConfirmClientRegistration(clientId, clazz.getName)
     }
     catch { case _  ⇒ sender ! false }
@@ -100,18 +100,18 @@ class Session(server: ServerSpec) extends Actor {
     case iteration: POMDPIteration  ⇒ { clients map { _._2 ! iteration }}
 
     case MessageBundle(content)  ⇒ {
-      if (sender == server.ref) content map {
+      if (sender == server) content map {
         c  ⇒ agents.find(_._1 == c.agentNumber) map { a  ⇒ a._2._2 ! c }}
     }
 
     case t: TakeAction  ⇒ {
       if (! (agents contains t.agentNumber)) sender ! PoisonPill
       agents.get(t.agentNumber) map { tuple  ⇒
-        if (sender == tuple._2) server.ref forward t else sender ! PoisonPill }
+        if (sender == tuple._2) server forward t else sender ! PoisonPill }
     }
 
     case Terminated(deceasedActor)  ⇒ {
-      if (deceasedActor == server.ref) {
+      if (deceasedActor == server) {
         // the server died
         agents map { a  ⇒ { unwatch(a._2._2); stop(a._2._2) }}
         clients map { c  ⇒ { unwatch(c._2); stop(c._2) }}
@@ -121,7 +121,7 @@ class Session(server: ServerSpec) extends Actor {
         agents.find(_._2._2 == deceasedActor) match {
           case Some(deadAgent)  ⇒ {
             // one of this session's agents died
-            server.ref ! AgentDied(deadAgent._1)
+            server ! AgentDied(deadAgent._1)
             agents = agents filterNot { _ == deadAgent }
           }
           case None  ⇒ ()

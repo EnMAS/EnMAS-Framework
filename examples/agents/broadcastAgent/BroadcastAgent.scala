@@ -6,10 +6,10 @@ import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._,
   * Agent 2: 10% of the time sends and 90% of the time waits.
   */
 class BroadcastAgent extends Agent {
-  
-  def handleError(error: Throwable) {}
-  
-  def handleUpdate(observation: Observation, reward: Float): Action = {
+
+  def name = "Simple Broadcast Agent"
+
+  def policy(observation: Observation, reward: Float): Action = {
     print("I am agent "+agentNumber+"\nI think my queue is ")
     println(observation.getAs[Boolean]("queue").getOrElse(false) match {
       case true  ⇒ "full"

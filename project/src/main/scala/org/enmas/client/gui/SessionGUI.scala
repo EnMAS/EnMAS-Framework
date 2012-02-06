@@ -1,11 +1,11 @@
 package org.enmas.client.gui
 
-import org.enmas.client._, org.enmas.messaging._,
+import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
        akka.actor._, akka.dispatch._, akka.util.duration._, akka.pattern.ask,
        java.io._
 
-class SessionGUI(session: ActorRef, server: ServerSpec) extends Frame {
+class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame {
   import ClientManager._, Session._, Modal._
 
   title = "EnMAS: Session Manager"
@@ -46,13 +46,13 @@ class SessionGUI(session: ActorRef, server: ServerSpec) extends Frame {
         val chooseJarButton = new Button { action = Action("Choose JAR file") {
           val result = jarChooser.showDialog(this, "Choose JAR file")
           if (result == FileChooser.Result.Approve && jarChooser.selectedFile.exists) {
-            import org.enmas.util.ClassLoaderUtils._
+            import org.enmas.util.voodoo.ClassLoaderUtils._
             classListView.listData = findSubclasses[Agent](jarChooser.selectedFile)
           }
         }}
 
         val agentTypeCombo = new ComboBox(
-          for (c  ← server.pomdp.agentConstraints) yield c.agentType
+          for (c  ← pomdp.agentConstraints) yield c.agentType
         )
 
         val launchButton = new Button { action = Action("Launch Agent") {
@@ -130,7 +130,7 @@ class SessionGUI(session: ActorRef, server: ServerSpec) extends Frame {
         val chooseJarButton = new Button { action = Action("Choose JAR file") {
           val result = jarChooser.showDialog(this, "Choose JAR file")
           if (result == FileChooser.Result.Approve && jarChooser.selectedFile.exists) {
-            import org.enmas.util.ClassLoaderUtils._
+            import org.enmas.util.voodoo.ClassLoaderUtils._
             classListView.listData = findSubclasses[IterationClient](jarChooser.selectedFile)
           }
         }}

@@ -13,12 +13,12 @@ class State(
     scala.collection.immutable.HashMap.empty[String, (Manifest[_], Any)]
 ) extends java.io.Serializable {
 
-  /** @post Returns a new State that contains a mapping from elem._1 to elem._2
+  /** Returns a new State that contains a mapping from elem._1 to elem._2
     */
   def +[T <: Any](elem: (String, T))(implicit m: Manifest[T]): State =
     State(map.+((elem._1, (m, elem._2))))
 
-  /** @post Returns a new State which contains no mapping from key
+  /** Returns a new State which contains no mapping from key
     */
   def -(key: String): State = State(map.-(key))
 

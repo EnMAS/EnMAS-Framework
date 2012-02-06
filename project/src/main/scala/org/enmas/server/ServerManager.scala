@@ -1,21 +1,30 @@
 package org.enmas.server
 
 import org.enmas.pomdp._, org.enmas.messaging._,
+       org.enmas.util.FileUtils._, org.enmas.util.voodoo.ClassLoaderUtils._,
        akka.actor._, akka.actor.Actor._,
-       com.typesafe.config.ConfigFactory
+       com.typesafe.config.ConfigFactory,
+       java.io.File
 
-class ServerManager extends Actor {
+class ServerManager extends Actor with Provisionable {
   import ServerManager._
 
+  var JARs = List[File]()
+  var POMDPs = Set[POMDP]()
   var servers = List[ServerSpec]()
 
-  /** Returns an akka.actor.ActorRef corresponding to a new Server
+  /** Creates an akka.actor.ActorRef corresponding to a new Server
     * simulating the specified POMDP and listening on the specified port.
     */
-  def createServer(pomdp: POMDP): ActorRef = {
-    val ref = system.actorOf(Props(new Server(pomdp)))
-    servers ::= ServerSpec(ref, pomdp)
-    ref
+  def createServer(className: String) {
+    POMDPs.find(_.getClass.getName == className) match {
+      case Some(pomdp)  ⇒ {
+        val ref = system.actorOf(Props(new Server(pomdp)))
+        servers ::= ServerSpec(ref, pomdp.getClass.getName, pomdp.name, pomdp.description)
+        sender ! ref
+      }
+      case None  ⇒ ()
+    }
   }
 
   /** Destroys the specified server.
@@ -27,9 +36,20 @@ class ServerManager extends Actor {
 
   def receive = {
     case Discovery  ⇒ sender ! DiscoveryReply(servers)
-    case CreateServerFor(pomdp)  ⇒ {
-      println("Received a request to create a server for [%s]" format pomdp.name)
-      sender ! createServer(pomdp)
+    case Provision(fileData)  ⇒ {
+      val (jarOption, pomdps) = provision[POMDP](fileData)
+      jarOption map { jar  ⇒ JARs ::= jar }
+      POMDPs ++= pomdps
+    }
+    case RequestProvisions  ⇒ {
+      JARs map { jarFile  ⇒ readFile(jarFile) match {
+        case Some(fd)  ⇒ sender ! Provision(fd)
+        case None  ⇒ ()
+      }}
+    }
+    case CreateServerFor(className)  ⇒ {
+      println("Received a request to create a server for [%s]" format className)
+      createServer(className)
     }
     case _  ⇒ ()
   }
