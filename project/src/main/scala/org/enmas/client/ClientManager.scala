@@ -51,9 +51,12 @@ class ClientManager extends Actor with Provisionable {
 
   def receive = {
 
-    case Provision(fd: FileData)  ⇒ {
-      val (_, pomdps) = provision[POMDP](fd)
-      POMDPs ++= pomdps
+    case Provision(fileData: FileData)  ⇒ {
+      val jarOption = provision[POMDP](fileData)
+      jarOption map { jar  ⇒ {
+        POMDPs ++= findSubclasses[POMDP](jar) filterNot {
+          _.getName contains "$"} map { clazz  ⇒ clazz.newInstance }
+      }}
     }
 
     case ScanHost(serverHost)  ⇒ scanHost(serverHost)

@@ -37,9 +37,12 @@ class ServerManager extends Actor with Provisionable {
   def receive = {
     case Discovery  ⇒ sender ! DiscoveryReply(servers)
     case Provision(fileData)  ⇒ {
-      val (jarOption, pomdps) = provision[POMDP](fileData)
-      jarOption map { jar  ⇒ JARs ::= jar }
-      POMDPs ++= pomdps
+      val jarOption = provision[POMDP](fileData)
+      jarOption map { jar  ⇒ {
+        JARs ::= jar
+        POMDPs ++= findSubclasses[POMDP](jar) filterNot {
+          _.getName contains "$"} map { clazz  ⇒ clazz.newInstance }
+      }}
     }
     case RequestProvisions  ⇒ {
       JARs map { jarFile  ⇒ readFile(jarFile) match {

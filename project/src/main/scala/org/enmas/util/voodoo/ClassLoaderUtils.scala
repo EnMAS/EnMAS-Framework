@@ -10,29 +10,23 @@ object ClassLoaderUtils {
     */
   trait Provisionable {
     import org.enmas.pomdp._, org.enmas.util.FileUtils._, java.io._
-    /** Black Magic! Saves the incoming FileData bytes as a JAR file
-      * and adds the classes within to a custom local classloader,
-      * returning the created JAR File object and a list of objects
-      * of the classes within conforming to this method's type parameter.
-      *
-      * Note that this method requires the classes that conform to this
-      * method's type parameter to have a zero argument constructor.
+    /** Saves the incoming FileData bytes as a JAR file
+      * if the computed MD5 matches the attached checksum,
+      * returning the optional File object.
       */
     def provision[T]
       (fileData: FileData)
       (implicit m: scala.reflect.Manifest[T])
-    : (Option[File], List[T]) = {
+    : Option[File] = {
       verifyFileData(fileData) match {
         case Some(data)  ⇒ {
-          val jarFile = File.createTempFile("provisioned", ".jar")
-          val fout = new FileOutputStream(jarFile)
+          val jar = File.createTempFile("provisioned", ".jar")
+          val fout = new FileOutputStream(jar)
           fout.write(data)
           fout.flush
-          val ts = findSubclasses[T](jarFile) filterNot {
-            _.getName.contains("$") } map { clazz  ⇒ clazz.newInstance }
-          (Some(jarFile), ts)
+          Some(jar)
         }
-        case None  ⇒ (None, List[T]())
+        case None  ⇒ None
       }
     }
   }
