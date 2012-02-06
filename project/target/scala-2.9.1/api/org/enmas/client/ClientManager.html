@@ -328,23 +328,20 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Actor</dd></dl></div>
     </li><li visbl="pub" name="org.enmas.util.voodoo.ClassLoaderUtils.Provisionable#provision" data-isabs="false">
-      <a id="provision[T](FileData)(Manifest[T]):(Option[File], List[T])"></a>
+      <a id="provision[T](FileData)(Manifest[T]):Option[File]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol"> 
         <span class="name">provision</span>
         <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="fileData">fileData: <a name="org.enmas.util.FileUtils.FileData" class="extype" href="../util/FileUtils$$FileData.html">FileData</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: (<span name="scala.Option" class="extype">Option</span>[<span name="java.io.File" class="extype">File</span>], List[T])</span>
+        <span class="params">(<span name="fileData">fileData: <a name="org.enmas.util.FileUtils.FileData" class="extype" href="../util/FileUtils$$FileData.html">FileData</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="java.io.File" class="extype">File</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Black Magic! Saves the incoming FileData bytes as a JAR file
-and adds the classes within to a custom local classloader,
-returning the created JAR File object and a list of objects
-of the classes within conforming to this method's type parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Black Magic! Saves the incoming FileData bytes as a JAR file
-and adds the classes within to a custom local classloader,
-returning the created JAR File object and a list of objects
-of the classes within conforming to this method's type parameter.</p><p>Note that this method requires the classes that conform to this
-method's type parameter to have a zero argument constructor.
+      <p class="shortcomment cmt">Saves the incoming FileData bytes as a temp file
+if the computed MD5 matches the attached checksum,
+returning the optional File object.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the incoming FileData bytes as a temp file
+if the computed MD5 matches the attached checksum,
+returning the optional File object.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.enmas.util.voodoo.ClassLoaderUtils.Provisionable" class="extype" href="../util/voodoo/ClassLoaderUtils$$Provisionable.html">Provisionable</a></dd></dl></div>
     </li><li visbl="pub" name="org.enmas.client.ClientManager#receive" data-isabs="false">
       <a id="receive:PartialFunction[Any, Unit]"></a>

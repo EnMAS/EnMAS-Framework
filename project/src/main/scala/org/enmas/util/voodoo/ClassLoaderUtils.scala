@@ -20,6 +20,7 @@ object ClassLoaderUtils {
       verifyFileData(fileData) match {
         case Some(data)  ⇒ {
           val file = File.createTempFile("provisioned", null)
+          file.deleteOnExit
           val fout = new FileOutputStream(file)
           fout.write(data)
           fout.flush
