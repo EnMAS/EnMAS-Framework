@@ -5,12 +5,11 @@ import java.io._, java.net._, java.lang.reflect._, java.util.jar._
 object ClassLoaderUtils {
 
   /** To be mixed in with classes that need to be able to receive
-    * the raw byte content of a JAR file over the network and add
-    * the classes therein to the system classloader.
+    * the raw byte content of a JAR file over the network.
     */
   trait Provisionable {
     import org.enmas.pomdp._, org.enmas.util.FileUtils._, java.io._
-    /** Saves the incoming FileData bytes as a JAR file
+    /** Saves the incoming FileData bytes as a temp file
       * if the computed MD5 matches the attached checksum,
       * returning the optional File object.
       */
@@ -20,11 +19,11 @@ object ClassLoaderUtils {
     : Option[File] = {
       verifyFileData(fileData) match {
         case Some(data)  ⇒ {
-          val jar = File.createTempFile("provisioned", ".jar")
-          val fout = new FileOutputStream(jar)
+          val file = File.createTempFile("provisioned", null)
+          val fout = new FileOutputStream(file)
           fout.write(data)
           fout.flush
-          Some(jar)
+          Some(file)
         }
         case None  ⇒ None
       }
@@ -48,26 +47,6 @@ object ClassLoaderUtils {
       }
     }
     subclasses
-  }
-
-  /** 
-    */
-  def findClasses[T](file: File)(implicit m: scala.reflect.Manifest[T]) = {
-    val jarFile = new JarFile(file)
-    val jarEntries = jarFile.entries
-    var classes = List[java.lang.Class[T]]()
-    while (jarEntries.hasMoreElements) {
-      val entry = jarEntries.nextElement
-      if (entry.getName.endsWith(".class")) {
-        val name = entry.getName.replace(".class", "")
-        try {
-          val clazz = getClass(file, name)
-          classes :+= clazz.asInstanceOf[java.lang.Class[T]]
-        }
-        catch { case _  ⇒ () }
-      }
-    }
-    classes
   }
 
   private def getClass(file: File, name: String): java.lang.Class[_] = {
