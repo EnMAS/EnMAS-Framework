@@ -18,7 +18,10 @@ object ClassLoaderUtils {
       * Note that this method requires the classes that conform to this
       * method's type parameter to have a zero argument constructor.
       */
-    def provision[T](fileData: FileData)(implicit m: scala.reflect.Manifest[T]): (Option[File], List[T]) = {
+    def provision[T]
+      (fileData: FileData)
+      (implicit m: scala.reflect.Manifest[T])
+    : (Option[File], List[T]) = {
       verifyFileData(fileData) match {
         case Some(data)  ⇒ {
           val jarFile = File.createTempFile("provisioned", ".jar")
