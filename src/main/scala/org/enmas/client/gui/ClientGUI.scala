@@ -42,7 +42,7 @@ class ClientGUI(application: ActorRef) extends MainFrame {
 
       val chooseJarButton = new Button { action = Action("Choose JAR file") {
         val result = jarChooser.showDialog(this, "Choose JAR file")
-        if (result == FileChooser.Result.Approve && jarChooser.selectedFile.exists) {         
+        if (result == FileChooser.Result.Approve && jarChooser.selectedFile.exists) {
           pomdpListView.listData = findSubclasses[POMDP](jarChooser.selectedFile) filterNot {
             _.getName.contains("$") } map { clazz  ⇒ clazz.newInstance }
         }

@@ -50,10 +50,7 @@ class ServerManager extends Actor with Provisionable {
         case None  ⇒ ()
       }}
     }
-    case CreateServerFor(className)  ⇒ {
-      println("Received a request to create a server for [%s]" format className)
-      createServer(className)
-    }
+    case CreateServerFor(className)  ⇒ createServer(className)
     case _  ⇒ ()
   }
 }

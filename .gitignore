@@ -1,1 +1,8 @@
 *.class
+target
+target/**
+project
+project/**
+lib_managed
+lib_managed/**
+
