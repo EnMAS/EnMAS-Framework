@@ -1,6 +1,14 @@
 name := "EnMAS"
 
-version := "0.5"
+organization := "org.enmas"
+
+version := "0.6.2"
+
+publishTo := Some(Resolver.sftp(
+   "EnMAS Repository",
+   "repo.enmas.org",
+   "/var/www/vhosts/enmas.org/subdomains/repo/httpdocs"
+) as("connor"))
 
 fork in run := true
 
