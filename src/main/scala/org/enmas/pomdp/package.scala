@@ -61,6 +61,17 @@ package org.enmas {
       * added to a simulation.
       */
     val NO_ACTION = Symbol("")
+
+    /** Implicit conversion from State to Either[State, List[(State, Int)]]
+      */
+    implicit def state2Either(s: State): Either[State, List[(State, Int)]] = Left(s)
+
+    /** Implicit conversion from List[(State, Int)] to Either[State, List[(State, Int)]]
+      */
+    implicit def stateList2Either(
+      stateList: List[(State, Int)]
+    ): Either[State, List[(State, Int)]] = Right(stateList)
+    
   }
 
 }

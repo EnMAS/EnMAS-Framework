@@ -56,6 +56,7 @@ class ServerManager extends Actor with Provisionable {
 }
 
 object ServerManager extends App {
+  println(new File(".").getAbsolutePath)
   val system = ActorSystem("enmasServer", ConfigFactory.load.getConfig("enmasServer"))
   val manager = system.actorOf(Props[ServerManager], "serverManager")
 }

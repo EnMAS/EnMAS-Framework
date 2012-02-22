@@ -80,7 +80,10 @@ class Server(pomdp: POMDP) extends Actor {
   private def iterate(state: State, actions: JointAction): State = {
     println("\niteration [%s]" format iterationOrdinality)
     try {
-      val statePrime = selectState(pomdp.transitionFunction(state, actions))
+      val statePrime = pomdp.transitionFunction(state, actions) match {
+        case Left(state)  ⇒ state
+        case Right(distribution)  ⇒ selectState(distribution)
+      }
       val reward = pomdp.rewardFunction(state, actions, statePrime)
       val observation = pomdp.observationFunction(state, actions, statePrime)
       var observations = Set[(AgentSpec, Observation)]()

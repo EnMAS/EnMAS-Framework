@@ -2,7 +2,7 @@ name := "EnMAS"
 
 organization := "org.enmas"
 
-version := "0.6.2"
+version := "0.6.3"
 
 publishTo := Some(Resolver.sftp(
    "EnMAS Repository",
