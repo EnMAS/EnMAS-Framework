@@ -13,12 +13,13 @@ package org.enmas.pomdp
   * The observation function, as visible from the signature, is allowed to
   * take into account the agent number for individual observations.
   * 
-  * The transition function returns a List of (State, Int) tuples, which
-  * is interpreted as a normalized probability distribution.  The probability
-  * of each State component is the corresponding Int component divided by
-  * the sum of all Int components.  States with non-positive Int components
-  * are ignored as impossible transitions.  In the event that the transition
-  * function returns the empty list, the next state is equal to the current.
+  * The transition function may return either a State object, or a
+  * List of (State, Int) tuples, which is interpreted as a normalized
+  * probability distribution.  The probability of each State component is the
+  * corresponding Int component divided by the sum of all Int components.
+  * States with non-positive Int components are ignored as impossible
+  * transitions.  In the event that the transition function returns the empty
+  * list, the next state is equal to the current.
   */
 case class POMDP (
   name: String,
