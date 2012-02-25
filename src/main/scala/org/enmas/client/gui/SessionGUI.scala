@@ -51,7 +51,7 @@ class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame {
     fileHidingEnabled = true
     peer.setAcceptAllFileFilterUsed(false)
     fileFilter = new javax.swing.filechooser.FileFilter {
-      def accept(f: File) = f.getName.endsWith(".jar") || f.getName.endsWith(".JAR")
+      def accept(f: java.io.File) = f.isDirectory || f.getName.endsWith(".jar") || f.getName.endsWith(".JAR")
       def getDescription = "JAR files"
     }
   }
