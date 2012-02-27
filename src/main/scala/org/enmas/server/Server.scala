@@ -58,7 +58,7 @@ class Server(pomdp: POMDP) extends Actor {
     if ((pendingActions filter { _.agentNumber == agentNumber }).isEmpty) {
       getAgent(agentNumber) map {
         a  ⇒ {
-          println("Agent [%s] took action [%s]".format(agentNumber, action))
+          // println("Agent [%s] took action [%s]".format(agentNumber, action))
           pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
         }
       }
