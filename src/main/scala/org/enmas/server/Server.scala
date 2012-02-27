@@ -78,7 +78,6 @@ class Server(pomdp: POMDP) extends Actor {
     * 3) Dispatches UpdateAgent messages
     */
   private def iterate(state: State, actions: JointAction): State = {
-    println("\niteration [%s]" format iterationOrdinality)
     try {
       val statePrime = pomdp.transitionFunction(state, actions) match {
         case Left(state)  ⇒ state
