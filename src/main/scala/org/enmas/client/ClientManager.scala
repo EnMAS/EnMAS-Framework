@@ -80,6 +80,10 @@ class ClientManager extends Actor with Provisionable {
       }
     }
 
+    case error: Throwable  ⇒ { println(
+      "Error received from [%s]:\n%s".format(sender, error.getMessage)
+    )}
+
     case _  ⇒ () // ignore unhandled messages
   }
 }

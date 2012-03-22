@@ -63,6 +63,15 @@ class State(
   def getInt(key: String): Int = getAs(key, 0)
   /** == Java API Method == */
   def getLong(key: String): Long = getAs(key, 0l)
+
+  override def toString(): String = {
+    map.toTraversable.foldLeft("State(\n") {
+      (s: String, mapping: (String, (Manifest[_], Any))) => {
+        val (key, value) = mapping
+        s + "  %s -> %s\n".format(key, value._2.toString)
+      }
+    } + ")"
+  }
 }
 
 object State {

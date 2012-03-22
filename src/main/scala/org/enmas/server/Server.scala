@@ -58,7 +58,7 @@ class Server(pomdp: POMDP) extends Actor {
     if ((pendingActions filter { _.agentNumber == agentNumber }).isEmpty) {
       getAgent(agentNumber) map {
         a  ⇒ {
-          // println("Agent [%s] took action [%s]".format(agentNumber, action))
+          println("Agent [%s] took action [%s]".format(agentNumber, action))
           pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
         }
       }
@@ -78,11 +78,19 @@ class Server(pomdp: POMDP) extends Actor {
     * 3) Dispatches UpdateAgent messages
     */
   private def iterate(state: State, actions: JointAction): State = {
+
+    // for testing...
+    println("iterating...");
+
     try {
       val statePrime = pomdp.transitionFunction(state, actions) match {
         case Left(state)  ⇒ state
         case Right(distribution)  ⇒ selectState(distribution)
       }
+
+      // for testing...
+      println("next "+statePrime+"\n")
+
       val reward = pomdp.rewardFunction(state, actions, statePrime)
       val observation = pomdp.observationFunction(state, actions, statePrime)
       var observations = Set[(AgentSpec, Observation)]()
@@ -110,7 +118,10 @@ class Server(pomdp: POMDP) extends Actor {
       statePrime
     }
     catch {
-      case t: Throwable  ⇒ sessions map { cm  ⇒ cm.ref ! t }
+      case t: Throwable  ⇒ {
+        t.printStackTrace
+        sessions map { cm  ⇒ cm.ref ! t }
+      }
       state
     }
   }
@@ -119,8 +130,14 @@ class Server(pomdp: POMDP) extends Actor {
     * represented as a List of (State, Int) tuples.
     */
   private def selectState(all: List[(State, Int)]) = {
+
+    // for testing...
+    println("Choosing among %s states...".format(all.length))
+
     def stateAt(possible: List[(State, Int)], scalar: Int): State =
-      if (scalar <= 0) possible.head._1 else stateAt(possible.tail, scalar - possible.head._2)
+      if (scalar <= 0 || possible.tail == Nil)
+        possible.head._1
+      else stateAt(possible.tail, scalar - possible.head._2)
 
     val possible = all filter { _._2 > 0 }
     if (possible.size > 0) {

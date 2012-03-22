@@ -32,10 +32,10 @@ wrong state of the buffer.
   transitionFunction = (state, actions)  ⇒ {
     val a1HasMessage = state.getAs[Boolean]("1") getOrElse false
     val a2HasMessage = state.getAs[Boolean]("2") getOrElse false
-    val a1Sends = actions contains {
-      a: AgentAction  ⇒ a.agentNumber == 1 && a.action == 'send }
-    val a2Sends = actions contains {
-      a: AgentAction  ⇒ a.agentNumber == 2 && a.action == 'send }
+    val a1Sends = actions.filter { a: AgentAction  ⇒ 
+      a.agentNumber == 1 && a.action == 'send }.length > 0
+    val a2Sends = actions.filter { a: AgentAction  ⇒ 
+      a.agentNumber == 2 && a.action == 'send }.length > 0
 
     val defaultDistribution = List(
       (State("1"  → true) + ("2"  → true), 9),
