@@ -1,12 +1,10 @@
 package org.enmas.server
 
-import org.enmas.pomdp._, org.enmas.messaging._, 
-       org.enmas.util.EncryptionUtils._, org.enmas.util.FileUtils._,
+import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.FileUtils._,
        akka.actor._, akka.actor.Actor._,
        scala.util._, scala.collection.immutable._
 
 class Server(pomdp: POMDP) extends Actor {
-  private val keyPair = genKeyPair
   private var state = pomdp.initialState
   private var iterationOrdinality = 0L
   private var sessions = Set[SessionSpec]()
