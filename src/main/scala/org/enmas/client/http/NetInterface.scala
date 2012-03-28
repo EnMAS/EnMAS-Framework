@@ -11,8 +11,14 @@ import org.enmas.pomdp._, org.enmas.client.ClientManager, org.enmas.messaging._,
 class NetInterface(application: ActorRef) extends Actor {
   import ClientManager._
 
+  val nothing: PartialFunction[Any, Unit] = { case _  ⇒ () }
+
   def receive = {
-    case NetInterface.Init  ⇒ init
+    case NetInterface.Init  ⇒ {
+      context become nothing // hence replies only to lifecycle messages
+      init
+    }
+    case _  ⇒ ()
   }
 
   object ScanHandler extends unfiltered.filter.async.Plan {
