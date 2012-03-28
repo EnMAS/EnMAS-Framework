@@ -4,19 +4,15 @@ import org.enmas.pomdp._, org.enmas.client.ClientManager, org.enmas.messaging._,
        org.enmas.client.Agent, org.enmas.util.voodoo.ClassLoaderUtils._,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
        akka.actor._, akka.dispatch._, akka.util.duration._, akka.pattern.ask,
-       dispatch._, javax.servlet._,
-       unfiltered.request._, unfiltered.response._, unfiltered.netty._,
-       java.net.InetAddress
+       unfiltered.request._, unfiltered.response._, unfiltered.netty._
 
 class NetInterface(application: ActorRef) extends Actor {
   import ClientManager._
 
-  val nothing: PartialFunction[Any, Unit] = { case _  ⇒ () }
-
   def receive = {
     case NetInterface.Init  ⇒ {
-      context become nothing // hence replies only to lifecycle messages
-      init
+      context become { case _  ⇒ () } // now replies only to lifecycle messages
+      startHttpServer
     }
     case _  ⇒ ()
   }
@@ -24,21 +20,21 @@ class NetInterface(application: ActorRef) extends Actor {
   object ScanHandler extends unfiltered.filter.async.Plan {
     def intent = { case req@Path(Seg("scan" :: address :: Nil)) => {
       (application ? ScanHost(address)) onSuccess {
-        case reply: DiscoveryReply  ⇒ {
-          req.respond(ResponseString(reply.servers.size + " servers found at "+address+"."))
-        }
+        case reply: DiscoveryReply  ⇒ req respond ResponseString(
+          reply.servers.foldLeft("{ servers: [") {
+            (s: String, srv: ServerSpec)  ⇒ s + "\"%s\", ".format(srv)
+          }.stripSuffix(", ") + "] }")
       } onFailure {
-        case _  ⇒ req.respond(ResponseString("The requested host could not be contacted."))
+        case _  ⇒ req respond ResponseString(
+          "{ error: \"The specified host could not be contacted.\" }"
+        )
       }
     }}
   }
 
-  def init = {
-    unfiltered.jetty.Http(8080).filter(ScanHandler).run
-  }
-
+  /** Starts the HTTP server.
+    */
+  def startHttpServer = unfiltered.jetty.Http(8080).filter(ScanHandler).run
 }
 
-object NetInterface {
-  case object Init
-}
+object NetInterface { case object Init }
