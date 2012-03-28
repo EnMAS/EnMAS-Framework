@@ -15,12 +15,6 @@ class ClientGUI(application: ActorRef) extends MainFrame {
   centerOnScreen
   visible = true
 
-  def updateServerList(reply: DiscoveryReply) {
-    if (reply.servers.isEmpty)
-      popup("Scan Result", "The host is up but has no active servers.")
-    else  ui.rightPanel.serverListView.listData = reply.servers
-  }
-
   private val jarChooser = new FileChooser {
     title = "Choose JAR file"
     fileSelectionMode = FileChooser.SelectionMode.FilesOnly
@@ -107,7 +101,15 @@ class ClientGUI(application: ActorRef) extends MainFrame {
         serverListView.listData = List[ServerSpec]()
         serverDetails.text = ""
         connectButton.enabled = false
-        application ! ScanHost(serverHostField.text.trim)
+        (application ? ScanHost(serverHostField.text.trim)) onSuccess {
+          case reply: DiscoveryReply  ⇒ {
+            if (reply.servers.isEmpty)
+              popup("Scan Result", "The host is up but has no active servers.")
+            else  serverListView.listData = reply.servers
+          }
+        } onFailure { case _  ⇒ {
+          popup("Scan Result", "Could not find a host at the specified address."); 
+        }}
       }}
 
       val serverListView = new ListView[ServerSpec] {

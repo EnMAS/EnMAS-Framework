@@ -24,7 +24,9 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-swing" % "2.9.1",
   "org.scala-lang" % "scala-compiler" % "2.9.1",
   "org.scala-lang" % "scala-library" % "2.9.1",
-  "net.databinder" %% "unfiltered-filter" % "0.6.1"
+  "net.databinder" %% "unfiltered-filter-async" % "0.6.1",
+  "net.databinder" %% "unfiltered-jetty" % "0.6.1",
+  "net.databinder" %% "unfiltered-netty" % "0.6.1"
 )
 
 unmanagedClasspath in Runtime <+= (baseDirectory) map {

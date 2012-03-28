@@ -1,6 +1,6 @@
 package org.enmas.client
 
-import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.client.gui._,
+import org.enmas.pomdp._, org.enmas.messaging._,
        org.enmas.util.FileUtils._, org.enmas.util.voodoo.ClassLoaderUtils._,
        scala.collection.immutable._,
        akka.actor._, akka.actor.Actor._, akka.dispatch._, akka.pattern.ask,
@@ -13,13 +13,14 @@ class ClientManager extends Actor with Provisionable {
   private var sessions = List[ActorRef]()
   private var POMDPs = Set[POMDP]()
 
-  private def scanHost(address: String) {
+  private def scanHost(address: String, replyTo: ActorRef) {
     val host = actorFor(
       "akka://enmasServer@"+address+":"+serverPort+"/user/serverManager"
     )
     host ! RequestProvisions
     (host ? Discovery) onSuccess {
-      case reply: DiscoveryReply  ⇒ gui updateServerList reply
+//      case reply: DiscoveryReply  ⇒ gui updateServerList reply
+      case reply: DiscoveryReply  ⇒ replyTo ! reply
     }
   }
 
@@ -59,7 +60,7 @@ class ClientManager extends Actor with Provisionable {
       }}
     }
 
-    case ScanHost(serverHost)  ⇒ scanHost(serverHost)
+    case ScanHost(serverHost)  ⇒ scanHost(serverHost, sender)
 
     case CreateServer(serverHost, pomdp, fileData)  ⇒ 
       createServer(serverHost, pomdp, fileData)
@@ -100,5 +101,11 @@ object ClientManager extends App {
 
   val manager = system.actorOf(Props[ClientManager], "clientManager")
   val serverPort = 36627 // ENMAS
+
+  import org.enmas.client.gui._, org.enmas.client.http._
+
   val gui = new ClientGUI(manager)
+
+  val net = system.actorOf(Props(new NetInterface(manager)), "clientNetInterface")
+  net ! NetInterface.Init
 }
