@@ -107,7 +107,8 @@ class Bundler extends MainFrame {
       val classFiles = sourceDir.listFiles.toList.filter(_.toString.endsWith(".class"))
       results.text += classFiles.length + " class files found\n"
       for (f <- classFiles) {
-        val className = f.getPath.replace("\\", "/").substring(f.getPath.lastIndexOf("/")+1, f.getPath.length)
+        var className = f.getPath.replace("\\", "/")
+        className = substring(className.lastIndexOf("/")+1, className.length)
         results.text += "Bundling class file: " + className + "\n"
         jar putNextEntry { new JarEntry(className) }
         val fin = new FileInputStream(f)
