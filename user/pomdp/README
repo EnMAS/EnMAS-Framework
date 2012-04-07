@@ -1,0 +1,1 @@
+Place JAR files containing POMDP definitions in this folder to have them loaded automatically when the client manager launches.
