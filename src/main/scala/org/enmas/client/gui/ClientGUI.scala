@@ -14,7 +14,6 @@ class ClientGUI(application: ActorRef) extends MainFrame {
   minimumSize = new Dimension(600, 550)
   centerOnScreen
   visible = true
-
   refreshPOMDPs
 
   private def refreshPOMDPs {

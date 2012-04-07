@@ -5,5 +5,5 @@ project/target
 project/target/**
 lib_managed
 lib_managed/**
-user/*/*.class
 user/*/*.jar
+user/*/**
