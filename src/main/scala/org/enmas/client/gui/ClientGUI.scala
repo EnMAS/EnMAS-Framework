@@ -61,15 +61,7 @@ class ClientGUI(application: ActorRef) extends MainFrame {
       val launchServerButton = new Button { action = Action("Request new server with selected") {
         pomdpListView.selection.items.headOption match {
           case Some(pomdp: POMDP)  ⇒ {
-            import org.enmas.util.FileUtils._
-            readFile(jarChooser.selectedFile) match {
-              case Some(fileData)  ⇒
-                application ! CreateServer(rightPanel.serverHostField.text, pomdp.getClass.getName)
-              case None  ⇒ popup(
-                "Server Launch Error",
-                "There was a problem reading the JAR file."
-              )
-            }
+            application ! CreateServer(rightPanel.serverHostField.text, pomdp.getClass.getName)
             rightPanel.scanButton.doClick
           }
           case None  ⇒ popup("Server Launch Error", "No POMDP selected!")
