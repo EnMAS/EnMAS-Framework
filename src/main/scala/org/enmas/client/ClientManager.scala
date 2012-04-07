@@ -2,7 +2,7 @@ package org.enmas.client
 
 import org.enmas.pomdp._, org.enmas.messaging._,
        org.enmas.util.FileUtils._, org.enmas.util.voodoo.ClassLoaderUtils._,
-       scala.collection.immutable._,
+       scala.collection.immutable._, java.io.File,
        akka.actor._, akka.actor.Actor._, akka.dispatch._, akka.pattern.ask,
        akka.util.Timeout, akka.util.duration._,
        com.typesafe.config.ConfigFactory
@@ -10,8 +10,21 @@ import org.enmas.pomdp._, org.enmas.messaging._,
 class ClientManager extends Actor with Provisionable {
   import ClientManager._, context._
 
-  private var sessions = List[ActorRef]()
-  private var POMDPs = Set[POMDP]()
+  private var sessions = List[ActiveSession]()
+  private var POMDPs = Set[LocallyAvailablePOMDP]()
+  loadUserPOMDPs
+
+  private def loadUserPOMDPs { if (pomdpDir.isDirectory) {
+    for (f  ← pomdpDir.listFiles) if (f.getName.endsWith(".jar")) {
+      POMDPs ++= loadPOMDPsFromFile(f)
+    }
+  }}
+
+  private def loadPOMDPsFromFile(jar: File): List[LocallyAvailablePOMDP] = {
+    findSubclasses[POMDP](jar).filterNot { _.getName contains "$"} map {
+      clazz  ⇒ LocallyAvailablePOMDP(clazz.newInstance, jar)
+    }
+  }
 
   private def scanHost(address: String, replyTo: ActorRef) {
     val host = actorFor(
@@ -19,63 +32,80 @@ class ClientManager extends Actor with Provisionable {
     )
     host ! RequestProvisions
     (host ? Discovery) onSuccess {
-//      case reply: DiscoveryReply  ⇒ gui updateServerList reply
       case reply: DiscoveryReply  ⇒ replyTo ! reply
     }
   }
 
-  private def createServer(address: String, pomdp: POMDP, fileData: FileData) {
-    val host = actorFor(
-      "akka://enmasServer@"+address+":"+serverPort+"/user/serverManager"
-    )
-    host ! Provision(fileData)
-    host ! CreateServerFor(pomdp.getClass.getName)
-  }
-
-  private def createSession(server: ServerSpec): Boolean = {
-    var result = false
-    POMDPs.find( _.getClass.getName == server.pomdpClassName) match {
-      case Some(pomdp)  ⇒ {
-        val session = actorOf(Props(new Session(server.ref, pomdp)))
-        try { Await.result(session ? 'Init, timeout.duration) match {
-          case b: Boolean  ⇒ result = b
-          case _  ⇒ ()
-        }}
-        catch { case t: Throwable  ⇒ {
-          println("An error occurred while attempting to create a session:")
-        }}
+  private def createServer(address: String, pomdpClassName: String) {
+    POMDPs.find(_.pomdp.getClass.getName == pomdpClassName) match {
+      case Some(availablePOMDP)  ⇒ {
+        readFile(availablePOMDP.jar) match {
+          case Some(fileData)  ⇒ {
+            val host = actorFor(
+              "akka://enmasServer@"+address+":"+serverPort+"/user/serverManager"
+            )
+            host ! Provision(fileData)
+            host ! CreateServerFor(pomdpClassName)            
+          }
+          case None  ⇒ ()
+        }
       }
       case None  ⇒ ()
     }
-    result
+  }
+
+  private def createSession(server: ServerSpec) {
+    val replyTo = sender
+    POMDPs.find( _.pomdp.getClass.getName == server.pomdpClassName) match {
+      case Some(availablePOMDP)  ⇒ {
+        val sessionRef = actorOf(Props(new Session(server.ref, availablePOMDP.pomdp)))
+        watch(sessionRef) // subscribe to Terminated(sessionRef)
+        (sessionRef ? 'Init) onSuccess {
+          case e: Either[Int, Boolean]  ⇒ e match { 
+            case Left(id)  ⇒ {
+              sessions = (ActiveSession(sessionRef, id, server) :: sessions)
+              replyTo ! true
+            } 
+            case _  ⇒ ()
+          }
+        } onFailure {
+          case _  ⇒ replyTo ! false
+        }
+      }
+      case None  ⇒ replyTo ! false
+    }
   }
 
   def receive = {
 
+    case LoadPOMDPsFromFile(f)  ⇒ POMDPs ++= loadPOMDPsFromFile(f)
+
+    case GetLocalPOMDPs  ⇒ sender ! (POMDPs.toList map { _.pomdp })
+
     case Provision(fileData: FileData)  ⇒ {
       val jarOption = provision[POMDP](fileData)
-      jarOption map { jar  ⇒ {
-        POMDPs ++= findSubclasses[POMDP](jar) filterNot {
-          _.getName contains "$"} map { clazz  ⇒ clazz.newInstance }
-      }}
+      jarOption map { jar  ⇒ { POMDPs ++= loadPOMDPsFromFile(jar) }}
     }
 
     case ScanHost(serverHost)  ⇒ scanHost(serverHost, sender)
 
-    case CreateServer(serverHost, pomdp, fileData)  ⇒ 
-      createServer(serverHost, pomdp, fileData)
+    case CreateServer(serverHost, pomdpClassName)  ⇒
+      createServer(serverHost, pomdpClassName)
 
     case e: Error  ⇒ {
       println(e.cause.getMessage)
       e.cause.printStackTrace
     }
 
-    case m: CreateSession  ⇒ sender ! createSession(m.server)
+    case m: CreateSession  ⇒ createSession(m.server)
+
+    case GetSessions  ⇒ sender ! sessions
 
     case Terminated(deceasedActor)  ⇒ {
-      sessions.find(_ == deceasedActor) match { case Some(deadSession)  ⇒ {
+      println("Received notice of some dead session")
+      sessions.find(_.ref == deceasedActor) match { case Some(deadSession)  ⇒ {
           sessions = sessions filterNot { _ == deadSession }
-          unwatch(deadSession)
+          unwatch(deadSession.ref)
         }
         case None  ⇒ ()
       }
@@ -90,22 +120,38 @@ class ClientManager extends Actor with Provisionable {
 }
 
 object ClientManager extends App {
+  import org.enmas.client.gui._, org.enmas.client.http._, java.io.File
+
   // CM specific messages
   sealed case class ScanHost(serverHost: String)
   sealed case class CreateSession(server: ServerSpec)
-  sealed case class CreateServer(serverHost: String, pomdp: POMDP, fileData: FileData)
+  sealed case class LoadPOMDPsFromFile(file: File)
+  case object GetSessions
+  case object GetLocalPOMDPs
+  sealed case class CreateServer(serverHost: String, pomdpClassName: String)
 
-  val system = ActorSystem("enmasClient", ConfigFactory.load.getConfig("enmasClient"))
+  // tuple representing an active session
+  sealed case class ActiveSession(ref: ActorRef, id: Int, server: ServerSpec)
+
+  // tuple representing a POMDP and the JAR file containing its bytecode
+  sealed case class LocallyAvailablePOMDP(pomdp: POMDP, jar: File) {
+    override def equals(obj: Any): Boolean = {
+      obj match {
+        case other: LocallyAvailablePOMDP  ⇒ pomdp.name == other.pomdp.name
+        case _  ⇒ false
+      }
+    }
+  }
+
+  // search locations for user-supplied code.
+  val pomdpDir = new File("user/pomdp")
+  val agentDir = new File("user/agent")
+  val iterationSubscriberDir = new File("user/iterationSubscriber")
 
   implicit val timeout: Timeout = Timeout(3 seconds)
-
-  val manager = system.actorOf(Props[ClientManager], "clientManager")
+  val system = ActorSystem("enmasClient", ConfigFactory.load.getConfig("enmasClient"))
   val serverPort = 36627 // ENMAS
-
-  import org.enmas.client.gui._, org.enmas.client.http._
-
+  val manager = system.actorOf(Props[ClientManager], "clientManager")
   val gui = new ClientGUI(manager)
-
-  val net = system.actorOf(Props(new NetInterface(manager)), "clientNetInterface")
-  net ! NetInterface.Init
+  val net = new NetInterface(manager)
 }

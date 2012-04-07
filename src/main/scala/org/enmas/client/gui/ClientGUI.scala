@@ -15,6 +15,16 @@ class ClientGUI(application: ActorRef) extends MainFrame {
   centerOnScreen
   visible = true
 
+  refreshPOMDPs
+
+  private def refreshPOMDPs {
+    (application ? GetLocalPOMDPs) onSuccess {
+      case pomdps: List[POMDP]  ⇒ {
+        ui.leftPanel.pomdpListView.listData = pomdps
+      }
+    }
+  }
+
   private val jarChooser = new FileChooser {
     title = "Choose JAR file"
     fileSelectionMode = FileChooser.SelectionMode.FilesOnly
@@ -37,8 +47,8 @@ class ClientGUI(application: ActorRef) extends MainFrame {
       val chooseJarButton = new Button { action = Action("Choose JAR file") {
         val result = jarChooser.showDialog(this, "Choose JAR file")
         if (result == FileChooser.Result.Approve && jarChooser.selectedFile.exists) {
-          pomdpListView.listData = findSubclasses[POMDP](jarChooser.selectedFile) filterNot {
-            _.getName.contains("$") } map { clazz  ⇒ clazz.newInstance }
+          application ! LoadPOMDPsFromFile(jarChooser.selectedFile)
+          refreshPOMDPs
         }
       }}
 
@@ -54,7 +64,7 @@ class ClientGUI(application: ActorRef) extends MainFrame {
             import org.enmas.util.FileUtils._
             readFile(jarChooser.selectedFile) match {
               case Some(fileData)  ⇒
-                application ! CreateServer(rightPanel.serverHostField.text, pomdp, fileData)
+                application ! CreateServer(rightPanel.serverHostField.text, pomdp.getClass.getName)
               case None  ⇒ popup(
                 "Server Launch Error",
                 "There was a problem reading the JAR file."

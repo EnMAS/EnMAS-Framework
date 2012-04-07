@@ -32,9 +32,9 @@ wrong state of the buffer.
   transitionFunction = (state, actions)  ⇒ {
     val a1HasMessage = state.getAs[Boolean]("1") getOrElse false
     val a2HasMessage = state.getAs[Boolean]("2") getOrElse false
-    val a1Sends = actions.filter { a: AgentAction  ⇒ 
+    val a1Sends = actions.filter { a: AgentAction  ⇒
       a.agentNumber == 1 && a.action == 'send }.length > 0
-    val a2Sends = actions.filter { a: AgentAction  ⇒ 
+    val a2Sends = actions.filter { a: AgentAction  ⇒
       a.agentNumber == 2 && a.action == 'send }.length > 0
 
     val defaultDistribution = List(
@@ -77,7 +77,7 @@ wrong state of the buffer.
   // lies to the agent 10% of the time
   observationFunction = (s, actions, sPrime)  ⇒ (aNum, aType)  ⇒ {
     val hasMessage = s.getAs[Boolean](aNum.toString) getOrElse false
-    if ((new Random nextInt 10) < 1) State("queue"  → !hasMessage)
+    if ((new Random nextInt 10) < 1) State("queue"  → ! hasMessage)
     else State("queue"  → hasMessage)
   }
 )

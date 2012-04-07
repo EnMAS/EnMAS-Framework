@@ -29,19 +29,15 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
     * server is unreachable, server is not running, request denied,
     * or some other exceptional condition.
     */
-  private def registerHost(): Boolean = {
-    var result = false
+  private def registerSelf(): Either[Int, Boolean] = {
+    var result: Either[Int, Boolean] = Right(false)
     try { Await.result(server ? RegisterHost(self), timeout.duration) match {
       case c: ConfirmHostRegistration  ⇒ {
         uniqueID = c.id
-        result = true
+        result = Left(uniqueID)
       }
-      case _  ⇒ println("Registration denied by server!")
     }}
-    catch { case t: Throwable  ⇒ {
-      println("An error occurred during registration:")
-      t.printStackTrace
-    }}
+    catch { case _  ⇒ () }
     result
   }
 
@@ -108,7 +104,7 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
       }}
     }
 
-    case 'Init  ⇒ sender ! registerHost
+    case 'Init  ⇒ sender ! registerSelf
 
     case m: LaunchAgent  ⇒ registerAgent(m.agentType, m.clazz)
     

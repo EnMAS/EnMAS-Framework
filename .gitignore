@@ -1,8 +1,8 @@
 *.class
 target
 target/**
-project
-project/**
+project/target
+project/target/**
 lib_managed
 lib_managed/**
 

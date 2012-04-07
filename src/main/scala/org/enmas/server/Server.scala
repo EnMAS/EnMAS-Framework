@@ -18,9 +18,7 @@ class Server(pomdp: POMDP) extends Actor {
     * unique id for this host.
     */
   private def registerHost(ref: ActorRef): Message = {
-
     def nextSessionId = sessions.foldLeft(0){ _ max _.id } + 1
-
     val id = nextSessionId
     context watch ref
     sessions += SessionSpec(id, ref)
@@ -32,9 +30,7 @@ class Server(pomdp: POMDP) extends Actor {
     * Agent, and with a DenyAgentRegistration message otherwise.
     */
   private def registerAgent(sessionID: Int, agentType: AgentType): Message = {
-
     def nextAgentId = agents.foldLeft(0){ _ max _.agentNumber } + 1
-
     val a = AgentSpec(sessionID, nextAgentId, agentType)
     var newAgentSet = agents + a
     if (pomdp accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
@@ -76,10 +72,6 @@ class Server(pomdp: POMDP) extends Actor {
     * 3) Dispatches UpdateAgent messages
     */
   private def iterate(state: State, actions: JointAction): State = {
-
-    // for testing...
-    println("iterating...");
-
     try {
       val statePrime = pomdp.transitionFunction(state, actions) match {
         case Left(state)  ⇒ state
