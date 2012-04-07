@@ -61,11 +61,11 @@ class ClientManager extends Actor with Provisionable {
         val sessionRef = actorOf(Props(new Session(server.ref, availablePOMDP.pomdp)))
         watch(sessionRef) // subscribe to Terminated(sessionRef)
         (sessionRef ? 'Init) onSuccess {
-          case e: Either[Int, Boolean]  ⇒ e match { 
-            case Left(id)  ⇒ {
+          case e: Either[_,_]  ⇒ e match {
+            case Left(obj)  ⇒ obj match { case id: Int  ⇒ {
               sessions = (ActiveSession(sessionRef, id, server) :: sessions)
               replyTo ! true
-            } 
+            }}
             case _  ⇒ ()
           }
         } onFailure {
@@ -80,7 +80,7 @@ class ClientManager extends Actor with Provisionable {
 
     case LoadPOMDPsFromFile(f)  ⇒ POMDPs ++= loadPOMDPsFromFile(f)
 
-    case GetLocalPOMDPs  ⇒ sender ! (POMDPs.toList map { _.pomdp })
+    case GetLocalPOMDPs  ⇒ sender ! POMDPList(POMDPs.toList map { _.pomdp })
 
     case Provision(fileData: FileData)  ⇒ {
       val jarOption = provision[POMDP](fileData)
@@ -99,7 +99,7 @@ class ClientManager extends Actor with Provisionable {
 
     case m: CreateSession  ⇒ createSession(m.server)
 
-    case GetSessions  ⇒ sender ! sessions
+    case GetSessions  ⇒ sender ! ActiveSessionList(sessions)
 
     case Terminated(deceasedActor)  ⇒ {
       println("Received notice of some dead session")
@@ -135,13 +135,14 @@ object ClientManager extends App {
 
   // tuple representing a POMDP and the JAR file containing its bytecode
   sealed case class LocallyAvailablePOMDP(pomdp: POMDP, jar: File) {
-    override def equals(obj: Any): Boolean = {
-      obj match {
-        case other: LocallyAvailablePOMDP  ⇒ pomdp.name == other.pomdp.name
-        case _  ⇒ false
-      }
+    override def equals(obj: Any): Boolean = obj match {
+      case other: LocallyAvailablePOMDP  ⇒ pomdp.name == other.pomdp.name
+      case _  ⇒ false
     }
   }
+  
+  sealed case class POMDPList(pomdps: List[POMDP])
+  sealed case class ActiveSessionList(sessions: List[ActiveSession])
 
   // search locations for user-supplied code.
   val pomdpDir = new File("user/pomdp")

@@ -18,7 +18,7 @@ class ClientGUI(application: ActorRef) extends MainFrame {
 
   private def refreshPOMDPs {
     (application ? GetLocalPOMDPs) onSuccess {
-      case pomdps: List[POMDP]  ⇒ {
+      case POMDPList(pomdps)  ⇒ {
         ui.leftPanel.pomdpListView.listData = pomdps
       }
     }

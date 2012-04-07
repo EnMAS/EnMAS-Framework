@@ -18,7 +18,7 @@ class NetInterface(application: ActorRef) {
       // /pomdps
       case req@Path(Seg("pomdps" :: Nil))  ⇒ {
         (application ? GetLocalPOMDPs) onSuccess {
-          case pomdps: List[POMDP]  ⇒ { req respond ResponseString(
+          case POMDPList(pomdps)  ⇒ { req respond ResponseString(
             pomdps.foldLeft("{ success: [") {
               (s, p)  ⇒ s + "\"%s\", ".format(p.getClass.getName)
             }.stripSuffix(", ") + "] }\n"
@@ -78,7 +78,7 @@ class NetInterface(application: ActorRef) {
       // /sessions
       case req@Path(Seg("sessions" :: Nil))  ⇒ {
         (application ? GetSessions) onSuccess {
-          case sessions: List[ActiveSession]  ⇒ {
+          case ActiveSessionList(sessions)  ⇒ {
             req respond ResponseString(
               "{ success: \""+sessions+"\" }\n"
             )

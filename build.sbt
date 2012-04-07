@@ -32,3 +32,5 @@ libraryDependencies ++= Seq(
 unmanagedClasspath in Runtime <+= (baseDirectory) map {
   bd => Attributed.blank(bd / "config")
 }
+
+scalacOptions in Compile ++= Seq("-unchecked")
