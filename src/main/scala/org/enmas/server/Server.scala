@@ -13,12 +13,17 @@ class Server(pomdp: POMDP) extends Actor {
   private var messageQueue = Map[SessionSpec, List[AgentMessage]]()
   private var pendingActions = List[AgentAction]()
 
+  private var lastAgentId = 0
+  private def nextAgentId: Int = { lastAgentId += 1; lastAgentId }
+
+  private var lastSessionId = 0
+  private def nextSessionId: Int = { lastSessionId += 1; lastSessionId }
+
   /** Creates a new SessionSpec object for the host and stores it in
     * the local list of sessions.  The SessionSpec contains a
     * unique id for this host.
     */
   private def registerHost(ref: ActorRef): Message = {
-    def nextSessionId = sessions.foldLeft(0){ _ max _.id } + 1
     val id = nextSessionId
     context watch ref
     sessions += SessionSpec(id, ref)
@@ -30,7 +35,6 @@ class Server(pomdp: POMDP) extends Actor {
     * Agent, and with a DenyAgentRegistration message otherwise.
     */
   private def registerAgent(sessionID: Int, agentType: AgentType): Message = {
-    def nextAgentId = agents.foldLeft(0){ _ max _.agentNumber } + 1
     val a = AgentSpec(sessionID, nextAgentId, agentType)
     var newAgentSet = agents + a
     if (pomdp accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
@@ -51,10 +55,7 @@ class Server(pomdp: POMDP) extends Actor {
   private def takeAction(agentNumber: Int, action: Action) {
     if ((pendingActions filter { _.agentNumber == agentNumber }).isEmpty) {
       getAgent(agentNumber) map {
-        a  ⇒ {
-          println("Agent [%s] took action [%s]".format(agentNumber, action))
-          pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
-        }
+        a  ⇒ pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
       }
       if (
         pomdp.isSatisfiedByAgents(agents.toList map {_.agentType}) &&
@@ -77,10 +78,6 @@ class Server(pomdp: POMDP) extends Actor {
         case Left(state)  ⇒ state
         case Right(distribution)  ⇒ selectState(distribution)
       }
-
-      // for testing...
-      println("next "+statePrime+"\n")
-
       val reward = pomdp.rewardFunction(state, actions, statePrime)
       val observation = pomdp.observationFunction(state, actions, statePrime)
       var observations = Set[(AgentSpec, Observation)]()
@@ -101,9 +98,10 @@ class Server(pomdp: POMDP) extends Actor {
 
       pendingActions = pendingActions take 0 // clears pending actions
       dispatchMessages // sends bundled agent updates
-      val iteration = POMDPIteration(iterationOrdinality, observations, rewards, actions, state)
       // send iteration to POMDPIteration subscribers
-      iterationSubscribers map { _.ref ! iteration }
+      iterationSubscribers map { 
+        _.ref ! POMDPIteration(iterationOrdinality, observations, rewards, actions, state)
+      }
       iterationOrdinality += 1;
       statePrime
     }
@@ -120,10 +118,6 @@ class Server(pomdp: POMDP) extends Actor {
     * represented as a List of (State, Int) tuples.
     */
   private def selectState(all: List[(State, Int)]) = {
-
-    // for testing...
-    println("Choosing among %s states...".format(all.length))
-
     def stateAt(possible: List[(State, Int)], scalar: Int): State =
       if (scalar <= 0 || possible.tail == Nil)
         possible.head._1
@@ -187,7 +181,7 @@ class Server(pomdp: POMDP) extends Actor {
       agents = agents filterNot { _.agentNumber == id }
       pendingActions = pendingActions filterNot { _.agentNumber == id }
       sessions filterNot { _.ref == sender } map { _.ref ! AgentDied(id) }
-      println("Received notice of an agent's death!  I have [%s] agent(s) left" format agents.size)
+      println("An agent died!  [%s] agent(s) left" format agents.size)
     }
 
     case Terminated(deceasedActor)  ⇒ {
@@ -199,7 +193,7 @@ class Server(pomdp: POMDP) extends Actor {
           }
           sessions = sessions filterNot { _ == dead }
           iterationSubscribers = iterationSubscribers filterNot { _ == dead }
-          println("A session died! "+sessions.size+" sessions active.")
+          println("A session died! [%s] session(s) left" format sessions.size)
         }
         case None  ⇒ ()
       }

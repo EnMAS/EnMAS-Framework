@@ -10,16 +10,10 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
   import ClientManager._, Session._, context._
 
   watch(server) // subscribe to Terminated(server.ref)
-  self ! Ping // start the server polling loop
-
+  self ! Ping   // start the server polling loop
   private var uniqueID = -1
   private var agents = Map[Int, (AgentType, ActorRef)]()
   private var clients = Map[Int, ActorRef]()
-
-  // TODO: fill these sets
-//  private var graphicsClients = Map[Int, GraphicsClient]
-//  private var graphicsClients = Map[Int, ]
-
   private val gui = new SessionGUI(self, pomdp)
 
   /** Returns true iff registering this clientManager session
@@ -51,27 +45,23 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
     * policy function.
     */
   private def registerAgent(
-    agentType: AgentType, 
+    agentType: AgentType,
     clazz: java.lang.Class[_ <: Agent]
   ) {
-    try { Await.result(
-      server ? RegisterAgent(uniqueID, agentType), timeout.duration
-    ) match {
+    val replyTo = sender
+    (server ? RegisterAgent(uniqueID, agentType)) onSuccess {
       case confirmation: ConfirmAgentRegistration  ⇒ {
         val agent = actorOf(Props(clazz.newInstance repliesTo self))
         watch(agent)
         agents += (confirmation.agentNumber  → (agentType, agent))
         agent forward confirmation
-        sender ! confirmation
+        replyTo ! confirmation
       }
-      case _  ⇒ sender ! false
-    }}
-    catch { case _  ⇒ sender ! false }
+      case _  ⇒ replyTo ! false
+    } onFailure { case _  ⇒ replyTo ! false }
   }
 
-  private def registerClient(
-    clazz: java.lang.Class[_ <: IterationClient]
-  ) {
+  private def registerClient(clazz: java.lang.Class[_ <: IterationClient]) {
     def nextClientId = clients.foldLeft(0){ _ max _._1 } + 1
     try {
       val client = actorOf(Props(clazz.newInstance))
@@ -124,24 +114,21 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
     }
 
     case Terminated(deceasedActor)  ⇒ {
-      if (deceasedActor == server) {
-        // the server died
+      if (deceasedActor == server) { // the server died
         agents map { a  ⇒ { unwatch(a._2._2); stop(a._2._2) }}
         clients map { c  ⇒ { unwatch(c._2); stop(c._2) }}
         stop(self)
       }
       else {
         agents.find(_._2._2 == deceasedActor) match {
-          case Some(deadAgent)  ⇒ {
-            // one of this session's agents died
+          case Some(deadAgent)  ⇒ { // one of this session's agents died
             server ! AgentDied(deadAgent._1)
             agents = agents filterNot { _ == deadAgent }
           }
           case None  ⇒ ()
         }
         clients find (_._2 == deceasedActor) match {
-          case Some(deadClient)  ⇒ {
-            // one of this session's clients died
+          case Some(deadClient)  ⇒ { // one of this session's clients died
             clients = clients filterNot { _ == deadClient }
             if (clients.isEmpty) server ! Unsubscribe
           }
@@ -155,24 +142,13 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
       println("An agent on another host (number "+id+") has died.")
     }
 
-    case KillAgent(number)  ⇒ {
-      agents filter { _._1 == number } map { a  ⇒ {
-        val ref = a._2._2
-        ref ! Kill
-        self ! Terminated(ref)
-      }}
-    }
+    case KillAgent(number)  ⇒
+      agents filter { _._1 == number } map { _._2._2 ! Kill }
  
-    case KillClient(number)  ⇒ {
-      clients filter { _._1 == number } map { c  ⇒ {
-        val ref = c._2
-        ref ! Kill
-        self ! Terminated(ref)
-      }}
-    }
- 
-    case _  ⇒ () // ignore unhandled messages
+    case KillClient(number)  ⇒
+      clients filter { _._1 == number } map { _._2 ! Kill }
 
+    case _  ⇒ () // ignore unhandled messages
   }
 }
 

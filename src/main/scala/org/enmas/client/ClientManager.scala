@@ -45,7 +45,7 @@ class ClientManager extends Actor with Provisionable {
               "akka://enmasServer@"+address+":"+serverPort+"/user/serverManager"
             )
             host ! Provision(fileData)
-            host ! CreateServerFor(pomdpClassName)            
+            host ! CreateServerFor(pomdpClassName)
           }
           case None  ⇒ ()
         }
@@ -68,9 +68,7 @@ class ClientManager extends Actor with Provisionable {
             }}
             case _  ⇒ ()
           }
-        } onFailure {
-          case _  ⇒ replyTo ! false
-        }
+        } onFailure { case _  ⇒ replyTo ! false }
       }
       case None  ⇒ replyTo ! false
     }
@@ -92,10 +90,7 @@ class ClientManager extends Actor with Provisionable {
     case CreateServer(serverHost, pomdpClassName)  ⇒
       createServer(serverHost, pomdpClassName)
 
-    case e: Error  ⇒ {
-      println(e.cause.getMessage)
-      e.cause.printStackTrace
-    }
+    case e: Error  ⇒ e.cause.printStackTrace
 
     case m: CreateSession  ⇒ createSession(m.server)
 
@@ -140,7 +135,7 @@ object ClientManager extends App {
       case _  ⇒ false
     }
   }
-  
+
   sealed case class POMDPList(pomdps: List[POMDP])
   sealed case class ActiveSessionList(sessions: List[ActiveSession])
 

@@ -16,7 +16,7 @@ class NetInterface(application: ActorRef) {
 
       // List locally available POMDPs
       // /pomdps
-      case req@Path(Seg("pomdps" :: Nil))  ⇒ {
+      case req@Path(Seg("pomdpClasses" :: Nil))  ⇒ {
         (application ? GetLocalPOMDPs) onSuccess {
           case POMDPList(pomdps)  ⇒ { req respond ResponseString(
             pomdps.foldLeft("{ success: [") {
@@ -88,40 +88,15 @@ class NetInterface(application: ActorRef) {
         )}
       }
 
-      // Get Session Status
-      // /session/<hostAddress>/<sessionId>
-/*
-      case req@Path(Seg("session" :: hostAddress :: sessionId :: Nil))  ⇒ {
-        (application ? GetSessions) onSuccess {
-          case sessions: List[ActiveSession]  ⇒ {
-            req respond ResponseString(
-              "{ success: \""+sessions+"\" }\n"
-            )
-          }
-        } onFailure { case _  ⇒ req respond ResponseString(
-          "{ error: \"The specified host could not be contacted.\" }\n"
-        )}
-
-        () ? onSuccess {
-          case Some[ActiveSession](session)  ⇒ {
-            req respond ResponseString("{ success: \"%s\" }" format session)
-          }
-          case None | _  ⇒ req respond ResponseString("{ error: Session not found. }")
-        } onFailure {
-          case _  ⇒ req respond ResponseString("{ error: \"An error occurred.\" }\n")
-        }
-      }
-*/
-
       // List Agents on Session
       // /session/<hostAddress>/<sessionId>/agents
-      case req@Path(Seg("session" :: hostAddress :: sessionId :: "agents" :: Nil))  ⇒ {
+      case req@Path(Seg("session" :: hostAddress :: sessionId :: "agentClasses" :: Nil))  ⇒ {
         req respond ResponseString("{ error: \"Not implemented yet.\" }\n")
       }
 
       // List Iteration Subscribers on Session
       // /session/<hostAddress>/<sessionId>/subscribers
-      case req@Path(Seg("session" :: hostAddress :: sessionId :: "subscribers" :: Nil))  ⇒ {
+      case req@Path(Seg("session" :: hostAddress :: sessionId :: "subscriberClasses" :: Nil))  ⇒ {
         req respond ResponseString("{ error: \"Not implemented yet.\" }\n")
       }
 
@@ -134,6 +109,12 @@ class NetInterface(application: ActorRef) {
       // Create Iteration Subscriber on Session
       // /session/<hostAddress>/<sessionId>/subscriber/create/<name>
       case req@Path(Seg("session" :: hostAddress :: sessionId :: "subscriber" :: "create" :: name :: Nil))  ⇒ {
+        req respond ResponseString("{ error: \"Not implemented yet.\" }\n")
+      }
+
+      // Get Session Status
+      // /session/<hostAddress>/<sessionId>
+      case req@Path(Seg("session" :: hostAddress :: sessionId :: Nil))  ⇒ {
         req respond ResponseString("{ error: \"Not implemented yet.\" }\n")
       }
       
