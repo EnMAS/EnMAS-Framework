@@ -2,7 +2,7 @@ name := "EnMAS"
 
 organization := "org.enmas"
 
-version := "0.9"
+version := "0.10"
 
 publishTo := Some(Resolver.sftp(
    "EnMAS Repository",
@@ -27,7 +27,8 @@ libraryDependencies ++= Seq(
   "net.databinder" %% "unfiltered-filter-async" % "0.6.1",
   "net.databinder" %% "unfiltered-jetty" % "0.6.1",
   "net.databinder" %% "unfiltered-netty" % "0.6.1",
-  "org.slf4j" % "slf4j-nop" % "1.6.4"
+  "org.slf4j" % "slf4j-nop" % "1.6.4",
+  "org.scalatest" %% "scalatest" % "1.7.2" % "test"
 )
 
 unmanagedClasspath in Runtime <+= (baseDirectory) map {

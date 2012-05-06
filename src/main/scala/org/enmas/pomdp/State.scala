@@ -9,7 +9,7 @@ import scala.collection.immutable.HashMap, scala.reflect._
   * objects, the proper type must be supplied.
   */
 class State(
-  map: HashMap[String, (Manifest[_], Any)] = 
+  val map: HashMap[String, (Manifest[_], Any)] = 
     scala.collection.immutable.HashMap.empty[String, (Manifest[_], Any)]
 ) extends java.io.Serializable {
 
@@ -64,6 +64,9 @@ class State(
   /** == Java API Method == */
   def getLong(key: String): Long = getAs(key, 0l)
 
+  /** Returns a String representation of the mappings contained
+    * in this State.
+    */
   override def toString(): String = {
     map.toTraversable.foldLeft("State(\n") {
       (s: String, mapping: (String, (Manifest[_], Any))) => {
@@ -72,6 +75,15 @@ class State(
       }
     } + ")"
   }
+
+  /** Overridden to defer to the backing hashmap, which
+    * performs a proper structural equality test.
+    */
+  override def equals(obj: Any) = obj match {
+    case s2: State  ⇒ map == s2.map
+    case _  ⇒ false
+  }
+
 }
 
 object State {
