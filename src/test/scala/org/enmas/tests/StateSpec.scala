@@ -1,3 +1,5 @@
+package org.enmas.tests
+
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
 
