@@ -84,6 +84,11 @@ class State(
     case _  ⇒ false
   }
 
+  /** Overridden to defer to the backing hashmap to maintain
+    * the relationship between equals and hashcode.
+    */
+    override def hashCode = map.hashCode
+
 }
 
 object State {
