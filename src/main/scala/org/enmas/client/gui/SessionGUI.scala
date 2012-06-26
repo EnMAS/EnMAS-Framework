@@ -5,8 +5,8 @@ import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._,
        akka.actor._, akka.dispatch._, akka.util.duration._, akka.pattern.ask,
        java.io._
 
-class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame {
-  import ClientManager._, Session._, Modal._
+class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame with EnMAS_GUI {
+  import ClientManager._, Session._
 
   title = "EnMAS: Session Manager"
   contents = ui
@@ -44,17 +44,9 @@ class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame {
     }
   }
 
-  private val jarChooser = new FileChooser {
-    title = "Choose JAR file"
-    fileSelectionMode = FileChooser.SelectionMode.FilesOnly
-    multiSelectionEnabled = false
-    fileHidingEnabled = true
-    peer.setAcceptAllFileFilterUsed(false)
-    fileFilter = new javax.swing.filechooser.FileFilter {
-      def accept(f: java.io.File) = f.isDirectory || f.getName.endsWith(".jar") || f.getName.endsWith(".JAR")
-      def getDescription = "JAR files"
-    }
-  }
+
+  private val jarChooser = createJarFileChooser
+
 
   lazy val agentsTab = new TabbedPane.Page("Agents",
     new GridPanel(2, 1) {

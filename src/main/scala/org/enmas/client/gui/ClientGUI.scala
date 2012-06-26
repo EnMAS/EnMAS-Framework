@@ -6,8 +6,8 @@ import org.enmas.pomdp._, org.enmas.client.ClientManager, org.enmas.messaging._,
        akka.actor._, akka.dispatch._, akka.util.duration._, akka.pattern.ask,
        java.net.InetAddress
 
-class ClientGUI(application: ActorRef) extends MainFrame {
-  import ClientManager._, Modal._
+class ClientGUI(application: ActorRef) extends MainFrame with EnMAS_GUI {
+  import ClientManager._
 
   title = "EnMAS: Client Manager"
   contents = ui
@@ -24,17 +24,9 @@ class ClientGUI(application: ActorRef) extends MainFrame {
     }
   }
 
-  private val jarChooser = new FileChooser {
-    title = "Choose JAR file"
-    fileSelectionMode = FileChooser.SelectionMode.FilesOnly
-    multiSelectionEnabled = false
-    fileHidingEnabled = true
-    peer.setAcceptAllFileFilterUsed(false)
-    fileFilter = new javax.swing.filechooser.FileFilter {
-      def accept(f: java.io.File) = f.isDirectory || f.getName.endsWith(".jar") || f.getName.endsWith(".JAR")
-      def getDescription = "JAR files"
-    }
-  }
+
+  private val jarChooser = createJarFileChooser
+
 
   lazy val ui = new BorderPanel {
     // Left side of the pane

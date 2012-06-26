@@ -12,7 +12,7 @@ publishTo := Some(Resolver.sftp(
 
 fork in run := true
 
-scalaVersion := "2.9.1"
+scalaVersion := "2.9.2"
 
 resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
 
@@ -21,9 +21,9 @@ retrieveManaged := true
 libraryDependencies ++= Seq(
   "com.typesafe.akka" % "akka-actor" % "2.0",
   "com.typesafe.akka" % "akka-remote" % "2.0",
-  "org.scala-lang" % "scala-swing" % "2.9.1",
-  "org.scala-lang" % "scala-compiler" % "2.9.1",
-  "org.scala-lang" % "scala-library" % "2.9.1",
+  "org.scala-lang" % "scala-swing" % "2.9.2",
+  "org.scala-lang" % "scala-compiler" % "2.9.2",
+  "org.scala-lang" % "scala-library" % "2.9.2",
   "net.databinder" %% "unfiltered-filter-async" % "0.6.1",
   "net.databinder" %% "unfiltered-jetty" % "0.6.1",
   "net.databinder" %% "unfiltered-netty" % "0.6.1",
