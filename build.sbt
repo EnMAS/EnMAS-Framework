@@ -19,8 +19,8 @@ resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/release
 retrieveManaged := true
 
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" % "akka-actor" % "2.0",
-  "com.typesafe.akka" % "akka-remote" % "2.0",
+  "com.typesafe.akka" % "akka-actor" % "2.0.2",
+  "com.typesafe.akka" % "akka-remote" % "2.0.2",
   "org.scala-lang" % "scala-swing" % "2.9.2",
   "org.scala-lang" % "scala-compiler" % "2.9.2",
   "org.scala-lang" % "scala-library" % "2.9.2",
