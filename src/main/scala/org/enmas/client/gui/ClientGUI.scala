@@ -24,9 +24,7 @@ class ClientGUI(application: ActorRef) extends MainFrame with EnMAS_GUI {
     }
   }
 
-
   private val jarChooser = createJarFileChooser
-
 
   lazy val ui = new BorderPanel {
     // Left side of the pane
