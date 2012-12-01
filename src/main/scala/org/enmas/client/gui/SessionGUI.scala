@@ -1,6 +1,7 @@
 package org.enmas.client.gui
 
-import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._,
+import org.enmas.pomdp.POMDP,
+       org.enmas.client._, org.enmas.messaging._,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
        akka.actor._, akka.dispatch._, akka.util.duration._, akka.pattern.ask,
        java.io._

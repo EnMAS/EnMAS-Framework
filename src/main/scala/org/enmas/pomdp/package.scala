@@ -52,7 +52,6 @@ package org.enmas {
     * Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>. */
 
   package object pomdp {
-    type Action = Symbol
     type AgentType = Symbol
     type JointAction = List[AgentAction]
     type Observation = State
@@ -61,6 +60,10 @@ package org.enmas {
       * added to a simulation.
       */
     val NO_ACTION = Symbol("")
+
+    /** Implicit conversion from Symbol to Action
+      */
+    implicit def symbol2Action(s: Symbol): Action = Action(s.name)
 
     /** Implicit conversion from State to Either[State, List[(State, Int)]]
       */
