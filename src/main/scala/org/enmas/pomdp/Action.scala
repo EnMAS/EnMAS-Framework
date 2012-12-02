@@ -6,3 +6,7 @@ package org.enmas.pomdp
 case class Action(name: String = "") {
   override def toString() = name
 }
+
+object Action {
+  val DoNothing = Action()
+}

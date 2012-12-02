@@ -55,11 +55,6 @@ package org.enmas {
     type AgentType = Symbol
     type JointAction = List[AgentAction]
 
-    /** This action is taken on an Agent's behalf when it is first
-      * added to a simulation.
-      */
-    val NO_ACTION = Action("")
-
     /** Implicit conversion from State to Either[State, List[(State, Int)]]
       */
     implicit def state2Either(s: State): Either[State, List[(State, Int)]] = Left(s)

@@ -7,12 +7,13 @@ import org.enmas.pomdp._, org.enmas.client._,
   */
 class SarsaAgent extends Agent {
 
-  def name = "Sarsa Agent"
   val random = new scala.util.Random
   val alpha = 0.9f
   val gamma = 0.9f
   var qTable = Map[(State, Action), Float]()
-  var lastSA = (State(), NO_ACTION)
+  var lastSA = (State(), Action())
+
+  def name = "Sarsa Agent"
 
   def policy(observation: State, reward: Float): Action = {
 
@@ -24,7 +25,7 @@ class SarsaAgent extends Agent {
       (op1, op2) => op1._2 > op2._2
     }.head._1
 
-    var decision = if ((random nextInt 10) < 1)
+    val decision = if ((random nextInt 10) < 1)
                      actions.toSeq(random nextInt actions.size)
                    else
                      best

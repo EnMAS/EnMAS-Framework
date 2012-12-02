@@ -39,7 +39,7 @@ class Server(pomdp: POMDP) extends Actor {
     var newAgentSet = agents + a
     if (pomdp accomodatesAgents { newAgentSet.toList map {_.agentType} }) {
       agents = newAgentSet
-      self ! TakeAction(a.agentNumber, NO_ACTION)
+      self ! TakeAction(a.agentNumber, Action.DoNothing)
       ConfirmAgentRegistration(a.agentNumber, a.agentType, pomdp.actionsFunction(agentType))
     }
     else DenyAgentRegistration
