@@ -22,7 +22,7 @@ the tiger is there they are both mauled by the tiger.""",
     ("doorOpen"  → false) +
     ("tigerNoise"  → true),
 
-  actionsFunction = (_)  ⇒ Set('open, 'listen),
+  actionsFunction = (_)  ⇒ Set(Action("open"), Action("listen")),
 
   transitionFunction = (state, actions)  ⇒ {
     val random = new Random
@@ -35,7 +35,7 @@ the tiger is there they are both mauled by the tiger.""",
 
     State("time"  → (time + 1)) +
       ("tiger"  → tigerPrime) +
-      ("doorOpen"  → (actions.filter { _.action == 'open }.length > 0)) +
+      ("doorOpen"  → (actions.filter { _.action == Action("open") }.length > 0)) +
       ("tigerNoise"  → (if (tigerPrime) (random nextInt 10) < 7 else false))
   },
 

@@ -7,3 +7,4 @@ lib_managed
 lib_managed/**
 user/*/*.jar
 user/*/**
+**.csv

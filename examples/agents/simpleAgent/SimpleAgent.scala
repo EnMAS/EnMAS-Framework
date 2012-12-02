@@ -3,7 +3,7 @@ import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._,
 
 class simpleAgent extends Agent {
   def name = "Simple Agent"
-  def policy(observation: Observation, reward: Float): Action = {
+  def policy(observation: State, reward: Float): Action = {
     observation.getAs[Int]("time") map { t  ⇒ if (t % 1000 == 0) {
 		  println(t.toString) }
 	  }

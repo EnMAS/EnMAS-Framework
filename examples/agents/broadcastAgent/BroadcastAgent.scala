@@ -9,7 +9,7 @@ class BroadcastAgent extends Agent {
 
   def name = "Simple Broadcast Agent"
 
-  def policy(observation: Observation, reward: Float): Action = {
+  def policy(observation: State, reward: Float): Action = {
     print("I am agent "+agentNumber+"\nI think my queue is ")
     println(observation.getAs[Boolean]("queue").getOrElse(false) match {
       case true  ⇒ "full"

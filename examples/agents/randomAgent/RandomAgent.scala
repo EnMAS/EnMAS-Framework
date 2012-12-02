@@ -5,6 +5,6 @@ class RandomAgent extends Agent {
 
   val random = new scala.util.Random
 
-  def policy(observation: Observation, reward: Float) =
+  def policy(observation: State, reward: Float) =
     actions.toSeq(random nextInt actions.size)
 }

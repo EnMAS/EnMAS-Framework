@@ -80,7 +80,7 @@ class Server(pomdp: POMDP) extends Actor {
       }
       val reward = pomdp.rewardFunction(state, actions, statePrime)
       val observation = pomdp.observationFunction(state, actions, statePrime)
-      var observations = Set[(AgentSpec, Observation)]()
+      var observations = Set[(AgentSpec, State)]()
       var rewards = Set[(AgentSpec, Float)]()
 
       sessions map { cm  ⇒ {

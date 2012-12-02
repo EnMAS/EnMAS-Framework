@@ -29,7 +29,7 @@ case class POMDP (
   actionsFunction: (AgentType) => Set[Action],
   transitionFunction: (State, JointAction) => Either[State, List[(State, Int)]],
   rewardFunction: (State, JointAction, State) => AgentType => Float,
-  observationFunction: (State, JointAction, State) => (Int, AgentType) => Observation
+  observationFunction: (State, JointAction, State) => (Int, AgentType) => State
 ) {
 
   /** Checks that all supplied agent types are allowed and that

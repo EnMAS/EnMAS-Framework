@@ -15,7 +15,7 @@ class JavaBroadcastAgent extends Agent {
 
 	Random random = new Random();
 
-    public String name() { return "Javandre Broadcasterson"; }
+    public String name() { return "Java Broadcast Agent"; }
 
 	public Symbol policy(State observation, float reward) {
 	    System.out.println("I am agent "+agentNumber()+"\nI think my queue is ");
@@ -29,15 +29,15 @@ class JavaBroadcastAgent extends Agent {
 		}
 	    System.out.println("I received "+reward+" as a reward\n");
 
-		Symbol decision = NO_ACTION();
+		Action decision = new Action();
 		int rand = random.nextInt(10);
 		if (agentNumber() == 1) {
-			if (rand < 1) decision = new Symbol("wait");
-			else decision = new Symbol("send");
+			if (rand < 1) decision = new Action("wait");
+			else decision = new Action("send");
 		}
 		else if (agentNumber() == 2) {	
-			if (rand < 1) decision = new Symbol("send");
-			else decision = new Symbol("wait");
+			if (rand < 1) decision = new Action("send");
+			else decision = new Action("wait");
 		}
 		return decision;
 	}

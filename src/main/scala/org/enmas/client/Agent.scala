@@ -9,9 +9,6 @@ abstract class Agent() extends Client {
   private var aType: AgentType = Symbol("")
   private var actionSet = Set[Action]()
 
-  /** For Java API */
-  val NO_ACTION = Symbol("")
-
   /** Returns the unique (per-server instance) identifier for this agent.
     */
   final def agentNumber = aNumber
@@ -36,7 +33,7 @@ abstract class Agent() extends Client {
 
   def name: String
 
-  def policy(observation: Observation, reward: Float): Action
+  def policy(observation: State, reward: Float): Action
 
   def handleError(error: Throwable): Unit = {}
 
@@ -69,6 +66,6 @@ abstract class Agent() extends Client {
     */
   protected final def takeAction(action: Action) {
     if (actionSet contains action) replyChannel ! TakeAction(agentNumber, action)
-    else replyChannel ! TakeAction(agentNumber, NO_ACTION)
+    else replyChannel ! TakeAction(agentNumber, Action())
   }
 }

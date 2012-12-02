@@ -128,7 +128,7 @@ case class TakeAction(agentNumber: Int, action: Action ) extends Message
   */
 case class UpdateAgent(
   agentNumber: Int,
-  observation: Observation,
+  observation: State,
   reward: Float
 ) extends AgentMessage
 

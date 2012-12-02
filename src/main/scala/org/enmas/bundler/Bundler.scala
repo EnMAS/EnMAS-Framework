@@ -65,7 +65,7 @@ class Bundler extends MainFrame {
       }
     }
 
-    def compile(sourceDir: File) = {
+    def compile(sourceDir: File) {
       results.text += "Compiling source files... "
       val settings = new Settings()
       settings.sourcepath.value = sourceDir.getPath
@@ -95,7 +95,7 @@ class Bundler extends MainFrame {
       }
     }
 
-    def makeJar(sourceDir: File) = {
+    def makeJar(sourceDir: File) {
       results.text += "Making JAR file... "
       import java.util.jar._
       val jarFile = new File(sourceDir.getParentFile, sourceDir.getName.replaceAll("\\s", "")+".jar")
