@@ -46,7 +46,7 @@ public class JavaSarsaAgent extends Agent {
 
 		Action decision = bestGuess;
 
-		if (random.nextInt(10) < 1) { decision = randomAction(); }
+		if (random.nextDouble < randomFactor) { decision = randomAction(); }
 
 		Situation currentSA = new Situation(observation, decision);
 
