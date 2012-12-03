@@ -1,5 +1,6 @@
-import org.enmas.pomdp._, org.enmas.client._,
-       scala.util._
+import org.enmas.client.Agent
+import org.enmas.pomdp.{State, Action}
+import scala.util.Random
 
 /**
   * Implementes the SARSA reinforcement learning algorithm, a modified
@@ -8,6 +9,7 @@ import org.enmas.pomdp._, org.enmas.client._,
 class SarsaAgent extends Agent {
 
   val random = new scala.util.Random
+  val randomFactor = 0.1f // this agent acts randomly 10% of the time
   val alpha = 0.9f
   val gamma = 0.9f
   var qTable = Map[(State, Action), Float]()
@@ -17,33 +19,32 @@ class SarsaAgent extends Agent {
 
   def policy(observation: State, reward: Float): Action = {
 
-    lazy val options: List[(Action, Float)] = {
-      for (a <- actions) yield (a, expectedReward(observation, a))
-    }.toList
+    val options: Seq[(Action, Float)] =
+      for (a <- actions.toSeq) yield (a, expectedReward(observation, a))
 
-    lazy val best = options.sortWith {
-      (op1, op2) => op1._2 > op2._2
-    }.head._1
+    lazy val bestGuess = options.sortWith((o1, o2) => o1._2 > o2._2).head._1
 
-    val decision = if ((random nextInt 10) < 1)
-                     actions.toSeq(random nextInt actions.size)
-                   else
-                     best
+    val decision = if (random.nextDouble < randomFactor) randomAction()
+                   else bestGuess
 
-    val newQValue = expectedReward(lastSA._1, lastSA._2) +
-                    alpha * (
-                      reward +
-                      gamma * expectedReward(observation, decision) -
-                      expectedReward(lastSA._1, lastSA._2)
-                    )
+    val currentSA = (observation, decision)
 
-    qTable = qTable + (lastSA -> newQValue) 
-    lastSA = (observation, decision)
+    val currentExpected = expectedReward(observation, decision)
+
+    val lastExpected = expectedReward(lastSA._1, lastSA._2)
+
+    val newQValue = lastExpected + alpha * (
+      reward + gamma * currentExpected - lastExpected
+    )
+
+    qTable += (lastSA -> newQValue) // update the Q-Table
+    lastSA = currentSA
 
     decision
   }
 
-  private def expectedReward(state: State, action: Action): Float = 
+  def expectedReward(state: State, action: Action): Float = 
     qTable.get(state, action) getOrElse 0
 
+  def randomAction(): Action = actions.toSeq(random nextInt actions.size)
 }

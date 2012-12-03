@@ -1,9 +1,12 @@
-import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._
+import org.enmas.client.Agent
+import org.enmas.pomdp.{State, Action}
+import scala.util.Random
 
 class RandomAgent extends Agent {
-  def name = "Random Agent"
 
   val random = new scala.util.Random
+
+  def name = "Random Agent"
 
   def policy(observation: State, reward: Float) =
     actions.toSeq(random nextInt actions.size)

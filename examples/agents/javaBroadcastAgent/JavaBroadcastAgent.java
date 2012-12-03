@@ -1,11 +1,8 @@
-package org.enmas.examples;
-
-import scala.Symbol;
-import scala.util.*;
-import org.enmas.pomdp.*;
-import static org.enmas.pomdp.package$.*;
 import org.enmas.client.Agent;
+import org.enmas.pomdp.State;
+import org.enmas.pomdp.Action;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 /** BroadcastAgent is very simple!
   * Agent 1: 90% of the time sends and 10% of the time waits.
@@ -13,11 +10,14 @@ import java.util.NoSuchElementException;
   */
 class JavaBroadcastAgent extends Agent {
 
+	final Action waitAction = new Action("wait");
+	final Action sendAction = new Action("send");
 	Random random = new Random();
+	final double randomFactor = 0.1;
 
     public String name() { return "Java Broadcast Agent"; }
 
-	public Symbol policy(State observation, float reward) {
+	public Action policy(State observation, float reward) {
 	    System.out.println("I am agent "+agentNumber()+"\nI think my queue is ");
 		try {
 			Boolean observedMessage = observation.getBoolean("queue");
@@ -29,16 +29,18 @@ class JavaBroadcastAgent extends Agent {
 		}
 	    System.out.println("I received "+reward+" as a reward\n");
 
-		Action decision = new Action();
-		int rand = random.nextInt(10);
+		Action decision = Action.DoNothing();
 		if (agentNumber() == 1) {
-			if (rand < 1) decision = new Action("wait");
-			else decision = new Action("send");
+			decision = (random.nextDouble() < randomFactor)
+				? waitAction
+				: sendAction;
 		}
-		else if (agentNumber() == 2) {	
-			if (rand < 1) decision = new Action("send");
-			else decision = new Action("wait");
+		else { // agentNumber() == 2
+			decision = (random.nextDouble() < randomFactor)
+				? sendAction
+				: waitAction;
 		}
+
 		return decision;
 	}
 }

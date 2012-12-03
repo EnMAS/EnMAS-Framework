@@ -1,5 +1,6 @@
-import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._,
-       scala.util._
+import org.enmas.pomdp._
+import org.enmas.pomdp.State.Implicits._
+import scala.util.Random
 
 case class Broadcast extends POMDP (
   name = "Broadcast Problem",
@@ -24,60 +25,70 @@ wrong state of the buffer.
 
   // state consists of two (Int, Boolean) mappings, representing
   // the internal buffers of agent 1 and agent 2
-  initialState = State.empty + ("1"  → false) + ("2"  → false),
+  initialState = State("1" -> false, "2" -> false),
 
-  // each agent has the same set of actions
-  actionsFunction = (agentType)  ⇒ Set('send, 'wait),
+  actionsFunction = (agentType) => Set(Action("send"), Action("wait")),
 
-  transitionFunction = (state, actions)  ⇒ {
+  transitionFunction = (state, actions) => {
+
     val a1HasMessage = state.getAs[Boolean]("1") getOrElse false
+
     val a2HasMessage = state.getAs[Boolean]("2") getOrElse false
-    val a1Sends = actions.filter { a: AgentAction  ⇒
-      a.agentNumber == 1 && a.action == 'send }.length > 0
-    val a2Sends = actions.filter { a: AgentAction  ⇒
-      a.agentNumber == 2 && a.action == 'send }.length > 0
+
+    val a1Sends = actions.exists { a =>
+      a.agentNumber == 1 && a.action == Action("send") }
+
+    val a2Sends = actions.exists { a =>
+      a.agentNumber == 2 && a.action == Action("send") }
 
     val defaultDistribution = List(
-      (State("1"  → true) + ("2"  → true), 9),
-      (State("1"  → true) + ("2"  → false), 81),
-      (State("1"  → false) + ("2"  → true), 1),
-      (State("1"  → false) + ("2"  → false), 9)
+      (State("1" -> true, "2" -> true), 9),
+      (State("1" -> true, "2" -> false), 81),
+      (State("1" -> false, "2" -> true), 1),
+      (State("1" -> false, "2" -> false), 9)
     )
 
     (a1Sends, a2Sends, a1HasMessage, a2HasMessage) match {
+
       // both do legit send OR both wait: stay in the current state
-      case (true, true, true, true) | (false, false, true, true)  ⇒ List(state  → 1)
-      case (true, false, _, true) | (false, false, false, true)  ⇒ { List(
-        (State("1"  → true) + ("2"  → true), 9),
-        (State("1"  → false) + ("2"  → true), 1)
-      )}
+      case (true, true, true, true) | (false, false, true, true) => List(state -> 1)
+
+      case (true, false, _, true) | (false, false, false, true) => List(
+        (State("1" -> true, "2" -> true), 9),
+        (State("1" -> false, "2" -> true), 1)
+      )
+
       // a1 does legit send, a2 has no msg or waits
-      case (true, false, true, _)  ⇒ { List(
-        (State("1"  → true) + ("2"  → true), 1),
-        (State("1"  → false) + ("2"  → true), 9)
-      )}
-      case (false, false, true, false)  ⇒ { List(
-        (State("1"  → true) + ("2"  → true), 1),
-        (State("1"  → true) + ("2"  → false), 9)
-      )}
-      case _  ⇒ defaultDistribution
+      case (true, false, true, _) => List(
+        (State("1" -> true, "2" -> true), 1),
+        (State("1" -> false, "2" -> true), 9)
+      )
+
+      case (false, false, true, false) => List(
+        (State("1" -> true, "2" -> true), 1),
+        (State("1" -> true, "2" -> false), 9)
+      )
+
+      case _ => defaultDistribution
     }
   },
 
-  // 1 if exactly one agent with a message chooses 'send and 0 otherwise
-  rewardFunction = (s, actions, sPrime)  ⇒ (agentType)  ⇒ {
-    actions.filter{ a  ⇒ { a.action == 'send &&
-      s.getAs[Boolean](a.agentNumber.toString).getOrElse(false)
-    }}.size match {
-      case 1  ⇒ 1
-      case _  ⇒ 0
+  // 1 if exactly one agent with a message chose to send and 0 otherwise
+  rewardFunction = (s, actions, sPrime) => (agentType) => {
+
+    val sentMessages = actions.filter { a =>
+      val aMessage = s.getAs[Boolean](a.agentNumber.toString) getOrElse false
+      val choseToSend = a.action == Action("send")
+      aMessage && choseToSend
     }
+
+    if (sentMessages.size == 1) 1 else 0
   },
 
   // lies to the agent 10% of the time
-  observationFunction = (s, actions, sPrime)  ⇒ (aNum, aType)  ⇒ {
+  observationFunction = (s, actions, sPrime) => (aNum, aType) => {
     val hasMessage = s.getAs[Boolean](aNum.toString) getOrElse false
-    if ((new Random nextInt 10) < 1) State("queue"  → ! hasMessage)
-    else State("queue"  → hasMessage)
+    if ((new Random).nextDouble < 0.1) State("queue" -> ! hasMessage)
+    else State("queue" -> hasMessage)
   }
 )

@@ -59,10 +59,19 @@ class Bundler extends MainFrame {
         if (v != FileChooser.Result.Approve || ! sourceChooser.selectedFile.exists)
           StatusBar.noSource
         else {
-          future { compile(sourceChooser.selectedFile) }
+          future {
+            clean(sourceChooser.selectedFile)
+            compile(sourceChooser.selectedFile)
+          }
           StatusBar.working
         }
       }
+    }
+
+    def clean(sourceDir: File) {
+      results.text += "Cleaning directory of .class files...\n"
+      val classFiles = sourceDir.listFiles.toList.filter(_.toString.endsWith(".class"))
+      classFiles map { _.delete() }
     }
 
     def compile(sourceDir: File) {

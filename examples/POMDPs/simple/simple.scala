@@ -1,4 +1,5 @@
-import org.enmas.pomdp._, org.enmas.client._, org.enmas.messaging._
+import org.enmas.pomdp._
+import org.enmas.pomdp.State.Implicits._
 
 case class SimplePOMDP extends POMDP (
 
@@ -7,23 +8,28 @@ case class SimplePOMDP extends POMDP (
   description = "Just a simple POMDP",
 
   agentConstraints = List(
-    AgentConstraint('A1, 1, 2),
-    AgentConstraint('A2, 1, 2)
+    AgentConstraint('TeamA, 1, Int.MaxValue)
   ),
 
-  initialState = State("time"  → 0),
+  initialState = State("time" -> 0),
 
-  actionsFunction = (_)  ⇒ Set('win, 'lose),
+  actionsFunction = (_) => Set(
+    Action("win"),
+    Action("lose")
+  ),
 
-  transitionFunction = (state, _)  ⇒ {
+  transitionFunction = (state, _) => {
     val t = state.getAs[Int]("time") getOrElse 0
-    State("time"  → (t+1))
+    State("time" -> (t + 1))
   },
 
-  rewardFunction = (state, actions, _)  ⇒ (_)  ⇒ {
-    if (actions.foldLeft(true)( (a, b)  ⇒ { a && b.action == 'win })) 1
+  rewardFunction = (state, actions, _) => (_) => {
+    val allChoseWin = actions.foldLeft(true) {
+      (result, a) => result && a.action == Action("win")
+    }
+    if (allChoseWin) 1
     else 0
   },
 
-  observationFunction = (state, _, _)  ⇒ (_, _)  ⇒ state
+  observationFunction = (state, _, _) => (_, _) => state
 )
