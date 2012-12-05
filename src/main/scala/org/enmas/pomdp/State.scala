@@ -102,7 +102,11 @@ object State {
 
   def apply(mappings: AugmentedElem[_]*): State = {
     mappings.foldLeft(new State) {
-      (state, m) => state.+(m.key -> m.value)(m.manifest.asInstanceOf[Manifest[Any]])
+      (state, m) => state.+(
+        m.key -> m.value
+      )(
+        m.manifest.asInstanceOf[Manifest[Any]]
+      )
     }
   }
 
@@ -124,10 +128,5 @@ object State {
       AugmentedElem(mapping._1, mapping._2, manifest)
     }
 
-    implicit def augmentedElem2Tuple[T](
-      ae: AugmentedElem[T]
-    ): (String, (Manifest[T], T)) = {
-      (ae.key, (ae.manifest, ae.value))
-    }
   }
 }
