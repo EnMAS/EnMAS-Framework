@@ -92,9 +92,41 @@ class State(
 }
 
 object State {
-  def apply(): State = new State
-  def apply[T <: Any](mapping: (String, T))(implicit manifest: Manifest[T]): State = 
-    State().+(mapping)(manifest)
-  private def apply(map: HashMap[String, (Manifest[_], Any)]) = new State(map)
+
   def empty = State()
+
+  def apply(): State = new State
+
+  def apply[T](mapping: (String, T))(implicit manifest: Manifest[T]): State = 
+    State().+(mapping)(manifest)
+
+  def apply(mappings: AugmentedElem[_]*): State = {
+    mappings.foldLeft(new State) {
+      (state, m) => state.+(
+        m.key -> m.value
+      )(
+        m.manifest.asInstanceOf[Manifest[Any]]
+      )
+    }
+  }
+
+  private def apply(map: HashMap[String, (Manifest[_], Any)]) = new State(map)
+
+  private[pomdp] case class AugmentedElem[T](
+    key: String,
+    value: T,
+    manifest: Manifest[T]
+  )
+
+  object Implicits {
+
+    implicit def elem2AugmentedElem[T](
+      mapping: (String, T)
+    )(
+      implicit manifest: Manifest[T]
+    ): AugmentedElem[T] = {
+      AugmentedElem(mapping._1, mapping._2, manifest)
+    }
+
+  }
 }

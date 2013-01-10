@@ -59,13 +59,22 @@ class Bundler extends MainFrame {
         if (v != FileChooser.Result.Approve || ! sourceChooser.selectedFile.exists)
           StatusBar.noSource
         else {
-          future { compile(sourceChooser.selectedFile) }
+          future {
+            clean(sourceChooser.selectedFile)
+            compile(sourceChooser.selectedFile)
+          }
           StatusBar.working
         }
       }
     }
 
-    def compile(sourceDir: File) = {
+    def clean(sourceDir: File) {
+      results.text += "Cleaning directory of .class files...\n"
+      val classFiles = sourceDir.listFiles.toList.filter(_.toString.endsWith(".class"))
+      classFiles map { _.delete() }
+    }
+
+    def compile(sourceDir: File) {
       results.text += "Compiling source files... "
       val settings = new Settings()
       settings.sourcepath.value = sourceDir.getPath
@@ -95,7 +104,7 @@ class Bundler extends MainFrame {
       }
     }
 
-    def makeJar(sourceDir: File) = {
+    def makeJar(sourceDir: File) {
       results.text += "Making JAR file... "
       import java.util.jar._
       val jarFile = new File(sourceDir.getParentFile, sourceDir.getName.replaceAll("\\s", "")+".jar")

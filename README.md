@@ -1,6 +1,8 @@
+## EnMAS
+
 Multi-agent research is a field of growing relevance to our modern world.  From heterogenous distributed computing and storage to robot swarms, the agent based paradigm is approaching ubiquity.
 
-One model of multi-agent systems is called a "Decentralized, Partially Observable Markov Decision Process", or Dec-POMDP.  A Dec-POMDP is informally: a finite set of agents, a finite set of actions, a finite set of states, a transition function that produces the next state given the joint action of the agents, a reward function, and an observation function.  At each time step, each agent chooses an action to take and each of the agents are shown a reward and an observation for the previous time step.
+One model of multi-agent systems is called a "Decentralized, Partially Observable Markov Decision Process", or **Dec-POMDP**.  A Dec-POMDP is informally: a finite set of agents, a finite set of actions, a finite set of states, a transition function that produces the next state given the joint action of the agents, a reward function, and an observation function.  At each time step, each agent chooses an action to take and each of the agents are shown a reward and an observation for the previous time step.
 
 The Dec-POMDP approach is compelling because the problems they model are genuinely hard  to solve in the general case, but research results show that it is possible to gain leverage under certain conditions.  In addition, as in other areas of artificial intelligence, our efforts are encouraged by apparent biological evidence of "good enough" solutions.
 
@@ -9,4 +11,5 @@ This project is a framework and an application for specifying POMDP problems and
 Artificial intelligence algorithms for doing on-line learning have different input requirements than algorithms used for off-line planning.  This problem leads to error-prone code duplication.  This problem is addressed by the EnMAS problem specification syntax.
 
 Another major goal of the EnMAS project is to unify the communication formats used to encode experiments and notation used by human researchers in the field.  Efforts are made toward a clean, human-readable problem specification syntax.  Problem specifications and Agent implementations are archived using the common JAR file format for easy sharing.
+
 An additional goal of the project is to provide high performance scalability.  EnMAS is a client-server application (one server to many clients).  Each client in turn may host many agents.  In this way, users may run both server and client on a single node and still reap the benefits of today’s multi-core architectures (scaling up).  Alternatively, more machines can run as an ad-hoc cluster.

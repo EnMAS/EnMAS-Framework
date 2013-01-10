@@ -2,7 +2,7 @@ name := "EnMAS"
 
 organization := "org.enmas"
 
-version := "0.10"
+version := "0.11.0-SNAPSHOT"
 
 publishTo := Some(Resolver.sftp(
    "EnMAS Repository",
@@ -19,20 +19,16 @@ resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/release
 retrieveManaged := true
 
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" % "akka-actor" % "2.0.2",
-  "com.typesafe.akka" % "akka-remote" % "2.0.2",
+  "com.typesafe.akka" % "akka-actor" % "2.0.4",
+  "com.typesafe.akka" % "akka-remote" % "2.0.4",
   "org.scala-lang" % "scala-swing" % "2.9.2",
   "org.scala-lang" % "scala-compiler" % "2.9.2",
   "org.scala-lang" % "scala-library" % "2.9.2",
   "net.databinder" %% "unfiltered-filter-async" % "0.6.1",
   "net.databinder" %% "unfiltered-jetty" % "0.6.1",
   "net.databinder" %% "unfiltered-netty" % "0.6.1",
-  "org.slf4j" % "slf4j-nop" % "1.6.4",
+  "ch.qos.logback" % "logback-classic" % "1.0.7",
   "org.scalatest" %% "scalatest" % "1.7.2" % "test"
 )
-
-unmanagedClasspath in Runtime <+= (baseDirectory) map {
-  bd => Attributed.blank(bd / "config")
-}
 
 scalacOptions in Compile ++= Seq("-unchecked")

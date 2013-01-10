@@ -52,15 +52,8 @@ package org.enmas {
     * Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>. */
 
   package object pomdp {
-    type Action = Symbol
     type AgentType = Symbol
     type JointAction = List[AgentAction]
-    type Observation = State
-
-    /** This action is taken on an Agent's behalf when it is first
-      * added to a simulation.
-      */
-    val NO_ACTION = Symbol("")
 
     /** Implicit conversion from State to Either[State, List[(State, Int)]]
       */

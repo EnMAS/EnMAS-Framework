@@ -1,6 +1,8 @@
-import org.enmas.pomdp._, scala.util._
+import org.enmas.pomdp._
+import org.enmas.pomdp.State.Implicits._
+import scala.util._
 
-case class TigerProblem extends POMDP (
+case class TigerProblem extends POMDP(
 
   name = "One Door Tiger Problem",
 
@@ -17,14 +19,16 @@ the tiger is there they are both mauled by the tiger.""",
     AgentConstraint('TweedleDum, 1, 1)
   ),
 
-  initialState = State("time" → 0) +
-    ("tiger"  → true) +
-    ("doorOpen"  → false) +
-    ("tigerNoise"  → true),
+  initialState = State(
+    "time"-> 0,
+    "tiger" -> true,
+    "doorOpen" -> false,
+    "tigerNoise" -> true
+  ),
 
-  actionsFunction = (_)  ⇒ Set('open, 'listen),
+  actionsFunction = (_) => Set(Action("open"), Action("listen")),
 
-  transitionFunction = (state, actions)  ⇒ {
+  transitionFunction = (state, actions) => {
     val random = new Random
     val time = state.getAs[Int]("time") getOrElse 0
     val tiger = state.getAs[Boolean]("tiger") getOrElse false
@@ -32,34 +36,45 @@ the tiger is there they are both mauled by the tiger.""",
     val tigerNoise = state.getAs[Boolean]("tigerNoise") getOrElse false
 
     val tigerPrime = (random nextInt 10) < (if (tiger) 8 else 3)
+    val tigerGrowlRate = 0.7
 
-    State("time"  → (time + 1)) +
-      ("tiger"  → tigerPrime) +
-      ("doorOpen"  → (actions.filter { _.action == 'open }.length > 0)) +
-      ("tigerNoise"  → (if (tigerPrime) (random nextInt 10) < 7 else false))
+    State(
+      "time" -> (time + 1),
+      "tiger" -> tigerPrime,
+      "tigerNoise" -> (
+        if (tigerPrime) random.nextDouble < tigerGrowlRate
+        else false
+      ),
+      "doorOpen" -> actions.exists { _.action == Action("open") }
+    )
   },
 
-  rewardFunction = (state, actions, _)  ⇒ (_)  ⇒ {
+  rewardFunction = (state, actions, _) => (_) => {
     val tiger = state.getAs[Boolean]("tiger") getOrElse false
     val doorOpen = state.getAs[Boolean]("doorOpen") getOrElse false
 
     // reward values for each possible outcome
     val survival = 1
     val treat = 10
-    val death = -50
+    val death = -1000
 
-    if (tiger && doorOpen) death
-    else if (! tiger && doorOpen) treat
+    if (doorOpen && tiger) death
+    else if (doorOpen && ! tiger) treat
     else survival
   },
 
-  observationFunction = (state, _, _)  ⇒ (_, _)  ⇒ {
+  observationFunction = (state, _, _) => (_, _) => {
     val random = new Random
+    val hallucinationRate = 0.1
     val tigerNoise = state.getAs[Boolean]("tigerNoise") getOrElse false
     val doorOpen = state.getAs[Boolean]("doorOpen") getOrElse false
 
-    State("doorOpen"  → doorOpen) +
-      ("tigerNoise"  → (
-        if ((random nextInt 10) < 9) tigerNoise else ! tigerNoise))
+    State(
+      "doorOpen" -> doorOpen,
+      "tigerNoise" -> (
+        if (random.nextDouble < hallucinationRate) ! tigerNoise
+        else tigerNoise
+      )
+    )
   }
 )
