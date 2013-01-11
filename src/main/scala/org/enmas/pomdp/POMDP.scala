@@ -28,7 +28,7 @@ case class POMDP (
   initialState: State,
   actionsFunction: (AgentType) => Set[Action],
   transitionFunction: (State, JointAction) => Either[State, List[(State, Int)]],
-  rewardFunction: (State, JointAction, State) => AgentType => Float,
+  rewardFunction: (State, JointAction, State) => (Int, AgentType) => Float,
   observationFunction: (State, JointAction, State) => (Int, AgentType) => State
 ) {
 

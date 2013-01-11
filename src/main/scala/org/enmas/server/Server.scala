@@ -6,7 +6,7 @@ import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.FileUtils._,
 
 class Server(pomdp: POMDP) extends Actor {
   private var state = pomdp.initialState
-  private var iterationOrdinality = 0L
+  private var iterationOrdinality: Long = 0
   private var sessions = Set[SessionSpec]()
   private var iterationSubscribers = Set[SessionSpec]()
   private var agents = Set[AgentSpec]()
@@ -55,7 +55,7 @@ class Server(pomdp: POMDP) extends Actor {
   private def takeAction(agentNumber: Int, action: Action) {
     if ((pendingActions filter { _.agentNumber == agentNumber }).isEmpty) {
       getAgent(agentNumber) map {
-        a  ⇒ pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
+        a => pendingActions ::= AgentAction(a.agentNumber, a.agentType, action)
       }
       if (
         pomdp.isSatisfiedByAgents(agents.toList map {_.agentType}) &&
@@ -75,40 +75,55 @@ class Server(pomdp: POMDP) extends Actor {
   private def iterate(state: State, actions: JointAction): State = {
     try {
       val statePrime = pomdp.transitionFunction(state, actions) match {
-        case Left(state)  ⇒ state
-        case Right(distribution)  ⇒ selectState(distribution)
+        case Left(state) => state
+        case Right(distribution) => selectState(distribution)
       }
       val reward = pomdp.rewardFunction(state, actions, statePrime)
       val observation = pomdp.observationFunction(state, actions, statePrime)
       var observations = Set[(AgentSpec, State)]()
       var rewards = Set[(AgentSpec, Float)]()
 
-      sessions map { cm  ⇒ {
+      sessions map { cm =>
+
         val theseAgents = agents.toList.filter(_.sessionID == cm.id)
-        for (a  ← theseAgents) {
-          observations += (a  → observation(a.agentNumber, a.agentType))
-          rewards += (a  → reward(a.agentType))
+
+        for (agentSpec <- theseAgents) {
+          val AgentSpec(_, agentNumber, agentType) = agentSpec
+          observations += (agentSpec -> observation(agentNumber, agentType))
+          rewards += (agentSpec -> reward(agentNumber, agentType))
         }
-        messageQueue += cm  → { for (a  ← theseAgents)
-          yield UpdateAgent(
-            a.agentNumber,
-            observation(a.agentNumber, a.agentType),
-            reward(a.agentType))}
-      }}
+
+        messageQueue += cm -> {
+          for (AgentSpec(_, agentNumber, agentType) <- theseAgents)
+            yield UpdateAgent(
+              agentNumber,
+              observation(agentNumber, agentType),
+              reward(agentNumber, agentType)
+            )
+        }
+      }
 
       pendingActions = pendingActions take 0 // clears pending actions
       dispatchMessages // sends bundled agent updates
+
       // send iteration to POMDPIteration subscribers
       iterationSubscribers map { 
-        _.ref ! POMDPIteration(iterationOrdinality, observations, rewards, actions, state)
+        _.ref ! POMDPIteration(
+          iterationOrdinality,
+          observations,
+          rewards,
+          actions,
+          state
+        )
       }
+
       iterationOrdinality += 1;
       statePrime
     }
     catch {
-      case t: Throwable  ⇒ {
+      case t: Throwable => {
         t.printStackTrace
-        sessions map { cm  ⇒ cm.ref ! t }
+        sessions map { cm => cm.ref ! t }
       }
       state
     }
@@ -125,7 +140,7 @@ class Server(pomdp: POMDP) extends Actor {
 
     val possible = all filter { _._2 > 0 }
     if (possible.size > 0) {
-      val totalWeight = possible.foldLeft(0)((a, b)  ⇒ a + b._2)
+      val totalWeight = possible.foldLeft(0)((a, b) => a + b._2)
       val randomScalar = (new Random) nextInt totalWeight
       stateAt(possible, randomScalar)
     }
@@ -137,7 +152,11 @@ class Server(pomdp: POMDP) extends Actor {
     * This method also resets the outbound message queue.
     */
   private def dispatchMessages: Unit = {
-    sessions map { cm  ⇒ { messageQueue.get(cm) map { cm.ref ! MessageBundle(_) }}}
+    sessions map { cm =>
+      messageQueue.get(cm) map { messages =>
+        cm.ref ! MessageBundle(messages)
+      }
+    }
     messageQueue = messageQueue.empty
   }
 
@@ -158,47 +177,47 @@ class Server(pomdp: POMDP) extends Actor {
     */
   def receive = {
 
-    case Ping  ⇒ sender ! Pong
+    case Ping => sender ! Pong
 
-    case reg: RegisterHost  ⇒ sender ! registerHost(reg.ref)
+    case reg: RegisterHost => sender ! registerHost(reg.ref)
 
-    case reg: RegisterAgent  ⇒ getSession(reg.sessionID) map {
-      session  ⇒ sender ! registerAgent(session.id, reg.agentType)
+    case reg: RegisterAgent => getSession(reg.sessionID) map {
+      session => sender ! registerAgent(session.id, reg.agentType)
     }
 
-    case TakeAction(agentNumber, action)  ⇒ takeAction(agentNumber, action)
+    case TakeAction(agentNumber, action) => takeAction(agentNumber, action)
 
-    case Subscribe  ⇒ sessions.find(_.ref == sender) match {
-      case Some(subscriber)  ⇒ iterationSubscribers += subscriber
-      case None  ⇒ ()
+    case Subscribe => sessions.find(_.ref == sender) match {
+      case Some(subscriber) => iterationSubscribers += subscriber
+      case None => ()
     }
 
-    case Unsubscribe  ⇒ {
+    case Unsubscribe => {
       iterationSubscribers = iterationSubscribers filterNot { _.ref == sender }
     }
 
-    case AgentDied(id)  ⇒ {
+    case AgentDied(id) => {
       agents = agents filterNot { _.agentNumber == id }
       pendingActions = pendingActions filterNot { _.agentNumber == id }
       sessions filterNot { _.ref == sender } map { _.ref ! AgentDied(id) }
       println("An agent died!  [%s] agent(s) left" format agents.size)
     }
 
-    case Terminated(deceasedActor)  ⇒ {
-      sessions.find(_.ref == deceasedActor) match { case Some(dead)  ⇒ {
+    case Terminated(deceasedActor) => {
+      sessions.find(_.ref == deceasedActor) match { case Some(dead) => {
           sessions find { _ == dead } match {
-            case Some(deadSession)  ⇒ 
+            case Some(deadSession) => 
               agents = agents filterNot { _.sessionID == deadSession.id }
-            case None  ⇒ ()
+            case None => ()
           }
           sessions = sessions filterNot { _ == dead }
           iterationSubscribers = iterationSubscribers filterNot { _ == dead }
           println("A session died! [%s] session(s) left" format sessions.size)
         }
-        case None  ⇒ ()
+        case None => ()
       }
     }
 
-    case _  ⇒ ()
+    case _ => ()
   }
 }
