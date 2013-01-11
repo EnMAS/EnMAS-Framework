@@ -1,12 +1,12 @@
 package org.enmas.client.gui
 
-import org.enmas.pomdp.POMDP
+import org.enmas.pomdp.State
 import scala.swing._, java.io.File
 
 trait EnMAS_GUI {
 
   protected def getBaseDirectory: File = {
-  	val classDirUrl = POMDP.getClass.getResource("POMDP.class")
+  	val classDirUrl = State.getClass.getResource("State.class")
   	val classDirPath = classDirUrl.getPath.replaceAll("%20", " ")
   	val baseDirPath = classDirPath.substring(
   	  classDirPath.indexOf('/'),

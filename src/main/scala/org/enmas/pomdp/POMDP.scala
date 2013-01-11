@@ -21,15 +21,15 @@ package org.enmas.pomdp
   * transitions.  In the event that the transition function returns the empty
   * list, the next state is equal to the current.
   */
-case class POMDP (
-  name: String,
-  description: String,
-  agentConstraints: List[AgentConstraint],
-  initialState: State,
-  actionsFunction: (AgentType) => Set[Action],
-  transitionFunction: (State, JointAction) => Either[State, List[(State, Int)]],
-  rewardFunction: (State, JointAction, State) => (Int, AgentType) => Float,
-  observationFunction: (State, JointAction, State) => (Int, AgentType) => State
+abstract class POMDP (
+  val name: String,
+  val description: String,
+  val agentConstraints: List[AgentConstraint],
+  val initialState: State,
+  val actionsFunction: (AgentType) => Set[Action],
+  val transitionFunction: (State, JointAction) => Either[State, List[(State, Int)]],
+  val rewardFunction: (State, JointAction, State) => (Int, AgentType) => Float,
+  val observationFunction: (State, JointAction, State) => (Int, AgentType) => State
 ) {
 
   /** Checks that all supplied agent types are allowed and that
