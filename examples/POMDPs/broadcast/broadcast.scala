@@ -74,7 +74,7 @@ wrong state of the buffer.
   },
 
   // 1 if exactly one agent with a message chose to send and 0 otherwise
-  rewardFunction = (s, actions, sPrime) => (agentType) => {
+  rewardFunction = (s, actions, sPrime) => (aNum, agentType) => {
 
     val sentMessages = actions.filter { a =>
       val aMessage = s.getAs[Boolean](a.agentNumber.toString) getOrElse false

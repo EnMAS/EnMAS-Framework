@@ -67,7 +67,7 @@ a large penalty.""",
     )
   },
 
-  rewardFunction = (state, actions, _) => (agentType) => {
+  rewardFunction = (state, actions, statePrime) => (aNum, agentType) => {
 
   	val agentPos = state.getAs[(Int, Int)](agentType.name) getOrElse (0, 0)
 

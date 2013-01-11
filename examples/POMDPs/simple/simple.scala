@@ -18,12 +18,12 @@ case class SimplePOMDP extends POMDP (
     Action("lose")
   ),
 
-  transitionFunction = (state, _) => {
+  transitionFunction = (state, actions) => {
     val t = state.getAs[Int]("time") getOrElse 0
     State("time" -> (t + 1))
   },
 
-  rewardFunction = (state, actions, _) => (_) => {
+  rewardFunction = (state, actions, statePrime) => (aNum, aType) => {
     val allChoseWin = actions.foldLeft(true) {
       (result, a) => result && a.action == Action("win")
     }
@@ -31,5 +31,5 @@ case class SimplePOMDP extends POMDP (
     else 0
   },
 
-  observationFunction = (state, _, _) => (_, _) => state
+  observationFunction = (state, actions, statePrime) => (aNum, aType) => state
 )

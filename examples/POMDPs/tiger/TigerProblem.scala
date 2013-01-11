@@ -49,7 +49,7 @@ the tiger is there they are both mauled by the tiger.""",
     )
   },
 
-  rewardFunction = (state, actions, _) => (_) => {
+  rewardFunction = (state, actions, statePrime) => (aNum, aType) => {
     val tiger = state.getAs[Boolean]("tiger") getOrElse false
     val doorOpen = state.getAs[Boolean]("doorOpen") getOrElse false
 
@@ -63,7 +63,7 @@ the tiger is there they are both mauled by the tiger.""",
     else survival
   },
 
-  observationFunction = (state, _, _) => (_, _) => {
+  observationFunction = (state, actions, statePrime) => (aNum, aType) => {
     val random = new Random
     val hallucinationRate = 0.1
     val tigerNoise = state.getAs[Boolean]("tigerNoise") getOrElse false
