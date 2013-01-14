@@ -16,8 +16,8 @@ class State(
 
   /** Returns a new State that contains a mapping from elem._1 to elem._2
     */
-  def +[T <: Any](elem: (String, T))(implicit m: ClassTag[T]): State =
-    State(map.+((elem._1, (m, elem._2))))
+  def +[T <: Any](elem: (String, T))(implicit ct: ClassTag[T]): State =
+    State(map.+((elem._1, (ct, elem._2))))
 
   /** Returns a new State which contains no mapping from key
     */
@@ -30,10 +30,10 @@ class State(
   /** Returns a Some[T] object iff key is mapped and the mapped object
     * conforms to the supplied type T.  Returns None otherwise.
     */
-  def getAs[T](key: String)(implicit m : ClassTag[T]): Option[T] = {
+  def getAs[T](key: String)(implicit ct : ClassTag[T]): Option[T] = {
     map.get(key) match {
-      case Some((om: ClassTag[_], obj: Any)) =>
-        if (om <:< m) Some(obj.asInstanceOf[T]) else None
+      case Some((oct: ClassTag[_], obj: Any)) =>
+        if (oct <:< ct) Some(obj.asInstanceOf[T]) else None
       case _ => None
     }
   }
