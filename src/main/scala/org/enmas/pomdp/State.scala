@@ -1,6 +1,7 @@
 package org.enmas.pomdp
 
-import scala.collection.immutable.HashMap, scala.reflect._
+import scala.collection.immutable.HashMap, scala.reflect._,
+       scala.language.implicitConversions
 
 /** Represents the state of a POMDP.
   *
@@ -9,13 +10,13 @@ import scala.collection.immutable.HashMap, scala.reflect._
   * objects, the proper type must be supplied.
   */
 class State(
-  val map: HashMap[String, (Manifest[_], Any)] = 
-    scala.collection.immutable.HashMap.empty[String, (Manifest[_], Any)]
+  val map: HashMap[String, (ClassTag[_], Any)] = 
+    scala.collection.immutable.HashMap.empty[String, (ClassTag[_], Any)]
 ) extends java.io.Serializable {
 
   /** Returns a new State that contains a mapping from elem._1 to elem._2
     */
-  def +[T <: Any](elem: (String, T))(implicit m: Manifest[T]): State =
+  def +[T <: Any](elem: (String, T))(implicit m: ClassTag[T]): State =
     State(map.+((elem._1, (m, elem._2))))
 
   /** Returns a new State which contains no mapping from key
@@ -29,11 +30,11 @@ class State(
   /** Returns a Some[T] object iff key is mapped and the mapped object
     * conforms to the supplied type T.  Returns None otherwise.
     */
-  def getAs[T](key: String)(implicit m : Manifest[T]): Option[T] = {
+  def getAs[T](key: String)(implicit m : ClassTag[T]): Option[T] = {
     map.get(key) match {
-      case Some((om: Manifest[_], obj: Any))  ⇒
+      case Some((om: ClassTag[_], obj: Any)) =>
         if (om <:< m) Some(obj.asInstanceOf[T]) else None
-      case _  ⇒ None
+      case _ => None
     }
   }
 
@@ -47,9 +48,9 @@ class State(
   @throws(classOf[java.util.NoSuchElementException])
   def getAs[T <: Any](key: String, prototypeObject: T): T = {
     val clazz = prototypeObject.getClass.asInstanceOf[java.lang.Class[T]]
-    getAs(key)(Manifest.classType(clazz)) match {
-      case Some(obj)  ⇒ obj.asInstanceOf[T]
-      case _  ⇒ throw new java.util.NoSuchElementException
+    getAs(key)(ClassTag(clazz)) match {
+      case Some(obj) => obj.asInstanceOf[T]
+      case _ => throw new java.util.NoSuchElementException
     }
   }
 
@@ -69,7 +70,7 @@ class State(
     */
   override def toString(): String = {
     map.toTraversable.foldLeft("State(\n") {
-      (s: String, mapping: (String, (Manifest[_], Any))) => {
+      (s: String, mapping: (String, (ClassTag[_], Any))) => {
         val (key, value) = mapping
         s + "  %s -> %s\n".format(key, value._2.toString)
       }
@@ -80,8 +81,8 @@ class State(
     * performs a proper structural equality test.
     */
   override def equals(obj: Any) = obj match {
-    case s2: State  ⇒ map == s2.map
-    case _  ⇒ false
+    case s2: State => map == s2.map
+    case _ => false
   }
 
   /** Overridden to defer to the backing hashmap to maintain
@@ -97,25 +98,25 @@ object State {
 
   def apply(): State = new State
 
-  def apply[T](mapping: (String, T))(implicit manifest: Manifest[T]): State = 
-    State().+(mapping)(manifest)
+  def apply[T](mapping: (String, T))(implicit ct: ClassTag[T]): State = 
+    State().+(mapping)(ct)
 
   def apply(mappings: AugmentedElem[_]*): State = {
     mappings.foldLeft(new State) {
       (state, m) => state.+(
         m.key -> m.value
       )(
-        m.manifest.asInstanceOf[Manifest[Any]]
+        ClassTag(m.value.getClass)
       )
     }
   }
 
-  private def apply(map: HashMap[String, (Manifest[_], Any)]) = new State(map)
+  private def apply(map: HashMap[String, (ClassTag[_], Any)]) = new State(map)
 
   private[pomdp] case class AugmentedElem[T](
     key: String,
     value: T,
-    manifest: Manifest[T]
+    ct: ClassTag[T]
   )
 
   object Implicits {
@@ -123,9 +124,9 @@ object State {
     implicit def elem2AugmentedElem[T](
       mapping: (String, T)
     )(
-      implicit manifest: Manifest[T]
+      implicit ct: ClassTag[T]
     ): AugmentedElem[T] = {
-      AugmentedElem(mapping._1, mapping._2, manifest)
+      AugmentedElem(mapping._1, mapping._2, ct)
     }
 
   }

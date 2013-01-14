@@ -5,6 +5,7 @@ project/target
 project/target/**
 lib_managed
 lib_managed/**
+lib/
 user/*/*.jar
 user/*/**
 **.csv

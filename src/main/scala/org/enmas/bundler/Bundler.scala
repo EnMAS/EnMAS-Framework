@@ -4,7 +4,8 @@ import org.enmas.pomdp.POMDP,
        scala.tools.nsc._, scala.tools.nsc.reporters._,
        scala.swing._, scala.swing.event._, 
        scala.swing.BorderPanel.Position._,
-       scala.actors.Futures._,
+       scala.concurrent.future,
+       scala.concurrent.ExecutionContext.Implicits.global,
        java.io._, java.net._, java.util.jar._
 
 class Bundler extends MainFrame {

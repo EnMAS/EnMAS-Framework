@@ -4,7 +4,9 @@ import org.enmas.pomdp._, org.enmas.messaging._,
        org.enmas.client.gui._,
        scala.collection.immutable._,
        akka.actor._, akka.actor.Actor._, akka.dispatch._, akka.pattern.ask,
-       akka.util.Timeout, akka.util.duration._
+       scala.concurrent.Await,
+       akka.util.Timeout, scala.concurrent.duration._,
+       scala.language.existentials
 
 class Session(server: ActorRef, pomdp: POMDP) extends Actor {
   import ClientManager._, Session._, context._
@@ -31,7 +33,7 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
         result = Left(uniqueID)
       }
     }}
-    catch { case _  ⇒ () }
+    catch { case t: Throwable  ⇒ () }
     result
   }
 
@@ -49,7 +51,9 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
     clazz: java.lang.Class[_ <: Agent]
   ) {
     val replyTo = sender
-    (server ? RegisterAgent(uniqueID, agentType)) onSuccess {
+    val futureResult = (server ? RegisterAgent(uniqueID, agentType))
+
+    futureResult onSuccess {
       case confirmation: ConfirmAgentRegistration  ⇒ {
         val agent = actorOf(Props(clazz.newInstance repliesTo self))
         watch(agent)
@@ -58,7 +62,8 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
         replyTo ! confirmation
       }
       case _  ⇒ replyTo ! false
-    } onFailure { case _  ⇒ replyTo ! false }
+    }
+    futureResult onFailure { case _  ⇒ replyTo ! false }
   }
 
   private def registerClient(clazz: java.lang.Class[_ <: IterationClient]) {
@@ -74,7 +79,7 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
       server ! Subscribe
       sender ! ConfirmClientRegistration(clientId, clazz.getName)
     }
-    catch { case _  ⇒ sender ! false }
+    catch { case t: Throwable  ⇒ sender ! false }
   }
 
   def receive = {
@@ -82,13 +87,15 @@ class Session(server: ActorRef, pomdp: POMDP) extends Actor {
     case Ping  ⇒ {
       def doPoll {
         try { Thread.sleep(1000) }
-        catch { case _  ⇒ () }
+        catch { case t: Throwable  ⇒ () }
         finally { self ! Ping }
       }
-      (server ? Ping) onSuccess { case _  ⇒ {
+      val futureResult = (server ? Ping)
+      futureResult onSuccess { case _  ⇒ {
         gui.StatusBar.connected
         doPoll
-      }} onFailure { case _  ⇒ {
+      }}
+      futureResult onFailure { case _  ⇒ {
         gui.StatusBar.noResponse
         doPoll
       }}

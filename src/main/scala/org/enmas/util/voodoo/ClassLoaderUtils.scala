@@ -2,7 +2,12 @@ package org.enmas.util.voodoo
 
 import java.io._, java.net._, java.lang.reflect._, java.util.jar._
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 object ClassLoaderUtils {
+
+  val log = LoggerFactory.getLogger(super.getClass)
 
   /** To be mixed in with classes that need to be able to receive
     * the raw byte content of a JAR file over the network.
@@ -18,7 +23,7 @@ object ClassLoaderUtils {
       (implicit m: scala.reflect.Manifest[T])
     : Option[File] = {
       verifyFileData(fileData) match {
-        case Some(data)  ⇒ {
+        case Some(data) => {
           val file = File.createTempFile("provisioned", null)
           file.deleteOnExit
           val fout = new FileOutputStream(file)
@@ -26,7 +31,7 @@ object ClassLoaderUtils {
           fout.flush
           Some(file)
         }
-        case None  ⇒ None
+        case None => None
       }
     }
   }
@@ -37,14 +42,29 @@ object ClassLoaderUtils {
     var subclasses = List[java.lang.Class[_ <: T]]()
     while (jarEntries.hasMoreElements) {
       val entry = jarEntries.nextElement
+
+      log.debug("Looking at jar entry [{}]", entry.getName)
+
       if (entry.getName.endsWith(".class")) {
-        val name = entry.getName.replace(".class", "")
+        val fqPath = entry.getName.replace(".class", "")
+        val name = fqPath.replaceAll("\\\\", "/").replaceAll("/", ".")
         try {
           val clazz = getClass(file, name)
+
+          log.debug("Got class [{}]", clazz.getName)
+
           clazz.asSubclass(m.erasure)
+
+          log.debug("Treating [{}] as a subclass of [{}]", clazz.getName, m.erasure.getName)
+
           subclasses :+= clazz.asInstanceOf[java.lang.Class[_ <: T]]
         }
-        catch { case t: Throwable  ⇒ () }
+        catch {
+          case t: Throwable => log.debug(
+            "findSubclasses: exception caught:\n[{}]",
+            t.getClass.getName
+          )
+        }
       }
     }
     subclasses
@@ -58,13 +78,13 @@ object ClassLoaderUtils {
   private def addURL(u: URL): Unit = {
     val loader = procureUrlLoader()
     val urls = loader.getURLs
-    var alreadyHasURL = urls.contains { url: URL  ⇒ url.toString.equalsIgnoreCase(u.toString) }
+    var alreadyHasURL = urls.contains { url: URL => url.toString.equalsIgnoreCase(u.toString) }
     if (! alreadyHasURL) {
-      loader.getClass.getMethods.filter{ method  ⇒ {
+      loader.getClass.getMethods.filter{ method => {
         method.getName == "addURL" || method.getName == "attachURL"
       }}.headOption match {
-        case Some(m)  ⇒ { m setAccessible true; m.invoke(loader, u) }
-        case None  ⇒ println("Big problems... the class loader does not support addURL!!!")
+        case Some(m) => { m setAccessible true; m.invoke(loader, u) }
+        case None => println("Big problems... the class loader does not support addURL!!!")
       }
     }
   }
@@ -85,14 +105,14 @@ object ClassLoaderUtils {
     */
   private def procureUrlLoader(): URLClassLoader = {
     val loaders = getClassLoaderChain(getClass().getClassLoader)
-    val urlLoaders = loaders filter { cl: ClassLoader  ⇒ {
+    val urlLoaders = loaders filter { cl: ClassLoader => {
       var accept = false
       try {
         val possibility = cl.asInstanceOf[URLClassLoader]
         accept = possibility.getClass.getName.contains("URL") &&
                  ! possibility.getClass.getMethods.filter{ _.getName == "addURL" }.isEmpty
       }
-      catch { case _  ⇒ () }
+      catch { case _ => () }
       accept
     }}
     (urlLoaders.headOption getOrElse DefaultLoader).asInstanceOf[URLClassLoader]
@@ -106,8 +126,8 @@ object ClassLoaderUtils {
 
   private def getClassLoaderChain(loader: ClassLoader): List[ClassLoader] = {
     loader.getParent match {
-      case null  ⇒ List(loader)
-      case p: ClassLoader  ⇒ loader :: getClassLoaderChain(p)
+      case null => List(loader)
+      case p: ClassLoader => loader :: getClassLoaderChain(p)
     }
   }
 

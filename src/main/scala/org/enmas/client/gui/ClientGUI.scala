@@ -4,7 +4,9 @@ import org.enmas.pomdp.POMDP,
        org.enmas.client.ClientManager, org.enmas.messaging._,
        org.enmas.client.Agent, org.enmas.util.voodoo.ClassLoaderUtils._,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
-       akka.actor._, akka.dispatch._, akka.util.duration._, akka.pattern.ask,
+       akka.actor._, akka.dispatch._, akka.pattern.ask,
+       scala.concurrent.duration._,
+       scala.concurrent.ExecutionContext.Implicits.global,
        java.net.InetAddress
 
 class ClientGUI(application: ActorRef) extends MainFrame with EnMAS_GUI {
@@ -93,13 +95,16 @@ class ClientGUI(application: ActorRef) extends MainFrame with EnMAS_GUI {
         serverListView.listData = List[ServerSpec]()
         serverDetails.text = ""
         connectButton.enabled = false
-        (application ? ScanHost(serverHostField.text.trim)) onSuccess {
+        val futureResult = (application ? ScanHost(serverHostField.text.trim))
+
+        futureResult onSuccess {
           case reply: DiscoveryReply  ⇒ {
             if (reply.servers.isEmpty)
               popup("Scan Result", "The host is up but has no active servers.")
             else  serverListView.listData = reply.servers
           }
-        } onFailure { case _  ⇒ {
+        }
+        futureResult onFailure { case _  ⇒ {
           popup("Scan Result", "Could not find a host at the specified address."); 
         }}
       }}

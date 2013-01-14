@@ -3,7 +3,9 @@ package org.enmas.client.gui
 import org.enmas.pomdp.POMDP,
        org.enmas.client._, org.enmas.messaging._,
        scala.swing._, scala.swing.event._, scala.swing.BorderPanel.Position._,
-       akka.actor._, akka.dispatch._, akka.util.duration._, akka.pattern.ask,
+       akka.actor._, akka.dispatch._, akka.pattern.ask,
+       scala.concurrent.duration._,
+       scala.concurrent.ExecutionContext.Implicits.global,
        java.io._
 
 class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame with EnMAS_GUI {
@@ -73,7 +75,8 @@ class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame with EnMAS_GUI {
           classListView.selection.items.headOption match {
             case Some(clazz)  ⇒ {
               val agentType = agentTypeCombo.selection.item
-              (session ? LaunchAgent(agentType, clazz)) onSuccess {
+              val futureResult = (session ? LaunchAgent(agentType, clazz))
+              futureResult onSuccess {
                 case confirmation: ConfirmAgentRegistration  ⇒ {
                   bottom.agentListView.listData ++= Seq(confirmation)
                 }
@@ -81,7 +84,8 @@ class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame with EnMAS_GUI {
                   "Failure",
                   "The server declined to admit an agent of type "+agentType+"."
                 )
-              } onFailure { case _  ⇒ popup(
+              }
+              futureResult onFailure { case _  ⇒ popup(
                 "Failure",
                 "Failed to launch the agent.  There was a problem contacting the server."
               )}
@@ -152,7 +156,9 @@ class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame with EnMAS_GUI {
         val launchButton = new Button { action = Action("Launch Client") {
           classListView.selection.items.headOption match {
             case Some(clazz)  ⇒ {
-              (session ? LaunchClient(clazz)) onSuccess {
+              val futureResult = (session ? LaunchClient(clazz))
+
+              futureResult onSuccess {
                 case confirmation: ConfirmClientRegistration  ⇒ {
                   bottom.subscriberListView.listData ++= Seq(confirmation)
                 }
@@ -160,7 +166,8 @@ class SessionGUI(session: ActorRef, pomdp: POMDP) extends Frame with EnMAS_GUI {
                   "Failure",
                   "Failed to launch the client."
                 )
-              } onFailure { case _  ⇒ popup(
+              }
+              futureResult onFailure { case _  ⇒ popup(
                 "Failure",
                 "Failed to launch the client."
               )}
