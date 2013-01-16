@@ -1,7 +1,10 @@
 package org.enmas.pomdp
 
-import scala.collection.immutable.HashMap, scala.reflect._,
-       scala.language.implicitConversions
+import scala.collection.immutable.HashMap,
+       scala.reflect._,
+       scala.reflect.runtime.universe._,
+       scala.language.implicitConversions,
+       scala.language.existentials
 
 /** Represents the state of a POMDP.
   *
@@ -10,14 +13,14 @@ import scala.collection.immutable.HashMap, scala.reflect._,
   * objects, the proper type must be supplied.
   */
 class State(
-  val map: HashMap[String, (ClassTag[_], Any)] = 
-    scala.collection.immutable.HashMap.empty[String, (ClassTag[_], Any)]
+  val map: HashMap[String, (TypeTag[_], Any)] = 
+    scala.collection.immutable.HashMap.empty[String, (TypeTag[_], Any)]
 ) extends java.io.Serializable {
 
   /** Returns a new State that contains a mapping from elem._1 to elem._2
     */
-  def +[T <: Any](elem: (String, T))(implicit ct: ClassTag[T]): State =
-    State(map.+((elem._1, (ct, elem._2))))
+  def +[T <: Any : TypeTag](elem: (String, T)): State =
+    State(map.+((elem._1, (typeTag[T], elem._2))))
 
   /** Returns a new State which contains no mapping from key
     */
@@ -30,10 +33,10 @@ class State(
   /** Returns a Some[T] object iff key is mapped and the mapped object
     * conforms to the supplied type T.  Returns None otherwise.
     */
-  def getAs[T](key: String)(implicit ct : ClassTag[T]): Option[T] = {
+  def getAs[T : TypeTag](key: String): Option[T] = {
     map.get(key) match {
-      case Some((oct: ClassTag[_], obj: Any)) =>
-        if (oct <:< ct) Some(obj.asInstanceOf[T]) else None
+      case Some((tt, obj)) =>
+        if (tt.tpe <:< typeTag[T].tpe) Some(obj.asInstanceOf[T]) else None
       case _ => None
     }
   }
@@ -45,12 +48,12 @@ class State(
     * advantage of Scala's Option monad.  This overloaded method definition
     * is provided solely for compatibility with Java client code.
     */
+  @throws(classOf[ClassCastException])
   @throws(classOf[java.util.NoSuchElementException])
-  def getAs[T <: Any](key: String, prototypeObject: T): T = {
-    val clazz = prototypeObject.getClass.asInstanceOf[java.lang.Class[T]]
-    getAs(key)(ClassTag(clazz)) match {
+  def getAs[T](key: String, prototype: T): T = {
+    getAs[Any](key) match {
       case Some(obj) => obj.asInstanceOf[T]
-      case _ => throw new java.util.NoSuchElementException
+      case None => throw new java.util.NoSuchElementException
     }
   }
 
@@ -70,7 +73,7 @@ class State(
     */
   override def toString(): String = {
     map.toTraversable.foldLeft("State(\n") {
-      (s: String, mapping: (String, (ClassTag[_], Any))) => {
+      (s: String, mapping: (String, (TypeTag[_], Any))) => {
         val (key, value) = mapping
         s + "  %s -> %s\n".format(key, value._2.toString)
       }
@@ -98,35 +101,32 @@ object State {
 
   def apply(): State = new State
 
-  def apply[T](mapping: (String, T))(implicit ct: ClassTag[T]): State = 
-    State().+(mapping)(ct)
+  def apply[T : TypeTag](mapping: (String, T)): State = 
+    State().+(mapping)(typeTag[T])
 
   def apply(mappings: AugmentedElem[_]*): State = {
     mappings.foldLeft(new State) {
-      (state, m) => state.+(
-        m.key -> m.value
-      )(
-        ClassTag(m.value.getClass)
-      )
+      (state, aElem) =>
+        val AugmentedElem(key, value, tt) = aElem
+        state.+(key -> value)(tt.asInstanceOf[TypeTag[Any]])
     }
   }
 
-  private def apply(map: HashMap[String, (ClassTag[_], Any)]) = new State(map)
+  private def apply(map: HashMap[String, (TypeTag[_], Any)]) = new State(map)
 
   private[pomdp] case class AugmentedElem[T](
     key: String,
     value: T,
-    ct: ClassTag[T]
+    tt: TypeTag[T]
   )
 
   object Implicits {
 
-    implicit def elem2AugmentedElem[T](
+    implicit def elem2AugmentedElem[T: TypeTag](
       mapping: (String, T)
-    )(
-      implicit ct: ClassTag[T]
     ): AugmentedElem[T] = {
-      AugmentedElem(mapping._1, mapping._2, ct)
+      val (key, value) = mapping
+      AugmentedElem(key, value, typeTag[T])
     }
 
   }

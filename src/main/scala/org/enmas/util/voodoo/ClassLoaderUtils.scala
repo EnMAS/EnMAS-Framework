@@ -2,6 +2,8 @@ package org.enmas.util.voodoo
 
 import java.io._, java.net._, java.lang.reflect._, java.util.jar._
 
+import scala.reflect._
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +38,13 @@ object ClassLoaderUtils {
     }
   }
 
-  def findSubclasses[T](file: File)(implicit m: scala.reflect.Manifest[T]) = {
+  def findSubclasses[T : ClassTag](file: File) = {
+
+    val target = classTag[T]
     val jarFile = new JarFile(file)
     val jarEntries = jarFile.entries
     var subclasses = List[java.lang.Class[_ <: T]]()
+
     while (jarEntries.hasMoreElements) {
       val entry = jarEntries.nextElement
 
@@ -53,9 +58,13 @@ object ClassLoaderUtils {
 
           log.debug("Got class [{}]", clazz.getName)
 
-          clazz.asSubclass(m.erasure)
+          clazz.asSubclass(target.runtimeClass)
 
-          log.debug("Treating [{}] as a subclass of [{}]", clazz.getName, m.erasure.getName)
+          log.debug(
+            "Treating [{}] as a subclass of [{}]",
+            clazz.getName,
+            target.runtimeClass.getName
+          )
 
           subclasses :+= clazz.asInstanceOf[java.lang.Class[_ <: T]]
         }
