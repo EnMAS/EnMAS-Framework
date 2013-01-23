@@ -6,7 +6,8 @@ import scala.collection.immutable.HashMap,
        scala.language.implicitConversions,
        scala.language.existentials
 
-/** Represents the state of a POMDP.
+/**
+  * Represents the state of a POMDP.
   *
   * This structure is a type-safe wrapper for a totally generic HashMap.
   * The State stores type information for mapped objects.  When retrieving
