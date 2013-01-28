@@ -4,7 +4,8 @@ import org.enmas.pomdp._, org.enmas.messaging._,
        org.enmas.util.FileUtils._, org.enmas.util.voodoo.ClassLoaderUtils._,
        scala.collection.immutable._, java.io.File,
        akka.actor._, akka.actor.Actor._, akka.dispatch._, akka.pattern.ask,
-       akka.util.Timeout, akka.util.duration._,
+       akka.util.Timeout,
+       scala.concurrent.duration._,
        com.typesafe.config.ConfigFactory
 
 class ClientManager extends Actor with Provisionable {
@@ -60,7 +61,8 @@ class ClientManager extends Actor with Provisionable {
       case Some(availablePOMDP)  ⇒ {
         val sessionRef = actorOf(Props(new Session(server.ref, availablePOMDP.pomdp)))
         watch(sessionRef) // subscribe to Terminated(sessionRef)
-        (sessionRef ? 'Init) onSuccess {
+        val futureResult = (sessionRef ? 'Init)
+        futureResult onSuccess {
           case e: Either[_,_]  ⇒ e match {
             case Left(obj)  ⇒ obj match { case id: Int  ⇒ {
               sessions = (ActiveSession(sessionRef, id, server) :: sessions)
@@ -68,7 +70,8 @@ class ClientManager extends Actor with Provisionable {
             }}
             case _  ⇒ ()
           }
-        } onFailure { case _  ⇒ replyTo ! false }
+        }
+        futureResult onFailure { case _  ⇒ replyTo ! false }
       }
       case None  ⇒ replyTo ! false
     }
@@ -115,7 +118,7 @@ class ClientManager extends Actor with Provisionable {
 }
 
 object ClientManager extends App {
-  import org.enmas.client.gui._, org.enmas.client.http._, java.io.File
+  import org.enmas.client.gui._, java.io.File
 
   // CM specific messages
   sealed case class ScanHost(serverHost: String)
@@ -144,10 +147,10 @@ object ClientManager extends App {
   val agentDir = new File("user/agent")
   val iterationSubscriberDir = new File("user/iterationSubscriber")
 
-  implicit val timeout: Timeout = Timeout(3 seconds)
+  implicit val timeout: Timeout = Timeout(3.seconds)
   val system = ActorSystem("enmasClient", ConfigFactory.load.getConfig("enmasClient"))
   val serverPort = 36627 // ENMAS
   val manager = system.actorOf(Props[ClientManager], "clientManager")
   val gui = new ClientGUI(manager)
-  val net = new NetInterface(manager)
+  // val net = new NetInterface(manager)
 }

@@ -1,3 +1,4 @@
+/*
 package org.enmas.client.http
 
 import org.enmas.pomdp._, org.enmas.client.ClientManager, org.enmas.messaging._,
@@ -121,3 +122,4 @@ class NetInterface(application: ActorRef) {
     }
   }
 }
+*/
