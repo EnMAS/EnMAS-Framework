@@ -48,31 +48,16 @@ object ClassLoaderUtils {
     while (jarEntries.hasMoreElements) {
       val entry = jarEntries.nextElement
 
-      log.debug("Looking at jar entry [{}]", entry.getName)
-
       if (entry.getName.endsWith(".class")) {
         val fqPath = entry.getName.replace(".class", "")
         val name = fqPath.replaceAll("\\\\", "/").replaceAll("/", ".")
         try {
           val clazz = getClass(file, name)
-
-          log.debug("Got class [{}]", clazz.getName)
-
           clazz.asSubclass(target.runtimeClass)
-
-          log.debug(
-            "Treating [{}] as a subclass of [{}]",
-            clazz.getName,
-            target.runtimeClass.getName
-          )
-
           subclasses :+= clazz.asInstanceOf[java.lang.Class[_ <: T]]
         }
         catch {
-          case t: Throwable => log.debug(
-            "findSubclasses: exception caught:\n[{}]",
-            t.getClass.getName
-          )
+          case t: Throwable => ()
         }
       }
     }

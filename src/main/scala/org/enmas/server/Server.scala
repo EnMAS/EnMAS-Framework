@@ -4,7 +4,7 @@ import org.enmas.pomdp._, org.enmas.messaging._, org.enmas.util.FileUtils._,
        akka.actor._, akka.actor.Actor._,
        scala.util._, scala.collection.immutable._
 
-class Server(pomdp: POMDP) extends Actor {
+class Server(pomdp: POMDP) extends Actor with ActorLogging {
   private var state = pomdp.initialState
   private var iterationOrdinality: Long = 0
   private var sessions = Set[SessionSpec]()
@@ -73,6 +73,9 @@ class Server(pomdp: POMDP) extends Actor {
     * 3) Dispatches UpdateAgent messages
     */
   private def iterate(state: State, actions: JointAction): State = {
+
+    log.debug("iterationOrdinality = [%d]" format iterationOrdinality)
+
     try {
       val statePrime = pomdp.transitionFunction(state, actions) match {
         case Left(state) => state

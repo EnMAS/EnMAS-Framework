@@ -2,7 +2,7 @@ package org.enmas.pomdp
 
 import scala.collection.immutable.HashMap,
        scala.reflect._,
-       scala.reflect.runtime.universe._,
+       // scala.reflect.runtime.universe._,
        scala.language.implicitConversions,
        scala.language.existentials
 
@@ -12,16 +12,19 @@ import scala.collection.immutable.HashMap,
   * This structure is a type-safe wrapper for a totally generic HashMap.
   * The State stores type information for mapped objects.  When retrieving
   * objects, the proper type must be supplied.
+  *
+  * Note: This class should uses ClassTags instead of TypeTags due to a bug
+  * in Scala 2.10 where TypeCreators are not serializable.
   */
 class State(
-  val map: HashMap[String, (TypeTag[_], Any)] = 
-    scala.collection.immutable.HashMap.empty[String, (TypeTag[_], Any)]
+  val map: HashMap[String, (ClassTag[_], Any)] = 
+    scala.collection.immutable.HashMap.empty[String, (ClassTag[_], Any)]
 ) extends java.io.Serializable {
 
   /** Returns a new State that contains a mapping from elem._1 to elem._2
     */
-  def +[T <: Any : TypeTag](elem: (String, T)): State =
-    State(map.+((elem._1, (typeTag[T], elem._2))))
+  def +[T <: Any : ClassTag](elem: (String, T)): State =
+    State(map.+((elem._1, (classTag[T], elem._2))))
 
   /** Returns a new State which contains no mapping from key
     */
@@ -34,10 +37,10 @@ class State(
   /** Returns a Some[T] object iff key is mapped and the mapped object
     * conforms to the supplied type T.  Returns None otherwise.
     */
-  def getAs[T : TypeTag](key: String): Option[T] = {
+  def getAs[T : ClassTag](key: String): Option[T] = {
     map.get(key) match {
-      case Some((tt, obj)) =>
-        if (tt.tpe <:< typeTag[T].tpe) Some(obj.asInstanceOf[T]) else None
+      case Some((ct, obj)) =>
+        if (ct <:< classTag[T]) Some(obj.asInstanceOf[T]) else None
       case _ => None
     }
   }
@@ -74,9 +77,9 @@ class State(
     */
   override def toString(): String = {
     map.toTraversable.foldLeft("State(\n") {
-      (s: String, mapping: (String, (TypeTag[_], Any))) => {
-        val (key, value) = mapping
-        s + "  %s -> %s\n".format(key, value._2.toString)
+      (s: String, mapping: (String, (ClassTag[_], Any))) => {
+        val (key, (_, value)) = mapping
+        s + "  %s -> %s\n".format(key, value)
       }
     } + ")"
   }
@@ -102,32 +105,32 @@ object State {
 
   def apply(): State = new State
 
-  def apply[T : TypeTag](mapping: (String, T)): State = 
-    State().+(mapping)(typeTag[T])
+  def apply[T : ClassTag](mapping: (String, T)): State = 
+    State().+(mapping)(classTag[T])
 
   def apply(mappings: AugmentedElem[_]*): State = {
     mappings.foldLeft(new State) {
       (state, aElem) =>
-        val AugmentedElem(key, value, tt) = aElem
-        state.+(key -> value)(tt.asInstanceOf[TypeTag[Any]])
+        val AugmentedElem(key, value, ct) = aElem
+        state.+(key -> value)(ct.asInstanceOf[ClassTag[Any]])
     }
   }
 
-  private def apply(map: HashMap[String, (TypeTag[_], Any)]) = new State(map)
+  private def apply(map: HashMap[String, (ClassTag[_], Any)]) = new State(map)
 
   private[pomdp] case class AugmentedElem[T](
     key: String,
     value: T,
-    tt: TypeTag[T]
+    ct: ClassTag[T]
   )
 
   object Implicits {
 
-    implicit def elem2AugmentedElem[T: TypeTag](
+    implicit def elem2AugmentedElem[T: ClassTag](
       mapping: (String, T)
     ): AugmentedElem[T] = {
       val (key, value) = mapping
-      AugmentedElem(key, value, typeTag[T])
+      AugmentedElem(key, value, classTag[T])
     }
 
   }
