@@ -1,32 +1,18 @@
 name := "EnMAS"
 
-organization := "org.enmas"
+organization in ThisBuild := "org.enmas"
 
 version := "0.13.0-SNAPSHOT"
 
-publishTo := Some(Resolver.sftp(
-   "EnMAS Repository",
-   "repo.enmas.org",
-   "/var/www/vhosts/enmas.org/subdomains/repo/httpdocs"
-) as("connor"))
+scalaVersion in ThisBuild := "2.10.0"
 
-fork in run := true
+retrieveManaged in ThisBuild := true
 
-scalaVersion := "2.10.0"
-
-resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
-
-retrieveManaged := true
-
-libraryDependencies ++= Seq(
+libraryDependencies in ThisBuild ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.1.0",
-  "com.typesafe.akka" %% "akka-remote" % "2.1.0",
-  "org.scala-lang" % "scala-swing" % "2.10.0",
-  "org.scala-lang" % "scala-compiler" % "2.10.0",
   "ch.qos.logback" % "logback-classic" % "1.0.7",
-  "org.scalatest" %% "scalatest" % "2.0.M5b" % "test"
+  "org.scalatest" %% "scalatest" % "2.0.M5b" % "test",
+  "org.scala-lang" % "scala-reflect" % "2.10.0"
 )
 
-scalacOptions in (Compile, doc) ++= Opts.doc.title("EnMAS") 
-
-scalacOptions in Compile ++= Seq("-unchecked", "-deprecation", "-feature")
+scalacOptions in (ThisBuild, Compile) ++= Seq("-unchecked", "-deprecation", "-feature")

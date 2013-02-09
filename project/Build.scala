@@ -1,25 +1,47 @@
 import sbt._
 import Keys._
+
 object EnMASBuild extends Build {
 
-  val bundlerTask = TaskKey[Unit]("bundler") <<= (target, fullClasspath in Runtime) map {
-    (target, cp) => {
-      val cpOpt = cp.map(_.data).mkString(":")
-      val jars = cp map { item  ⇒ new File(item.data.toString) }
-      (new Fork.ForkScala("org.enmas.bundler.Bundler"))(
-        None,               // java home
-        Seq("-cp", cpOpt),  // jvm options
-        jars,               // scala jars
-        Seq(),              // arguments
-        None,               // working directory
-        StdoutOutput        // output strategy
-      )
-    }
-  }
-
-  lazy val EnMASproject = Project (
-    "EnMAS",
-    file ("."),
-    settings = Defaults.defaultSettings ++ Seq(bundlerTask)
+  lazy val root = Project(id = "enmas", base = file(".")) aggregate(
+    enmasBundler,
+    enmasClient,
+    enmasCore,
+    enmasExamples,
+    enmasServer
   )
+
+  lazy val enmasCore = Project(
+    id = "enmas-core",
+    base = file("enmas-core")
+  )
+
+  lazy val enmasBundler = Project(
+    id = "enmas-bundler",
+    base = file("enmas-bundler")
+  ) dependsOn(
+    enmasCore
+  )
+
+  lazy val enmasClient = Project(
+    id = "enmas-client",
+    base = file("enmas-client")
+  ) dependsOn(
+    enmasCore
+  )
+
+  lazy val enmasServer = Project(
+    id = "enmas-server",
+    base = file("enmas-server")
+  ) dependsOn(
+    enmasCore
+  )
+
+  lazy val enmasExamples = Project(
+    id = "enmas-examples",
+    base = file("enmas-examples")
+  ) dependsOn(
+    enmasCore
+  )
+
 }
