@@ -2,7 +2,7 @@ name := "EnMAS"
 
 organization in ThisBuild := "org.enmas"
 
-version := "0.13.0-SNAPSHOT"
+version := "1.0.0"
 
 scalaVersion in ThisBuild := "2.10.0"
 
@@ -16,3 +16,43 @@ libraryDependencies in ThisBuild ++= Seq(
 )
 
 scalacOptions in (ThisBuild, Compile) ++= Seq("-unchecked", "-deprecation", "-feature")
+
+publishMavenStyle in ThisBuild := true
+
+useGpg in ThisBuild := true
+
+pomIncludeRepository in ThisBuild := { _ => false }
+
+licenses in ThisBuild := Seq(
+  "BSD-style" -> url("http://www.opensource.org/licenses/bsd-license.php")
+)
+
+homepage in ThisBuild := Some(url("http://enmas.org"))
+
+pomExtra in ThisBuild := (
+  <scm>
+    <url>git@github.com:EnMAS/EnMAS.git</url>
+    <connection>scm:git:git@github.com:EnMAS/EnMAS.git</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>ConnorDoyle</id>
+      <name>Connor Doyle</name>
+      <url>http://topology.io</url>
+    </developer>
+  </developers>
+)
+
+// temporary micro repo until we get publish rights to sonatype OSS
+publishTo in ThisBuild := Some(Resolver.file(
+  "file",
+  new File("../enmas.github.com/repo")
+))
+
+// publishTo in ThisBuild <<= version { (v: String) =>
+//   val nexus = "https://oss.sonatype.org/"
+//   if (v.trim.endsWith("SNAPSHOT"))
+//     Some("snapshots" at nexus + "content/repositories/snapshots")
+//   else
+//     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+// }

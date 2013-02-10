@@ -4,7 +4,7 @@ assemblySettings
 
 name := "enmas-client"
 
-version := "0.13.0-SNAPSHOT"
+version := "1.0.0"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-remote" % "2.1.0",
