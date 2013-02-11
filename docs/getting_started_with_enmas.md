@@ -13,7 +13,7 @@ _Note to Mac users:_ Git, giter8, and SBT are all available via the homebrew pac
 
 ## Download enmas-client and enmas-server
 
-Visit the [downloads page](http://enmas.org/downloads) on the official project web site to obtain the latest stable version of all three Jar files: `enmas-client`, `enmas-server`, and `enmas-examples`.
+Visit the [downloads page](http://enmas.org/pages/downloads) on the official project web site to obtain the latest stable version of all three Jar files: `enmas-client`, `enmas-server`, and `enmas-examples`.
 
 ## Write your own Agent
 
