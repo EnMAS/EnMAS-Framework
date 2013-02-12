@@ -43,16 +43,10 @@ pomExtra in ThisBuild := (
   </developers>
 )
 
-// temporary micro repo until we get publish rights to sonatype OSS
-publishTo in ThisBuild := Some(Resolver.file(
-  "file",
-  new File("../enmas.github.com/repo")
-))
-
-// publishTo in ThisBuild <<= version { (v: String) =>
-//   val nexus = "https://oss.sonatype.org/"
-//   if (v.trim.endsWith("SNAPSHOT"))
-//     Some("snapshots" at nexus + "content/repositories/snapshots")
-//   else
-//     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-// }
+publishTo in ThisBuild <<= version { (v: String) =>
+  val nexus = "https://oss.sonatype.org/"
+  if (v.trim.endsWith("SNAPSHOT"))
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
