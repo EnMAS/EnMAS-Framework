@@ -4,10 +4,11 @@ assemblySettings
 
 name := "enmas-bundler"
 
-version := "1.0.0"
+version := "1.0.1"
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-compiler" % "2.10.0",
+  "org.scala-lang" % "scala-library" % "2.10.0",
   "org.scala-lang" % "scala-swing" % "2.10.0"
 )
 

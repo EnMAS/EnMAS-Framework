@@ -4,8 +4,9 @@ import org.enmas.pomdp.POMDP,
        scala.tools.nsc._, scala.tools.nsc.reporters._,
        scala.swing._, scala.swing.event._, 
        scala.swing.BorderPanel.Position._,
-       scala.concurrent.future,
+       scala.concurrent.{future, Future},
        scala.concurrent.ExecutionContext.Implicits.global,
+       scala.util.{Try, Success, Failure},
        java.io._, java.net._, java.util.jar._
 
 class Bundler extends MainFrame {
@@ -60,9 +61,16 @@ class Bundler extends MainFrame {
         if (v != FileChooser.Result.Approve || ! sourceChooser.selectedFile.exists)
           StatusBar.noSource
         else {
-          future {
-            clean(sourceChooser.selectedFile)
-            compile(sourceChooser.selectedFile)
+          clean(sourceChooser.selectedFile)
+          compile(sourceChooser.selectedFile) map {
+            case Success(message) => {
+              StatusBar.success
+              results.text += message
+            }
+            case Failure(cause) => {
+              StatusBar.failure
+              results.text += "%s:\n%s".format(cause.getClass.getName, cause.getMessage)
+            }
           }
           StatusBar.working
         }
@@ -71,67 +79,81 @@ class Bundler extends MainFrame {
 
     def clean(sourceDir: File) {
       results.text += "Cleaning directory of .class files...\n"
-      val classFiles = sourceDir.listFiles.toList.filter(_.toString.endsWith(".class"))
-      classFiles map { _.delete() }
+      findFiles(
+        sourceDir,
+        (f: File) => f.toString.endsWith(".class")
+      ) map { _.delete() }
     }
 
-    def compile(sourceDir: File) {
-      results.text += "Compiling source files... "
+    def compile(sourceDir: File): Future[Try[String]] = future { Try {
+      results.text += "Compiling source files...\n"
       val settings = new Settings()
+      import java.net.{URL, URLClassLoader}
+      val urls = ClassLoader.getSystemClassLoader.asInstanceOf[URLClassLoader].getURLs
+      settings.classpath.value = urls.map(_.getFile).mkString(":")
       settings.sourcepath.value = sourceDir.getPath
+      results.text += "Source directory: [%s]\n" format settings.sourcepath.value
       settings.outdir.value = settings.sourcepath.value
+
+      val sourceFiles = findFiles(
+        sourceDir,
+        (f: File) => f.toString.endsWith(".scala")
+      )
+
       val errorLog = new StringWriter
       val reporter = new ConsoleReporter(settings, null, new PrintWriter(errorLog))
-      object scalac extends Global(settings, reporter)
-      val run = new scalac.Run
-      run compile(
-        sourceDir.listFiles.toList.filter(_.toString.endsWith(".scala")) map { _.getAbsolutePath }
-      )
-      if (reporter.hasErrors) {
-        StatusBar.failure
-        results.text += "\n" + errorLog.toString
-      }
+      val scalac = new Global(settings, reporter)
+      new scalac.Run compile sourceFiles.map(_.getAbsolutePath).toList
+
+      if (reporter.hasErrors) throw new RuntimeException(errorLog.toString)
       else {
-        results.text += "completed without errors.\n\n"
-        try {
-          makeJar(sourceDir)
-          StatusBar.success
-          results.text += "\nDone!"
-        }
-        catch { case t: Throwable => 
-          StatusBar.failure
-          results.text += "\n%s:\n%s".format(t.getClass.getName, t.getMessage)
-        }
+        makeJar(sourceDir)
+        "Compilation completed without errors.\n\n"
       }
-    }
+    }}
 
     def makeJar(sourceDir: File) {
       results.text += "Making JAR file... "
       import java.util.jar._
+
       val jarFile = new File(sourceDir.getParentFile, sourceDir.getName.replaceAll("\\s", "")+".jar")
       jarFile.delete
       jarFile.getParentFile.mkdirs
       val manifest = new java.util.jar.Manifest
       manifest.getMainAttributes.put(Attributes.Name.MANIFEST_VERSION, "1.0")
       val jar = new JarOutputStream(new FileOutputStream(jarFile), manifest)
-      val classFiles = sourceDir.listFiles.toList.filter(_.toString.endsWith(".class"))
+
+      val classFiles = findFiles(
+        sourceDir,
+        (f: File) => f.toString.endsWith(".class")
+      )
+
       results.text += classFiles.length + " class files found\n"
-      for (f <- classFiles) {
-        var className = f.getPath.replace("\\", "/")
-        className = className.substring(className.lastIndexOf("/")+1, className.length)
-        results.text += "Bundling class file: " + className + "\n"
+      classFiles.foreach { f =>
+        var className = f.getPath.replace(sourceDir.getPath, "").replace("\\", "/").stripPrefix("/")
+        results.text += "Bundling class: " + className.replaceAll("/", ".") + "\n"
         jar putNextEntry { new JarEntry(className) }
         val fin = new FileInputStream(f)
         org.enmas.util.IOUtils.copy(fin, jar)
         fin.close
       }
       jar.close
+      clean(sourceDir)
     }
 
     layout(new FlowPanel(compileSourceButton)) = North
     layout(new ScrollPane(results)) = Center
     layout(StatusBar) = South
   }
+
+  def findFiles(dir: File, criterion: (File) => Boolean): Seq[File] = {
+    if (dir.isFile) Seq()
+    else {
+      val (files, dirs) = dir.listFiles.partition(_.isFile)
+      files.filter(criterion) ++ dirs.toSeq.map(findFiles(_, criterion)).foldLeft(Seq[File]())(_ ++ _)
+    }
+  }
+
 }
 
 object Bundler extends App {
