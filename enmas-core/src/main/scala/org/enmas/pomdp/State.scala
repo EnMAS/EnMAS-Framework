@@ -76,7 +76,8 @@ class State(
     * in this State.
     */
   override def toString(): String = {
-    map.toTraversable.foldLeft("State(\n") {
+    if (map.isEmpty) "State()"
+    else map.toTraversable.foldLeft("State(\n") {
       (s: String, mapping: (String, (ClassTag[_], Any))) => {
         val (key, (_, value)) = mapping
         s + "  %s -> %s\n".format(key, value)
