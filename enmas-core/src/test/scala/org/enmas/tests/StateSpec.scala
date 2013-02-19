@@ -51,6 +51,23 @@ class StateSpec extends FlatSpec with ShouldMatchers {
     s1.getAs[Boolean]("boolean") should equal (Some(true))
   }
 
+  it should "support Java clients" in {
+    s1.getAs("integer", 1) should equal (5)
+
+    intercept[ClassCastException] {
+      s1.getAs("integer", 1.0)
+    }
+
+    intercept[NoSuchElementException] {
+      s1.getAs("xyz", new Object)
+    }
+
+    s1.getInt("integer") should equal (5)
+    s1.getFloat("float") should equal (5f)
+    s1.getDouble("double") should equal (5.0)
+    s1.getBoolean("boolean") should equal (true)
+  }
+
   it should "be equal to itself" in {
     s1 should equal (s1)
     s2 should equal (s2)
